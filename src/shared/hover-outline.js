@@ -38,7 +38,9 @@ const removeHover = function() {
 }
 
 const hoverOnHandler = function(event) {
-    event.target.classList.add('ui-br-ext-hovered');
+    if(!event.target.classList.value.includes('ui-br-ext-')){
+        event.target.classList.add('ui-br-ext-hovered');
+    }
 }
 
 const hoverOffHandler = function(event) {

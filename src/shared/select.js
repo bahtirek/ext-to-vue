@@ -160,11 +160,10 @@ const findElementFromPoint = function(pageX, pageY){
     }
 
     ui_br_ext_previousElement.element = retainSelectedElement;
-
     if(
         element?.tagName.toLocaleLowerCase() != 'body'
         && element?.tagName.toLocaleLowerCase() != 'html'
-        && element?.closest('#ui-br-ext-extention') === null
+        && element?.classList.value.includes('ui-br-ext-') && element?.classList.value.includes('ui-br-ext-hovered')
         ){
             
             outlineSelectedElement(element);
@@ -217,10 +216,11 @@ const displayReportBugButton = function(enable){
  * @param {selected/outlined element} element 
  * @returns xpath of outlined/selected element.
  */
-/* const getElementXpath = function(elm){
+const getElementXpath = function(elm){
 
     let allNodes = document.getElementsByTagName('*'); 
-    let segs = []
+    let segs = [];
+    let sib;
     for (; elm && elm.nodeType == 1; elm = elm.parentNode) 
     { 
         if (elm.hasAttribute('id')) { 
@@ -235,24 +235,25 @@ const displayReportBugButton = function(enable){
                 }
              
         } else { 
+            let i;
             for (i = 1, sib = elm.previousSibling; sib; sib = sib.previousSibling) { 
                 if (sib.localName == elm.localName){
                     i++;
                 }  
-            }; 
+            } 
                 segs.unshift(elm.localName.toLowerCase() + '[' + i + ']'); 
-        }; 
+        } 
 
         if(elm.localName.toLowerCase() === 'html'){
             break;
         }
-    }; 
+    } 
 
     return segs.length ? '/' + segs.join('/') : null;    
-} */
+}
 
 export default {
-    //getElementXpath,
+    getElementXpath,
     displayReportBugButton,
     outlineSelectedElement,
     findElementFromPoint,
