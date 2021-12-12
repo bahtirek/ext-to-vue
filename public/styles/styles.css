@@ -116,7 +116,6 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   cursor: default;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item {
-  display: none;
   padding-bottom: 10px;
   padding: 10px 10px;
   cursor: default;

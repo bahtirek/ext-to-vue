@@ -6,11 +6,7 @@
             <ViewReportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <ExportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
-            <CloseBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
-            
-            
-            
-            
+            <CloseBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />  
         </div>
     </div>
 </template>
@@ -50,13 +46,14 @@
 
             toggleButton(el) {
                 this.toggleCompleted = this.activateOperator(el);
-            },
-
-
-            onSelect1(el) {
-                console.log(el);
-            },
+                this.toggleDrops(el.id, this.toggleCompleted)
+            },  
             
+            toggleDrops(id, state){
+                id = id.replace('ui-br-ext-', "").replace(/-/g, "").replace('button', '');
+
+                this.$emit('toggle-drop', {id: id, state: state})
+            }
         }
     }
 </script>
