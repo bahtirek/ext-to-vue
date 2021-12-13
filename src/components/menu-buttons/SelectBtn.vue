@@ -21,7 +21,7 @@
         },
 
         mounted: function () {
-            window.test = this;
+            window.selectButtonComponent = this;
         },
 
         data() {

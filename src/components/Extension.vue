@@ -23,7 +23,6 @@ export default {
     },
     methods: {
         toggleDrop(data) {
-                console.log(data);
             this.dropToToggle = data;
         }
     }

@@ -19,9 +19,8 @@
         ],
 
         watch: { 
-            dropToToggle: function(newVal, oldVal) { // watch it
-                console.log('Prop changed: ', newVal, ' | was: ', oldVal)
-                this.toggleDropdown(newVal.id, newVal.state);
+            dropToToggle: function(newVal, prevVal) { // watch it
+                this.toggleDropdown(newVal.id, newVal.state, prevVal.id);
             }
         },
         
@@ -39,7 +38,8 @@
         },
         methods: {
 
-            toggleDropdown(id, state) {
+            toggleDropdown(id, state, prevId) {
+                this.drops[prevId] = false;
                 this.drops[id] = state;
             },         
         }

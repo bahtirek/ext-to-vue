@@ -34,8 +34,7 @@
         created() { 
             this.activateOperator = operators.activateOperator;
             this.onSelect = operators.onSelect;
-            this.openDropdown = operators.openDropdown;
-            this.setOperatorIconStyle = operators.setOperatorIconStyle;
+            this.removeClickFromBodyOnReport = operators.removeClickFromBodyOnReport;
         },
         data() {
             return {
@@ -45,14 +44,17 @@
         methods: {
 
             toggleButton(el) {
-                this.toggleCompleted = this.activateOperator(el);
-                this.toggleDrops(el.id, this.toggleCompleted)
+                this.toggleCompleted = this.activateOperator(el);//Activate button
+                this.toggleDrops(el.id, this.toggleCompleted); //Expand dropdown if exist
+                if(el.id == 'ui-br-ext-report-bug-button') {
+                    console.log(el.id);
+                    this.removeClickFromBodyOnReport();
+                }
             },  
             
             toggleDrops(id, state){
                 id = id.replace('ui-br-ext-', "").replace(/-/g, "").replace('button', '');
-
-                this.$emit('toggle-drop', {id: id, state: state})
+                this.$emit('toggle-drop', {id: id, state: state});
             }
         }
     }

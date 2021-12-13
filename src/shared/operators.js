@@ -75,11 +75,17 @@ import select from './select';
         select.onSelect();
     }
 
+    
+    const removeClickFromBodyOnReport = function(){
+        select.removeClickFromBody(select.getMouseCoordinates);
+    }
+
     export default {
         activateOperator,
         resetAllOperators,
         setOperatorIconStyle,
         openDropdown,
         closeDropdown,
-        onSelect
+        onSelect,
+        removeClickFromBodyOnReport
     }
