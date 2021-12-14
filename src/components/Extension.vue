@@ -1,7 +1,7 @@
 <template>
-    <div class="ui-br-ext-extension ui-br-ext-alwaysOn" id="ui-br-ext-extension" style="outline: none !important;">
+    <div class="ui-br-ext-extension ui-br-ext-alwaysOn" id="ui-br-ext-extension" style="outline: none !important;" v-show="toggleExtensionVal">
         <MainMenu @toggle-drop="toggleDrop"/>
-        <Dropdown :dropToToggle="dropToToggle" />
+        <Dropdown :dropToToggle="dropToToggle" @toggle-extension="toggleExtension"/>
     </div>
 </template>  
 
@@ -18,13 +18,18 @@ export default {
     },
     data() {
         return {
-            dropToToggle: {}
+            dropToToggle: {},
+            toggleExtensionVal: true
         }
     },
     methods: {
         toggleDrop(data) {
             this.dropToToggle = data;
+        },
+        toggleExtension(val){
+            this.toggleExtensionVal = !this.toggleExtensionVal;
         }
+        
     }
 }
 </script>

@@ -9,7 +9,7 @@ new Vue({
 
 export const globalStore = new Vue({
   data: {
-    globalVar: {
+    store: {
       selectedElement: '',
       currentElementInlineStyle: '',
       selectedElementRect: ''

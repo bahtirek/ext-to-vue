@@ -38,7 +38,7 @@
                 <label for="ui-br-ext-save-to-screenshot">Attach screenshot</label>
                 <span class="ui-br-ext-disclaimer">Make sure to remove personal identity information</span>
             </div>
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" data-listener="off">
+            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveReport" data-listener="off">
                 <span>Save</span> 
             </button>
             <div class="ui-br-ext-box-resize" id="ui-br-comment-boxResize">
@@ -49,12 +49,14 @@
                     <path d="M23,23H13a1,1,0,0,0,0,2H23a1,1,0,0,0,0-2Z"
                         class="ui-br-ext-clr-i-outline clr-i-outline-path-3" /></svg>
             </div>
+            <a href="" ref="downloadImageFull" style="display: none !important;"></a>
         </div>
 </template>
 
 <script>
 
-    //import operators from '../../shared/operators';
+    import screenshot from '../../shared/screenshot';
+    import { globalStore } from './../../main';
 
     export default {
         name: 'ReportBugDrop',
@@ -62,7 +64,7 @@
         props: ['toggleCompleted'],
         
         created() { 
-            //this.onSelect = operators.onSelect;
+            this.getScreenshot = screenshot.getScreenshot;
         },
 
         data() {
@@ -72,7 +74,6 @@
         },
 
         methods: {
-
             toggleDrop(e) {
                 //this.next = this.activateOperator(e.currentTarget);
                 this.$emit('toggle-button', e.currentTarget);
@@ -83,6 +84,22 @@
                     }
                 })
             },
+
+            async saveReport(){
+                this.$emit('toggle-extension');
+                globalStore.store.screenshot = await this.getScreenshot();
+                this.screenshotLink(globalStore.store.screenshot, 'filename');
+                this.$emit('toggle-extension');
+            },
+
+            screenshotLink(dataUrl, filename) {
+                let dlLink = this.$refs.downloadImageFull;
+                let MIME_TYPE = "image/png";
+                dlLink.download = filename;
+                dlLink.href = dataUrl;
+                dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+                dlLink.click();
+            }
         }
     }
 </script>

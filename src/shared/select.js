@@ -1,5 +1,5 @@
 import hoverOutline from './hover-outline';
-import { globalStore } from '../main.js'
+import { globalStore } from '../main.js';
 
 // Global variable to hold previously clicked element properties.
 let ui_br_ext_previousElement = {
@@ -52,7 +52,7 @@ const onDeselect = function(){
     // Remove outline from any previously selected elements.
     document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
         element.classList.remove('ui-br-ext-outlined-element');
-        element.style.cssText = globalStore.globalVar.currentElementInlineStyle;
+        element.style.cssText = globalStore.store.currentElementInlineStyle;
     });
 
     // Reset the global variable that holds the previously selected element properties.
@@ -168,9 +168,9 @@ const findElementFromPoint = function(pageX, pageY){
             
             outlineSelectedElement(element);
             displayReportBugButton(true);
-            globalStore.globalVar.selectedElement = element;
+            globalStore.store.selectedElement = element;
             //Used to crop dynamic elements
-            globalStore.globalVar.selectedElementRect = element.getBoundingClientRect();
+            globalStore.store.selectedElementRect = element.getBoundingClientRect();
     }
 
     if(ui_br_ext_previousElement.parentCount === ui_br_ext_parentLimit){
@@ -188,12 +188,12 @@ const outlineSelectedElement = function(element){
     // Remove outline from any previously selected elements.
     document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
         element.classList.remove('ui-br-ext-outlined-element');
-        element.style.cssText = globalStore.globalVar.currentElementInlineStyle;
+        element.style.cssText = globalStore.store.currentElementInlineStyle;
     });
 
     element.classList.add('ui-br-ext-outlined-element');
-    globalStore.globalVar.currentElementInlineStyle = element.style.cssText;
-    element.style.cssText = globalStore.globalVar.currentElementInlineStyle + "outline: 3px dashed!important; outline-color: red!important; ";
+    globalStore.store.currentElementInlineStyle = element.style.cssText;
+    element.style.cssText = globalStore.store.currentElementInlineStyle + "outline: 3px dashed!important; outline-color: red!important; ";
 
 }
 /**

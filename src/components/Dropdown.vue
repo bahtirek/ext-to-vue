@@ -1,7 +1,7 @@
 
 <template>
     <div class="ui-br-ext-container ui-br-ext-dropdown">
-        <ReportBugDrop v-show="drops.reportbug" />
+        <ReportBugDrop v-show="drops.reportbug" @toggle-extension="$emit('toggle-extension')"/>
     </div>
 </template>
 

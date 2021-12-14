@@ -47,7 +47,6 @@
                 this.toggleCompleted = this.activateOperator(el);//Activate button
                 this.toggleDrops(el.id, this.toggleCompleted); //Expand dropdown if exist
                 if(el.id == 'ui-br-ext-report-bug-button') {
-                    console.log(el.id);
                     this.removeClickFromBodyOnReport();
                 }
             },  
