@@ -152,7 +152,6 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item #ui-br-ext-new-project-cont {
   padding-bottom: 30px;
-  display: none;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item #ui-br-ext-new-project-cont .ui-br-ext-form-container.ui-br-ext-textarea {
   margin-bottom: 30px;
@@ -360,7 +359,6 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-comments .ui-br-ext-drop-body .ui-br-ext-settings-container .ui-br-ext-setting-body,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-settings .ui-br-ext-drop-body .ui-br-ext-settings-container .ui-br-ext-setting-body,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-view-bug .ui-br-ext-drop-body .ui-br-ext-settings-container .ui-br-ext-setting-body {
-  display: none;
   padding: 15px 0;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-box-resize,

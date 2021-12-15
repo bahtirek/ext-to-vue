@@ -10,31 +10,31 @@
                 </ul>
                 <div class="ui-br-ext-form-container ui-br-ext-textarea">
                     <label for="ui-br-ext-description">Description</label>
-                    <textarea name="ui-br-ext-description" id="ui-br-ext-description" rows="2" data-gramm="false"></textarea>
+                    <textarea name="ui-br-ext-description" v-model="form.description" rows="2" data-gramm="false"></textarea>
                 </div>
                 <div class="ui-br-ext-form-container ui-br-ext-textarea">
                     <label for="ui-br-ext-act-results">Actual results</label>
-                    <textarea name="ui-br-ext-act-results" id="ui-br-ext-act-results" rows="3" data-gramm="false"></textarea>
+                    <textarea name="ui-br-ext-act-results" v-model="form.actualResults" rows="3" data-gramm="false"></textarea>
                 </div>
                 <div class="ui-br-ext-form-container ui-br-ext-textarea">
                     <label for="ui-br-ext-exp-results">Expected results</label>
-                    <textarea name="ui-br-ext-exp-results" id="ui-br-ext-exp-results" rows="3" data-gramm="false"></textarea>
+                    <textarea name="ui-br-ext-exp-results" v-model="form.expectedResults" rows="3" data-gramm="false"></textarea>
                 </div>
                 <div class="ui-br-ext-form-container ui-br-ext-textarea">
                     <label for="ui-br-ext-rep-steps">Steps to reproduce</label>
-                    <textarea name="ui-br-ext-rep-steps" id="ui-br-ext-rep-steps" rows="3" data-gramm="false"></textarea>
+                    <textarea name="ui-br-ext-rep-steps" v-model="form.stepsToReproduce" rows="3" data-gramm="false"></textarea>
                 </div>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-                <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira">
+                <input type="checkbox" name="jira" v-model="form.saveJira">
                 <label for="ui-br-ext-save-to-jira">Create Jira ticket on save</label>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-                <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf">
+                <input type="checkbox" name="pdf" v-model="form.savePdf">
                 <label for="ui-br-ext-save-to-pdf">Save as PDF</label>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-                <input type="checkbox" name="screenshot" id="ui-br-ext-save-screenshot">
+                <input type="checkbox" name="screenshot" v-model="form.saveScreenshot">
                 <label for="ui-br-ext-save-to-screenshot">Attach screenshot</label>
                 <span class="ui-br-ext-disclaimer">Make sure to remove personal identity information</span>
             </div>
@@ -61,34 +61,47 @@
     export default {
         name: 'ReportBugDrop',
         
-        props: ['toggleCompleted'],
-        
         created() { 
-            this.getScreenshot = screenshot.getScreenshot;
+            this.onGetScreenshot = screenshot.getScreenshot;
         },
 
         data() {
             return {
-                next: false
+                next: false,
+                form: {
+                    description: '',
+                    actualResults: '',
+                    expectedResults: '',
+                    stepsToReproduce: '',
+                    saveJira: false,
+                    savePdf: false,
+                    saveScreenshot: false,
+                    xPath: '',
+                }
             }
         },
 
         methods: {
-            toggleDrop(e) {
-                //this.next = this.activateOperator(e.currentTarget);
-                this.$emit('toggle-button', e.currentTarget);
-                this.$nextTick(() => {
-                    console.log(this.toggleCompleted)
-                    if(this.toggleCompleted) {
-                        console.log(this.toggleCompleted)
-                    }
-                })
-            },
 
             async saveReport(){
+                if(this.form.saveScreenshot) {
+                    await this.getScreenshot();
+                }
+
+                if(this.form.savePdf){
+                     console.log('save pdf');
+                } else {
+                    this.screenshotLink(globalStore.store.screenshot, 'filename');
+                }
+
+                if(this.form.saveJira){
+                    console.log('save jira')
+                }
+            },
+
+            async getScreenshot(){
                 this.$emit('toggle-extension');
-                globalStore.store.screenshot = await this.getScreenshot();
-                this.screenshotLink(globalStore.store.screenshot, 'filename');
+                globalStore.store.screenshot = await this.onGetScreenshot();
                 this.$emit('toggle-extension');
             },
 

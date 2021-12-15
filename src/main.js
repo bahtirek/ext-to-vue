@@ -12,7 +12,17 @@ export const globalStore = new Vue({
     store: {
       selectedElement: '',
       currentElementInlineStyle: '',
-      selectedElementRect: ''
+      selectedElementRect: '',
+      report: {
+        description: '',
+        actualResults: '',
+        expectedResults: '',
+        stepsToReproduce: '',
+        saveJira: false,
+        savePdf: false,
+        saveScreenshot: false,
+        xPath: '',
+    }
     }
   }
 })
