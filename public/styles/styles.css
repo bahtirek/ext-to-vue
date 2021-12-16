@@ -423,7 +423,7 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   width: 20px;
   -webkit-animation: spin 1s infinite linear;
 }
-.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-spinner.ui-br-ext-spinner-on {
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-spinner.active {
   display: inline-block;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-view-bug {

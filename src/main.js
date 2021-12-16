@@ -13,6 +13,7 @@ export const globalStore = new Vue({
       selectedElement: '',
       currentElementInlineStyle: '',
       selectedElementRect: '',
+      account: {},
       report: {
         description: '',
         actualResults: '',
