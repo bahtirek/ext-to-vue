@@ -3,14 +3,16 @@ const auth = (regKey) => {
         fetch(`https://extension-auth.evendor.app/api/get_config?RegistrationKey=${regKey}`)
             .then(response => {
                 if (response.ok) {
-                    return response
+                    return response.json();
                 } else if (response.status === 401) {
                     reject('Invalid registration key')
                 } else {
                     reject('Sorry, something went wrong')
                 }
             })
-            .then( data => {resolve(data)})
+            .then( data => {
+                resolve(data)
+            })
             .catch(error => {
                 reject('Sorry, something went wrong');
             })       

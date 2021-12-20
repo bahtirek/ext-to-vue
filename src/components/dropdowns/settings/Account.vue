@@ -29,6 +29,13 @@
             this.localStorage = storage
         },
 
+        mounted() { 
+            this.$nextTick(function () {
+                console.log(globalStore.store);
+                if(globalStore.store.account) this.account = globalStore.store.account
+            })
+        },
+
         watch: { 
             isRegKeySaved: function(newVal, prevVal) { // watches if reg key saved to local
                 this.reg.spinner = false
@@ -37,7 +44,7 @@
 
         data() {
             return {
-                accountData: {},
+                account: {},
                 isRegKeySaved: false,
                 reg: {
                     key: '',
@@ -53,13 +60,15 @@
                 this.reg.error = "";
                 if (this.reg.key !== ''){ 
                     this.reg.spinner = true;
-                    this.accountData = await this.auth(this.reg.key)
-                    .catch(error => {
-                        this.reg.error = error;
-                        this.reg.spinner = false;
-                    });
-                    this.localStorage.set('regKey', this.reg.key)
-                    this.isRegKeySaved = this.localStorage.get('regKey');
+                    this.account = await this.auth(this.reg.key)
+                        .catch(error => {
+                            this.reg.error = error;
+                            this.reg.spinner = false;
+                        });
+                    if(this.accountData) {
+                        this.localStorage.set('regKey', this.reg.key)
+                        this.isRegKeySaved = this.localStorage.get('regKey');
+                    }
                 } else {
                     this.reg.error = "Enter registration key";
                     this.reg.spinner = false

@@ -45,9 +45,16 @@
             
         },
 
+        mounted() { 
+            this.$nextTick(function () {
+                console.log(globalStore.store.account);
+                if(globalStore.store.account) this.account = globalStore.store.account;
+                console.log(this.account);
+            })
+        },
         data() {
             return {
-                
+                account: {}
             }
         },
 

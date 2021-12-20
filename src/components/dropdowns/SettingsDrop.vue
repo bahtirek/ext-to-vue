@@ -5,12 +5,12 @@
                     
                     <div class="ui-br-ext-settings-container">
                         <div class="ui-br-ext-setting-title" @click="toggleSetting">Project</div>
-                        <Project />
+                        <Project/>
                     </div>
                     
                     <div class="ui-br-ext-settings-container">
                         <div class="ui-br-ext-setting-title" @click="toggleSetting">Account</div>
-                        <Account />
+                        <Account  />
                     </div>
                     
                 </div>

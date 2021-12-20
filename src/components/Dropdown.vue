@@ -1,7 +1,7 @@
 
 <template>
     <div class="ui-br-ext-container ui-br-ext-dropdown">
-        <ReportBugDrop v-show="drops.reportbug" @toggle-extension="$emit('toggle-extension')"/>
+        <ReportBugDrop  v-show="drops.reportbug" @toggle-extension="$emit('toggle-extension')"/>
         <SettingsDrop />
     </div>
 </template>
@@ -20,6 +20,12 @@
         props: [
             'dropToToggle'
         ],
+
+        mounted() { 
+            this.$nextTick(function () {
+            
+            })
+        },
 
         watch: { 
             dropToToggle: function(newVal, prevVal) { // watch it
