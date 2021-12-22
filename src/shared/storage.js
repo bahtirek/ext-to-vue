@@ -9,12 +9,22 @@ const get = (key) => {
     })
 }
 
-const set = (key, value) => {
-    chrome.storage.local.set({[key]: value}, function() {
-        return true;
-    });
+const set = (key, value) => {  
+    return new Promise((resolve, reject) => {
+        try {
+            chrome.storage.local.set({[key]: value}, function() {
+                resolve(true);
+            });
+        } catch (error) {
+            reject(false)
+        }
+    })
 }
 
 export default {
     get, set
 }
+
+//Check storage in devtools
+//chrome.storage.local.get(function(result){console.log(result)})
+

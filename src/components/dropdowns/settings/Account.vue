@@ -29,22 +29,23 @@
             this.localStorage = storage
         },
 
+        inject: [
+            'account'
+        ],
+
         mounted() { 
-            this.$nextTick(function () {
-                console.log(globalStore.store);
-                if(globalStore.store.account) this.account = globalStore.store.account
-            })
+            this.updatePlaceholder()
         },
 
         watch: { 
-            isRegKeySaved: function(newVal, prevVal) { // watches if reg key saved to local
-                this.reg.spinner = false
+            account: function(newVal, prevVal) { // 
+                console.log(newVal, prevVal);
             }
         },
 
         data() {
             return {
-                account: {},
+                newAccount: {},
                 isRegKeySaved: false,
                 reg: {
                     key: '',
@@ -59,21 +60,36 @@
             async onRegKeySave(){
                 this.reg.error = "";
                 if (this.reg.key !== ''){ 
+                    if (this.account && this.account.registratonKey) {
+                        let regKeyConfirmation = confirm('Do you want to change the registration key?');
+                        if (!regKeyConfirmation) return false;
+                    }
                     this.reg.spinner = true;
-                    this.account = await this.auth(this.reg.key)
+                    this.newAccount = await this.auth(this.reg.key)
                         .catch(error => {
                             this.reg.error = error;
                             this.reg.spinner = false;
                         });
-                    if(this.accountData) {
-                        this.localStorage.set('regKey', this.reg.key)
-                        this.isRegKeySaved = this.localStorage.get('regKey');
+                    if(this.newAccount) {
+                        await this.localStorage.set('regKey', this.reg.key);
+                        this.reg.spinner = false;
                     }
                 } else {
                     this.reg.error = "Enter registration key";
                     this.reg.spinner = false
                 }
             },
+            
+            updatePlaceholder() {
+                if(this.account) {
+                    console.log(this.account);
+                    if (this.account.isAdmin == 1 ){
+                        this.reg.placeholder = 'sup_**********************'
+                    } else {
+                        'reg_**********************'
+                    }
+                }
+            }
         }
     }
 </script>

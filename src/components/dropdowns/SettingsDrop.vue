@@ -4,13 +4,13 @@
                 <div class="ui-br-ext-drop-body">
                     
                     <div class="ui-br-ext-settings-container">
-                        <div class="ui-br-ext-setting-title" @click="toggleSetting">Project</div>
-                        <Project/>
+                        <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifAccount = false">Project</div>
+                        <Project v-if="ifProject" />
                     </div>
                     
                     <div class="ui-br-ext-settings-container">
-                        <div class="ui-br-ext-setting-title" @click="toggleSetting">Account</div>
-                        <Account  />
+                        <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifProject = false">Account</div>
+                        <Account v-if="ifAccount" />
                     </div>
                     
                 </div>
@@ -30,20 +30,17 @@
             Project,
             Account
         },
-        
-        created() { 
-            
-        },
 
         data() {
             return {
-                
+                ifProject: false,
+                ifAccount: false
             }
         },
 
         methods: {
-            toggleSetting(e) {
-                console.log(e);
+            toggleSetting(el) {
+                
             },
         }
     }

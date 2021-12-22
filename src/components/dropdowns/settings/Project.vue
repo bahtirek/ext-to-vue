@@ -1,10 +1,10 @@
 <template>
     
         <div class="ui-br-ext-setting-body">
-            <div class="ui-br-ext-btn-link">
-                <span id="ui-br-ext-btn-link">Add project</span>  
+            <div class="ui-br-ext-btn-link" v-if="account.isAdmin == 1">
+                <span id="ui-br-ext-btn-link" @click="showAddProject = !showAddProject">Add project</span>  
             </div>
-            <div  id="ui-br-ext-new-project-cont">
+            <div  id="ui-br-ext-new-project-cont" v-if="showAddProject">
                 <form novalidate name="ui-br-ext-new-project">
                     <div class="ui-br-ext-form-container ui-br-ext-textarea">
                         <label for="ui-br-ext-new-project-label">Project label</label>
@@ -36,25 +36,27 @@
 
 <script>
 
-    import { globalStore } from './../../../main';
-
     export default {
         name: 'Project',
         
-        created() { 
-            
-        },
+        /* inject: [
+            'account'
+        ], */
 
         mounted() { 
-            this.$nextTick(function () {
-                console.log(globalStore.store.account);
-                if(globalStore.store.account) this.account = globalStore.store.account;
-                console.log(this.account);
-            })
+            console.log(this.account);
         },
+
         data() {
             return {
-                account: {}
+                showAddProject: false,
+                account: {
+        client: "My Test Company",
+        isAdmin: 0,
+        registratonKey: "sup_61b589b5f03c42.30439098",
+        repositoryServer: "http://127.0.0.1:8000/api/",
+        token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i."
+      }
             }
         },
 

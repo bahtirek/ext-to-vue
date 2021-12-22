@@ -17,10 +17,22 @@ export default {
     Extension,
   },
 
+  provide(){
+    return {
+      account: this.account
+    }
+  },
+
   data() {
     return {
       regKey: '',
-      account: {}
+      account: {
+        /* client: "My Test Company",
+        isAdmin: 0,
+        registratonKey: "sup_61b589b5f03c42.30439098",
+        repositoryServer: "http://127.0.0.1:8000/api/",
+        token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i." */
+      }
     }
   },
 
@@ -30,9 +42,15 @@ export default {
     //this.getRegKey();
   },
 
+  watch: {
+    account: function(newVal, prevVal) { // 
+        console.log(newVal);
+    } 
+  },
+
   mounted() { 
+    this.getRegKey()
     this.$nextTick(function () {
-      this.getRegKey()
     })
   },
 
@@ -43,13 +61,15 @@ export default {
         globalStore.store.account = await this.auth(this.regKey)
       } */
       //console.log(globalStore);
-      globalStore.store.account = {
-        client: "My Test Company",
-        isAdmin: 1,
-        registratonKey: "sup_61b589b5f03c42.30439098",
-        repositoryServer: "http://127.0.0.1:8000/api/",
-        token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i."
-      }
+      setTimeout(()=>{
+        this.account = {
+          client: "My Test Company",
+          isAdmin: 0,
+          registratonKey: "sup_61b589b5f03c42.30439098",
+          repositoryServer: "http://127.0.0.1:8000/api/",
+          token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i."
+        }
+      }, 2000)
     }
   }
 };
