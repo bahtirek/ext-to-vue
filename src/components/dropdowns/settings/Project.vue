@@ -35,28 +35,20 @@
 
 
 <script>
+    import { globalStore } from './../../../main';
 
     export default {
         name: 'Project',
-        
-        /* inject: [
-            'account'
-        ], */
 
         mounted() { 
+            this.account = globalStore.store.account;
             console.log(this.account);
         },
 
         data() {
             return {
                 showAddProject: false,
-                account: {
-        client: "My Test Company",
-        isAdmin: 0,
-        registratonKey: "sup_61b589b5f03c42.30439098",
-        repositoryServer: "http://127.0.0.1:8000/api/",
-        token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i."
-      }
+                account: {}
             }
         },
 

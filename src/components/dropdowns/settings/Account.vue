@@ -29,23 +29,18 @@
             this.localStorage = storage
         },
 
-        inject: [
-            'account'
-        ],
-
-        mounted() { 
+        mounted() {
+            this.account = globalStore.store.account;
             this.updatePlaceholder()
         },
 
         watch: { 
-            account: function(newVal, prevVal) { // 
-                console.log(newVal, prevVal);
-            }
+
         },
 
         data() {
             return {
-                newAccount: {},
+                account: {},
                 isRegKeySaved: false,
                 reg: {
                     key: '',
@@ -65,12 +60,12 @@
                         if (!regKeyConfirmation) return false;
                     }
                     this.reg.spinner = true;
-                    this.newAccount = await this.auth(this.reg.key)
+                    this.account = await this.auth(this.reg.key)
                         .catch(error => {
                             this.reg.error = error;
                             this.reg.spinner = false;
                         });
-                    if(this.newAccount) {
+                    if(this.account) {
                         await this.localStorage.set('regKey', this.reg.key);
                         this.reg.spinner = false;
                     }
@@ -82,11 +77,11 @@
             
             updatePlaceholder() {
                 if(this.account) {
-                    console.log(this.account);
+                    console.log(JSON.parse(JSON.stringify(this.account)));
                     if (this.account.isAdmin == 1 ){
                         this.reg.placeholder = 'sup_**********************'
                     } else {
-                        'reg_**********************'
+                        this.reg.placeholder = 'reg_**********************'
                     }
                 }
             }

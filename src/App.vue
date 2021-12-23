@@ -17,12 +17,6 @@ export default {
     Extension,
   },
 
-  provide(){
-    return {
-      account: this.account
-    }
-  },
-
   data() {
     return {
       regKey: '',
@@ -43,9 +37,7 @@ export default {
   },
 
   watch: {
-    account: function(newVal, prevVal) { // 
-        console.log(newVal);
-    } 
+
   },
 
   mounted() { 
@@ -62,14 +54,15 @@ export default {
       } */
       //console.log(globalStore);
       setTimeout(()=>{
-        this.account = {
+        globalStore.store.account = {
           client: "My Test Company",
           isAdmin: 0,
           registratonKey: "sup_61b589b5f03c42.30439098",
           repositoryServer: "http://127.0.0.1:8000/api/",
           token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i."
         }
-      }, 2000)
+        console.log(this.account);
+      }, 0)
     }
   }
 };
