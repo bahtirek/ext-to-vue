@@ -2,7 +2,7 @@
 <template>
     <div class="ui-br-ext-container ui-br-ext-dropdown">
         <ReportBugDrop  v-show="drops.reportbug" @toggle-extension="$emit('toggle-extension')"/>
-        <SettingsDrop />
+        <SettingsDrop v-show="drops.settings" />
     </div>
 </template>
 
@@ -41,7 +41,8 @@
                 toggleCompleted: false,
                 toggleReportBugDrop: false,
                 drops: {
-                    reportbug: false
+                    reportbug: false,
+                    settings: false,
                 }
             }
         },
