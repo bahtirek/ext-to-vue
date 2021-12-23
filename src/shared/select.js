@@ -30,7 +30,7 @@ const onSelect = function(){
 
     const style = document.createElement('style');
 
-    style.setAttribute('id','ui-br-ext-extention-style');    
+    style.setAttribute('id','ui-br-ext-extension-style');    
 
     head.appendChild(style);
 
@@ -45,7 +45,7 @@ const onSelect = function(){
 
 const onDeselect = function(){
 
-    document.getElementById('ui-br-ext-extention-style')?.remove();
+    document.getElementById('ui-br-ext-extension-style')?.remove();
 
     removeClickFromBody(getMouseCoordinates);
     
@@ -113,7 +113,8 @@ const findElementFromPoint = function(pageX, pageY){
     if(element 
        && ui_br_ext_previousElement.element !== null
        && ui_br_ext_previousElement.parentCount < ui_br_ext_parentLimit 
-       && element?.closest('#ui-br-ext-extention') === null){
+       && element?.closest('#ui-br-ext-extension') === null
+       ){
 
         // Previously selected element's top and left coordicates.
         const previousElementRect = ui_br_ext_previousElement.element.getBoundingClientRect();
@@ -163,7 +164,7 @@ const findElementFromPoint = function(pageX, pageY){
     if(
         element?.tagName.toLocaleLowerCase() != 'body'
         && element?.tagName.toLocaleLowerCase() != 'html'
-        && element?.classList.value.includes('ui-br-ext-') && element?.classList.value.includes('ui-br-ext-hovered')
+        && element?.closest('#ui-br-ext-extension') === null
         ){
             
             outlineSelectedElement(element);

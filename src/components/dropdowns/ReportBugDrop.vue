@@ -136,7 +136,6 @@
                 event.preventDefault();
                 this.positions.resizeX = this.positions.width + (event.clientX - this.positions.clientX) - 20;
                 if(this.positions.resizeX > 350) {
-                    console.log(this.positions.width);
                     this.$refs.divToResize.style.width = this.positions.resizeX + 'px'
                 }
                 this.positions.resizeY = this.positions.height + (event.clientY - this.positions.clientY) - 20;

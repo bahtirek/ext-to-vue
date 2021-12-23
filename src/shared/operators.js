@@ -64,7 +64,7 @@ import select from './select';
     
     const closeDropdown = () => {
     
-        document.querySelectorAll('.ui-br-ext-extention .ui-br-ext-dropdown-item').forEach(operator => {
+        document.querySelectorAll('.ui-br-ext-extension .ui-br-ext-dropdown-item').forEach(operator => {
     
             operator.classList.remove('ui-br-ext-active');
     

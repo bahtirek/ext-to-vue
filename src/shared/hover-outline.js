@@ -1,4 +1,4 @@
-const bodyChildren = document.querySelectorAll('body > *:not(#ui-br-ext-extention):not(script):not(noscript):not(style)');
+const bodyChildren = document.querySelectorAll('body > *:not(#ui-br-ext-extension):not(script):not(noscript):not(style)');
 
 const preventClick = (event) => preventClickHandler(event);
 
