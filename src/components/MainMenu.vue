@@ -82,8 +82,12 @@
                 this.positions.clientX = event.clientX
                 this.positions.clientY = event.clientY
                 // set the element's new position:
-                draggableContainer.style.top = (draggableContainer.offsetTop - this.positions.movementY) + 'px'
-                draggableContainer.style.left = (draggableContainer.offsetLeft - this.positions.movementX) + 'px'
+                if (event.clientY > 0 && event.clientY < window.innerHeight) {
+                    draggableContainer.style.top = (draggableContainer.offsetTop - this.positions.movementY) + 'px'
+                }
+                if (event.clientX > 0 && event.clientX < window.innerWidth){
+                    draggableContainer.style.left = (draggableContainer.offsetLeft - this.positions.movementX) + 'px'
+                }
             },
             closeDragElement () {
                 document.onmouseup = null
