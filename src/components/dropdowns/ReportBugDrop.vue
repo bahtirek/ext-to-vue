@@ -1,5 +1,5 @@
 <template>
-    <div class="ui-br-ext-dropdown-item ui-br-ext-report-bug" id="ui-br-ext-report-bug">
+    <div class="ui-br-ext-dropdown-item ui-br-ext-report-bug" id="ui-br-ext-report-bug" ref="divToResize">
             <div class="ui-br-ext-drop-title">Report bug</div>
             <div class="ui-br-ext-drop-body">
                 <ul>
@@ -41,7 +41,7 @@
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveReport" data-listener="off">
                 <span>Save</span> 
             </button>
-            <div class="ui-br-ext-box-resize" id="ui-br-comment-boxResize">
+            <div class="ui-br-ext-box-resize" id="ui-br-comment-boxResize" @mousedown="onMouseDown">
                 <svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" focusable="false"
                     role="img" width="128" height="128" fill="currentColor">
                     <path d="M33,11H3a1,1,0,0,0,0,2H33a1,1,0,0,0,0-2Z" class="ui-br-ext-clr-i-outline clr-i-outline-path-1" />
@@ -77,6 +77,14 @@
                     savePdf: false,
                     saveScreenshot: false,
                     xPath: '',
+                },
+                positions: {
+                    clientX: undefined,
+                    clientY: undefined,
+                    resizeX: 0,
+                    resizeY: 0,
+                    height: undefined,
+                    width: undefined
                 }
             }
         },
@@ -112,6 +120,34 @@
                 dlLink.href = dataUrl;
                 dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
                 dlLink.click();
+            },
+
+            onMouseDown: function (event) {
+                event.preventDefault();
+                this.positions.width = this.$refs.divToResize.getBoundingClientRect().width;
+                this.positions.height = this.$refs.divToResize.getBoundingClientRect().height;
+                this.positions.clientX = event.clientX
+                this.positions.clientY = event.clientY
+                document.onmousemove = this.elementResize
+                document.onmouseup = this.closeElementResize
+            },
+
+            elementResize: function (event) {
+                event.preventDefault();
+                this.positions.resizeX = this.positions.width + (event.clientX - this.positions.clientX) - 20;
+                if(this.positions.resizeX > 350) {
+                    console.log(this.positions.width);
+                    this.$refs.divToResize.style.width = this.positions.resizeX + 'px'
+                }
+                this.positions.resizeY = this.positions.height + (event.clientY - this.positions.clientY) - 20;
+                if(this.positions.resizeY > 200) {
+                    this.$refs.divToResize.style.height = this.positions.resizeY + 'px'
+                }
+            },
+
+            closeElementResize () {
+                document.onmouseup = null
+                document.onmousemove = null
             }
         }
     }
