@@ -1,4 +1,4 @@
- const getScreenshot = async function(){
+const getScreenshot = async function(){
 	//document.getElementById('ui-br-ext-extension').style.display = 'none';
 	document.querySelector('body').classList.add('ui-br-ext-hide-hovered');
 	await setDelay(100);

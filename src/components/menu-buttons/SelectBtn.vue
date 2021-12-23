@@ -10,6 +10,7 @@
 <script>
 
     import operators from '../../shared/operators';
+    import { globalStore } from '../../main';
 
     export default {
         name: 'SelectBtn',
@@ -34,6 +35,8 @@
 
             toggleBtn(e) {
                 this.toggleEmit(e.currentTarget)
+                //turning off  dynamic flow on select click
+                globalStore.store.dynamicDomFlow = false;
             },
 
             toggleEmit(el) {
@@ -45,8 +48,11 @@
                 })
             },
 
-            fetchTestData() {
+            toggleSelectButton() {
                this.toggleEmit(this.$refs.selectButton)
+               //turning on dynamic flow
+               globalStore.store.dynamicDomFlow = true;
+               //toggleBtn function turns off  dynamic flow on select click
             },
         }
     }
