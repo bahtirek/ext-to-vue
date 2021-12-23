@@ -56,6 +56,7 @@
 <script>
 
     import screenshot from '../../shared/screenshot';
+    import extensionMove from '../../shared/extension-move';
     import { globalStore } from './../../main';
 
     export default {
@@ -63,6 +64,11 @@
         
         created() { 
             this.onGetScreenshot = screenshot.getScreenshot;
+            this.mouseMove = extensionMove.onMouseDown;
+        },
+
+        mounted: function () {
+            window.reportBugComponent = this;
         },
 
         data() {
@@ -93,12 +99,14 @@
 
             async saveReport(){
                 if(this.form.saveScreenshot) {
-                    await this.getScreenshot();
+                    if(!globalStore.store.dynamicDomFlow) await this.getScreenshot();
                 }
 
                 if(this.form.savePdf){
                      console.log('save pdf');
-                } else {
+                }
+
+                if(this.form.saveScreenshot && !this.form.savePdf){
                     this.screenshotLink(globalStore.store.screenshot, 'filename');
                 }
 
@@ -122,31 +130,8 @@
                 dlLink.click();
             },
 
-            onMouseDown: function (event) {
-                event.preventDefault();
-                this.positions.width = this.$refs.divToResize.getBoundingClientRect().width;
-                this.positions.height = this.$refs.divToResize.getBoundingClientRect().height;
-                this.positions.clientX = event.clientX
-                this.positions.clientY = event.clientY
-                document.onmousemove = this.elementResize
-                document.onmouseup = this.closeElementResize
-            },
-
-            elementResize: function (event) {
-                event.preventDefault();
-                this.positions.resizeX = this.positions.width + (event.clientX - this.positions.clientX) - 20;
-                if(this.positions.resizeX > 350) {
-                    this.$refs.divToResize.style.width = this.positions.resizeX + 'px'
-                }
-                this.positions.resizeY = this.positions.height + (event.clientY - this.positions.clientY) - 20;
-                if(this.positions.resizeY > 200) {
-                    this.$refs.divToResize.style.height = this.positions.resizeY + 'px'
-                }
-            },
-
-            closeElementResize () {
-                document.onmouseup = null
-                document.onmousemove = null
+            onMouseDown() {
+                this.mouseMove()
             }
         }
     }
