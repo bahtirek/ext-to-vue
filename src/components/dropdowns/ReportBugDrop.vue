@@ -58,6 +58,7 @@
     import screenshot from '../../shared/screenshot';
     import extensionMove from '../../shared/extension-move';
     import { globalStore } from './../../main';
+    //import jsPDF from 'jspdf';
 
     export default {
         name: 'ReportBugDrop',
@@ -91,7 +92,8 @@
                     resizeY: 0,
                     height: undefined,
                     width: undefined
-                }
+                },
+                name: 'test'
             }
         },
 
@@ -102,9 +104,12 @@
                     if(!globalStore.store.dynamicDomFlow) await this.getScreenshot();
                 }
 
-                if(this.form.savePdf){
-                     console.log('save pdf');
-                }
+                /* if(this.form.savePdf){
+                    let pdfName = 'test'; 
+                    var doc = new jsPDF();
+                    doc.text(this.name, 10, 10);
+                    doc.save(pdfName + '.pdf');
+                } */
 
                 if(this.form.saveScreenshot && !this.form.savePdf){
                     this.screenshotLink(globalStore.store.screenshot, 'filename');
