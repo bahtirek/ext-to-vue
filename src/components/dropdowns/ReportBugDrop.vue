@@ -95,7 +95,6 @@
                     width: undefined
                 },
                 name: 'test',
-                screen: `data:image/png;base64,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" id="ui-br-ext-download-image-cropped" style="display: none;" download="cropped_screenshot" data-downloadurl="image/png:cropped_screenshot:data:image/png;base64,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`
             }
         },
 
@@ -103,7 +102,10 @@
 
             async saveReport(){
                 if(this.form.saveScreenshot) {
-                    if(!globalStore.store.dynamicDomFlow) await this.getScreenshot();
+                    if(!globalStore.store.dynamicDomFlow) {
+                        console.log('not dynamic');
+                        await this.getScreenshot();
+                    }
                 }
 
                 if(this.form.savePdf){
@@ -112,6 +114,7 @@
 
                 if(this.form.saveScreenshot && !this.form.savePdf){
                     this.screenshotLink(globalStore.store.screenshot, 'filename');
+                    console.log('globalStore.store.screenshot download',globalStore.store.screenshot);
                 }
 
                 if(this.form.saveJira){
@@ -122,7 +125,11 @@
             savePdf() {
                 let pdfName = 'test'; 
                 let count = 20;
-                var doc = new jsPDF();
+                let doc = new jsPDF('p','mm', 'letter');
+                const width = doc.internal.pageSize.getWidth() - 20;
+                const ratio = window.innerWidth / window.innerHeight;
+                const height = width/ratio
+                console.log('ratio=', ratio, ' height = ', width/ratio);
                 const list = ['description', 'actualResults', 'expectedResults', 'stepsToReproduce'];
                 const titles = {
                     description: 'Description',
@@ -138,16 +145,16 @@
                         doc.setFontSize(15);
                         doc.text(titles[item], 10, count);
                         // Text
-                        count = count + 7;
+                        count = count + 7;//spacing between title and text
                         doc.setFont("helvetica", "normal");
                         doc.setFontSize(14);
                         doc.text(this.form[item], 10, count);
-                        count = count + 15;
+                        count = count + 15;//spacing between descriptions
                     }
                     
                 }
                 if(this.form.saveScreenshot) {
-                    doc.addImage(this.screen, "JPEG", 15, count, 180, 180);
+                    doc.addImage(globalStore.store.screenshot, "PNG", 15, count, width, height);
                 }
 
                 doc.save(pdfName + '.pdf'); 

@@ -34,7 +34,7 @@ const imageDownload = async function(filename) {
 
 const screenshotLink = async function(id, dataUrl, filename) {
 	let dlLink = document.getElementById(id);
-	let MIME_TYPE = "image/jpeg";
+	let MIME_TYPE = "image/png";
 	dlLink.download = filename;
 	dlLink.href = dataUrl;
 	dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
