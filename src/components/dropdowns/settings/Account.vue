@@ -20,6 +20,7 @@
     import { globalStore } from './../../../main';
     import regKeyAuth from './../../../shared/regkey';
     import storage from './../../../shared/storage';
+    import eventBus from './../../../eventBus'
 
     export default {
         name: 'Account',
@@ -32,10 +33,6 @@
         mounted() {
             this.account = globalStore.store.account;
             this.updatePlaceholder()
-        },
-
-        watch: { 
-
         },
 
         data() {
@@ -60,12 +57,15 @@
                         if (!regKeyConfirmation) return false;
                     }
                     this.reg.spinner = true;
+                    // Get request
                     this.account = await this.auth(this.reg.key)
                         .catch(error => {
                             this.reg.error = error;
                             this.reg.spinner = false;
                         });
                     if(this.account) {
+                        globalStore.store.account = this.account;
+                        eventBus.$emit('account-loaded');
                         await this.localStorage.set('regKey', this.reg.key);
                         this.reg.spinner = false;
                     }
