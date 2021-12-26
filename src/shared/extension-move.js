@@ -1,22 +1,25 @@
+let positions = {};
+
 const onMouseDown = function (event) {
     event.preventDefault();
-    this.positions.width = this.$refs.divToResize.getBoundingClientRect().width;
-    this.positions.height = this.$refs.divToResize.getBoundingClientRect().height;
-    this.positions.clientX = event.clientX
-    this.positions.clientY = event.clientY
-    document.onmousemove = this.elementResize
-    document.onmouseup = this.closeElementResize
+    positions.width = this.$refs.divToResize.getBoundingClientRect().width;
+    positions.height = this.$refs.divToResize.getBoundingClientRect().height;
+    positions.clientX = event.clientX
+    positions.clientY = event.clientY
+    positions.element = this.$refs.divToResize
+    document.onmousemove = elementResize
+    document.onmouseup = closeElementResize
 }
 
 const elementResize = function (event) {
     event.preventDefault();
-    this.positions.resizeX = this.positions.width + (event.clientX - this.positions.clientX);
-    if(this.positions.resizeX > 350) {
-        this.$refs.divToResize.style.width = this.positions.resizeX + 'px'
+    positions.resizeX = positions.width + (event.clientX - positions.clientX);
+    if(positions.resizeX > 350) {
+        positions.element.style.width = positions.resizeX + 'px'
     }
-    this.positions.resizeY = this.positions.height + (event.clientY - this.positions.clientY);
-    if(this.positions.resizeY > 200) {
-        this.$refs.divToResize.style.height = this.positions.resizeY + 'px'
+    positions.resizeY = positions.height + (event.clientY - positions.clientY);
+    if(positions.resizeY > 200) {
+        positions.element.style.height = positions.resizeY + 'px'
     }
 }
 
