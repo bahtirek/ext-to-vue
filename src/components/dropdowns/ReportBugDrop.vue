@@ -3,10 +3,10 @@
         <div class="ui-br-ext-drop-title">Report bug</div>
         <div class="ui-br-ext-drop-body">
             <ul>
-                <li>
+                <li v-if="account && account.registratonKey">
                     <span>Project label: </span>
                     <span id="ui-br-ext-project-name" v-if="currentProject"> <strong> {{currentProject.label || 'No project chosen'}}</strong></span>
-                </li>
+                </li >
             </ul>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-description">Description</label>
@@ -25,7 +25,7 @@
                 <textarea name="ui-br-ext-rep-steps" v-model="form.stepsToReproduce" rows="3" data-gramm="false"></textarea>
             </div>
         </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registratonKey">
             <input type="checkbox" name="jira" v-model="form.saveJira">
             <label for="ui-br-ext-save-to-jira">Create Jira ticket on save</label>
         </div>
@@ -77,6 +77,7 @@
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
                 this.currentProject = globalStore.store.currentProject;
+                console.log('reportbug line80', globalStore.store);
             })
         },
 
@@ -104,6 +105,7 @@
                     height: undefined,
                     width: undefined
                 },
+                filename: 'BugReport',
                 name: 'test',
             }
         },
@@ -111,6 +113,9 @@
         methods: {
 
             async saveReport(){
+                
+                if(this.currentProject && this.currentProject.label) this.filename = this.currentProject.label + '_' + this.getDate();
+
                 if(this.form.saveScreenshot) {
                     if(!globalStore.store.dynamicDomFlow) {
                         console.log('not dynamic');
@@ -123,13 +128,24 @@
                 }
 
                 if(this.form.saveScreenshot && !this.form.savePdf){
-                    this.screenshotLink(globalStore.store.screenshot, 'filename');
-                    console.log('globalStore.store.screenshot download',globalStore.store.screenshot);
+                    this.screenshotLink(globalStore.store.screenshot, this.filename);
                 }
 
                 if(this.form.saveJira){
                     console.log('save jira')
                 }
+
+                this.form = {
+                    description: '',
+                    actualResults: '',
+                    expectedResults: '',
+                    stepsToReproduce: '',
+                    saveJira: false,
+                    savePdf: false,
+                    saveScreenshot: false,
+                    screenshot: '',
+                    xPath: '',
+                }                
             },
 
             savePdf() {
@@ -162,10 +178,10 @@
                     
                 }
                 if(this.form.saveScreenshot) {
-                    doc.addImage(globalStore.store.screenshot, "PNG", 15, count, width, height);
+                    doc.addImage(globalStore.store.screenshot, "PNG", 10, count, width, height);
                 }
 
-                doc.save(`${this.currentProject.label}_${this.getDate()}.pdf`); 
+                doc.save(this.filename + '.pdf'); 
             },
 
             async getScreenshot(){
@@ -188,12 +204,14 @@
             },
 
             getDate() {
-                var today = new Date();
+                /* var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
 
-                return mm + '/' + dd + '/' + yyyy;
+                return mm + '/' + dd + '/' + yyyy; */
+                let date = Date.now().toString();
+                return date.slice(-6)
             }
         }
     }

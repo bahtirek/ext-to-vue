@@ -6,7 +6,7 @@
 
     import Extension from './components/Extension';
     import storage from './shared/storage';
-    import regKeyAuth from './shared/regkey';
+    import regKeyAuthentication from './shared/regkey';
     import { globalStore } from './main';
     import eventBus from './eventBus'
         
@@ -20,19 +20,13 @@ export default {
   data() {
     return {
       regKey: '',
-      account: {
-        /* client: "My Test Company",
-        isAdmin: 0,
-        registratonKey: "sup_61b589b5f03c42.30439098",
-        repositoryServer: "http://127.0.0.1:8000/api/",
-        token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i." */
-      }
+      account: {}
     }
   },
 
   created() { 
-    /* this.localStorage = storage;
-    this.auth = regKeyAuth.auth; */
+    this.localStorage = storage;
+    this.auth = regKeyAuthentication.auth;
     this.getRegKey();
   },
 
@@ -48,11 +42,18 @@ export default {
 
   methods: {
     async getRegKey(){
-      /* this.regKey = await this.localStorage.get('regKey');
+      this.regKey = await this.localStorage.get('regKey');
       if(this.regKey) {
-        globalStore.store.account = await this.auth(this.regKey)
-      } */
-      //console.log(globalStore);
+        globalStore.store.account = await this.auth(this.regKey);
+        //globalStore.store.projects = await this.getProjects(globalStore.store.account.token);
+        eventBus.$emit('account-loaded')
+      }
+      //this.fakeGetkey()
+      console.log('app 50',globalStore.store.account);
+
+    },
+
+    fakeGetkey(){
       setTimeout(()=>{
         globalStore.store.account = {
           client: "My Test Company",
@@ -60,7 +61,8 @@ export default {
           registratonKey: "sup_61b589b5f03c42.30439098",
           repositoryServer: "http://127.0.0.1:8000/api/",
           token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i.",
-          projects: [
+        };
+        globalStore.store.projects = [
             {
               id: 1,
               label: 'bu senlarga',
@@ -87,7 +89,6 @@ export default {
               description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
             },
           ]
-        }
         eventBus.$emit('account-loaded')
       }, 2000)
     }

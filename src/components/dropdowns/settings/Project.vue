@@ -9,11 +9,11 @@
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-projects">Projects</label>
                 <input type="text" v-model="searchQuery">
-                <span class="ui-br-ext-message" v-if="searchQuery!=='' && searchResults.length == 0">No projects found</span>
+                <span class="ui-br-ext-message" v-if="searchQuery!=='' && searchResults && searchResults.length == 0">No projects found</span>
                 <span class="ui-br-ext-search-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ad55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </span >
-                <div class="ui-br-ext-search-results" v-if="searchResults.length > 0">
+                <div class="ui-br-ext-search-results" v-if="searchResults && searchResults.length > 0">
                     <ul>
                         <li v-for="project in searchResults.slice(0, 3)" :key="project.id" @click="onResultClick(project)">{{project.label}}</li>
                     </ul>
@@ -55,12 +55,12 @@
 
         mounted() { 
             this.account = globalStore.store.account;
-            this.currentProject = globalStore.store.currentProject;
+            this.projects = globalStore.store.projects;
             console.log(this.account);
 
             eventBus.$on('account-loaded', () => {
                 this.account = globalStore.store.account;
-                this.currentProject = globalStore.store.currentProject;
+                this.projects = globalStore.store.projects;
             })
         },
 
@@ -74,26 +74,27 @@
                 searchQuery: '',
                 projectMessage: '',
                 currentProject: {},
-                account: {}
+                account: {},
+                projects: []
             }
         },
 
         computed: {
             searchResults: function () {
                 if(this.searchQuery == '') return [];
-                return this.account.projects?.filter(project => project.label?.includes(this.searchQuery));
+                return this.projects.filter(project => project.label?.includes(this.searchQuery));
             }
         },
 
         methods: {
             saveProject(){
                 this.projectMessage = '';
-                const index = this.account.projects.findIndex(project => {
+                const index = this.projects.findIndex(project => {
                     return project.label == this.project.label
                 });
                 if(index == -1) {
                     //post
-                    this.account.projects.push({label: this.project.label, description: this.project.description});
+                    this.projects.push({label: this.project.label, description: this.project.description});
                     alert(`Project ${this.project.label} successfully saved`);
                     this.project.label = '';
                     this.project.description = '';
