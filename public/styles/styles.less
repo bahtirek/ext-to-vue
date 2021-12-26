@@ -161,7 +161,6 @@ body {
             }
 
             .ui-br-ext-btn-link {
-                margin-bottom: 20px;
                 text-align: right;
 
                 span {
@@ -170,7 +169,7 @@ body {
                     color: @primary-color;
                     cursor: pointer;
 
-                    &::before {
+                    /* &::before {
                         content: "+";
                         height: 14px;
                         width: 14px;
@@ -179,10 +178,15 @@ body {
                         border: 1px solid @primary-color;
                         margin-right: 3px;
                     }
+
+                    &.active::before {
+                        content: "-";
+                        padding: 0 6px;
+                    } */
                 }
             }
 
-            #ui-br-ext-new-project-cont {
+            .ui-br-ext-new-project-cont {
                 padding-bottom: 30px;
                 .ui-br-ext-form-container.ui-br-ext-textarea {
                     margin-bottom: 30px;
@@ -268,6 +272,31 @@ body {
                     left: 2px;
                     display: block;
                     color: red;
+                }
+
+                .ui-br-ext-search-icon {
+                    position: absolute;
+                    right: 6px;
+                    top: 5px;
+                    svg {
+                        height: 20px;
+                    }
+                }
+
+                .ui-br-ext-search-results {
+                    width: 100%;
+                    padding-top: 10px;
+                    ul {
+                        margin: 0;
+                        padding: 0;
+                        li {
+                            padding: 5px 10px;
+                            &:hover {
+                                background-color: #f7f7f7;
+                                cursor: pointer;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -366,8 +395,23 @@ body {
                             border-top: none;
                         }
                     }
-                    .ui-br-ext-setting-body {
+                    .ui-br-ext-settings-body {
                         padding: 15px 0;
+
+                        .ui-br-ext-current-project {
+                            padding: 0 5px;
+                            color: #555555;
+                            span {
+                                font-weight: bold;
+                            }
+                            div {
+                                margin-top: 5px;
+                                font-size: 12px;
+                            }
+                        }
+                        .ui-br-ext-form-container {
+                            margin-top: 20px;
+                        }
                     }
                 }
             }

@@ -5,7 +5,7 @@
                 <ul>
                     <li>
                         <span>Project:</span>
-                        <span id="ui-br-ext-project-name">No project choosen</span>
+                        <span id="ui-br-ext-project-name" v-if="currentProject"> <strong>{{currentProject.label}}</strong></span>
                     </li>
                 </ul>
                 <div class="ui-br-ext-form-container ui-br-ext-textarea">
@@ -59,6 +59,7 @@
     import extensionMove from '../../shared/extension-move';
     import { globalStore } from './../../main';
     import jsPDF from 'jspdf';
+    import eventBus from './../../eventBus'
 
     export default {
         name: 'ReportBugDrop',
@@ -70,11 +71,20 @@
 
         mounted: function () {
             window.reportBugComponent = this;
+            this.account = globalStore?.store?.account;
+            this.currentProject = globalStore?.store.currentProject;
+
+            eventBus.$on('account-loaded', (val) => {
+                this.account = globalStore.store.account;
+                this.currentProject = globalStore.store.currentProject;
+            })
         },
 
         data() {
             return {
                 next: false,
+                currentProject: {},
+                account: {},
                 form: {
                     description: '',
                     actualResults: '',

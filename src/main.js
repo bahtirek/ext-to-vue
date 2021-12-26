@@ -7,6 +7,7 @@ new Vue({
   render: (h) => h(App),
 }).$mount("#ui-br-ext-extension-container");
 
+
 export const globalStore = new Vue({
   data: {
     store: {
@@ -15,6 +16,7 @@ export const globalStore = new Vue({
       selectedElementRect: '',
       account: {},
       dynamicDomFlow: true,
+      currentProject: {},
       report: {
         description: '',
         actualResults: '',

@@ -8,7 +8,7 @@
     import storage from './shared/storage';
     import regKeyAuth from './shared/regkey';
     import { globalStore } from './main';
-
+    import eventBus from './eventBus'
         
 export default {
   name: "App",
@@ -33,7 +33,7 @@ export default {
   created() { 
     /* this.localStorage = storage;
     this.auth = regKeyAuth.auth; */
-    //this.getRegKey();
+    this.getRegKey();
   },
 
   watch: {
@@ -41,7 +41,7 @@ export default {
   },
 
   mounted() { 
-    this.getRegKey()
+    //this.getRegKey()
     this.$nextTick(function () {
     })
   },
@@ -56,13 +56,40 @@ export default {
       setTimeout(()=>{
         globalStore.store.account = {
           client: "My Test Company",
-          isAdmin: 0,
+          isAdmin: 1,
           registratonKey: "sup_61b589b5f03c42.30439098",
           repositoryServer: "http://127.0.0.1:8000/api/",
-          token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i."
+          token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i.",
+          projects: [
+            {
+              id: 1,
+              label: 'bu senlarga',
+              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+            },
+            {
+              id: 2,
+              label: 'tralivali',
+              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+            },
+            {
+              id: 3,
+              label: 'emas',
+              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+            },
+            {
+              id: 4,
+              label: 'tilitili',
+              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+            },
+            {
+              id: 5,
+              label: 'bubblegum',
+              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+            },
+          ]
         }
-        console.log(this.account);
-      }, 0)
+        eventBus.$emit('account-loaded')
+      }, 2000)
     }
   }
 };

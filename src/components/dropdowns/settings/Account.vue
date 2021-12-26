@@ -1,16 +1,16 @@
 <template>
     
-        <div class="ui-br-ext-setting-body">
-            <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                <label for="regKey">Registration Key</label>
-                <input type="text" name="regKey" v-model="reg.key" :placeholder="reg.placeholder"/>
-                <span class="ui-br-ext-message">{{reg.error}}</span>
-            </div>
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-new-project" data-listener="off">
-                <span class="ui-br-ext-spinner" :class="{ active: reg.spinner }"></span>
-                <span @click="onRegKeySave">Save</span > 
-            </button>
+    <div class="ui-br-ext-settings-body">
+        <div class="ui-br-ext-form-container ui-br-ext-textarea">
+            <label for="regKey">Registration Key</label>
+            <input type="text" name="regKey" v-model="reg.key" :placeholder="reg.placeholder"/>
+            <span class="ui-br-ext-message">{{reg.error}}</span>
         </div>
+        <button class="ui-br-ext-btn" id="ui-br-ext-save-new-project" data-listener="off">
+            <span class="ui-br-ext-spinner" :class="{ active: reg.spinner }"></span>
+            <span @click="onRegKeySave">Save</span > 
+        </button>
+    </div>
     
 </template>
 
