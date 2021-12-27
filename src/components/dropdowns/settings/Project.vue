@@ -56,11 +56,16 @@
         mounted() { 
             this.account = globalStore.store.account;
             this.projects = globalStore.store.projects;
+            this.user = globalStore.store.user;
             console.log(this.account);
 
             eventBus.$on('account-loaded', () => {
                 this.account = globalStore.store.account;
                 this.projects = globalStore.store.projects;
+            })
+            
+            eventBus.$on('user-loaded', () => {
+                this.user = globalStore.store.user;
             })
         },
 

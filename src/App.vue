@@ -28,6 +28,7 @@ export default {
     this.localStorage = storage;
     this.auth = regKeyAuthentication.auth;
     this.getRegKey();
+    this.getUserFromLocal();
   },
 
   watch: {
@@ -42,15 +43,24 @@ export default {
 
   methods: {
     async getRegKey(){
-      this.regKey = await this.localStorage.get('regKey');
+      /* this.regKey = await this.localStorage.get('regKey');
       if(this.regKey) {
         globalStore.store.account = await this.auth(this.regKey);
         //globalStore.store.projects = await this.getProjects(globalStore.store.account.token);
         eventBus.$emit('account-loaded')
-      }
-      //this.fakeGetkey()
-      console.log('app 50',globalStore.store.account);
+      } */
+      this.fakeGetkey()
+      //console.log('app 50',globalStore.store.account);
 
+    },
+
+    async getUserFromLocal() {
+        /* const user = await this.localStorage.get('user');
+        console.log(user);
+        if (user) {
+          this.user = JSON.parse(user);
+          eventBus.$emit('user-loaded')
+        } */
     },
 
     fakeGetkey(){
@@ -63,32 +73,32 @@ export default {
           token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i.",
         };
         globalStore.store.projects = [
-            {
-              id: 1,
-              label: 'bu senlarga',
-              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-            },
-            {
-              id: 2,
-              label: 'tralivali',
-              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-            },
-            {
-              id: 3,
-              label: 'emas',
-              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-            },
-            {
-              id: 4,
-              label: 'tilitili',
-              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-            },
-            {
-              id: 5,
-              label: 'bubblegum',
-              description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-            },
-          ]
+          {
+            id: 1,
+            label: 'bu senlarga',
+            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+          },
+          {
+            id: 2,
+            label: 'tralivali',
+            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+          },
+          {
+            id: 3,
+            label: 'emas',
+            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+          },
+          {
+            id: 4,
+            label: 'tilitili',
+            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+          },
+          {
+            id: 5,
+            label: 'bubblegum',
+            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+          },
+        ]
         eventBus.$emit('account-loaded')
       }, 2000)
     }

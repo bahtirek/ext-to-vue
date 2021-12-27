@@ -2,12 +2,20 @@
     <div class="ui-br-ext-dropdown-item ui-br-ext-report-bug" id="ui-br-ext-report-bug" ref="divToResize">
         <div class="ui-br-ext-drop-title">Report bug</div>
         <div class="ui-br-ext-drop-body">
-            <ul>
+            <ul class="ui-br-ext-info-list">
                 <li v-if="account && account.registratonKey">
                     <span>Project label: </span>
-                    <span id="ui-br-ext-project-name" v-if="currentProject"> <strong> {{currentProject.label || 'No project chosen'}}</strong></span>
+                    <span v-if="currentProject"> <strong> {{currentProject.label || 'No project chosen'}}</strong></span>
                 </li >
-            </ul>
+                <li v-if="user && (user.firstname || user.lastname)">
+                    <span>User: </span>
+                    <span> <strong> {{user.firstname}} {{user.lastname}}</strong></span>
+                </li >
+                <li v-if="user && user.email">
+                    <span>Email: </span>
+                    <span> <strong> {{user.email}}</strong></span>
+                </li >
+            </ul >
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-description">Description</label>
                 <textarea name="ui-br-ext-description" v-model="form.description" rows="2" data-gramm="false"></textarea>
@@ -73,11 +81,16 @@
             window.reportBugComponent = this;
             this.account = globalStore?.store?.account;
             this.currentProject = globalStore?.store.currentProject;
+            this.user = globalStore?.store.user;
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
                 this.currentProject = globalStore.store.currentProject;
                 console.log('reportbug line80', globalStore.store);
+            })
+                        
+            eventBus.$on('user-loaded', () => {
+                this.user = globalStore.store.user;
             })
         },
 
@@ -86,6 +99,7 @@
                 next: false,
                 currentProject: {},
                 account: {},
+                user: {},
                 form: {
                     description: '',
                     actualResults: '',

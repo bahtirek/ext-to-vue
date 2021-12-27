@@ -16,6 +16,7 @@ export const globalStore = new Vue({
       selectedElementRect: '',
       account: {},
       projects: [],
+      user: {},
       dynamicDomFlow: true,
       currentProject: {},
       report: {

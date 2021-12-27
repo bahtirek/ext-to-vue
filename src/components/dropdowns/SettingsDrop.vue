@@ -4,13 +4,18 @@
                 <div class="ui-br-ext-drop-body">
                     
                     <div class="ui-br-ext-settings-container" v-if="account && account.registratonKey">
-                        <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifAccount = false">Project</div>
+                        <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifAccount, ifUser = false">Project</div>
                         <Project v-if="ifProject" />
                     </div>
                     
                     <div class="ui-br-ext-settings-container">
-                        <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifProject = false">Account</div>
+                        <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifProject, ifUser = false">Account</div>
                         <Account v-if="ifAccount" />
+                    </div>
+                    
+                    <div class="ui-br-ext-settings-container">
+                        <div class="ui-br-ext-setting-title" @click="ifUser = !ifUser; ifProject, ifAccount = false">User</div>
+                        <User v-if="ifUser" />
                     </div>
                     
                 </div>
@@ -22,6 +27,7 @@
 
     import Project from './settings/Project';
     import Account from './settings/Account';
+    import User from './settings/User';
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus'
 
@@ -29,7 +35,8 @@
         name: 'SettingsDrop',
         components: {
             Project,
-            Account
+            Account,
+            User
         },
 
         mounted: function () {
@@ -47,6 +54,7 @@
             return {
                 ifProject: false,
                 ifAccount: false,
+                ifUser: false,
                 currentProject: {},
                 account: {},
             }
