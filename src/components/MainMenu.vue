@@ -6,7 +6,7 @@
             <ViewReportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <ExportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
-            <CloseBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />  
+            <CloseBtn @toggle-button="toggleButton" />  
         </div>
     </div>
 </template>
@@ -53,11 +53,16 @@
 
         methods: {
             toggleButton(el) {
-                this.toggleCompleted = this.activateOperator(el);//Activate button
-                this.toggleDrops(el.id, this.toggleCompleted); //Expand dropdown if exist
-                if(el.id == 'ui-br-ext-report-bug-button') {
-                    this.removeClickFromBodyOnReport();
-                }
+                if (el.id == 'ui-br-ext-close-button') {
+                    console.log('ui-br-ext-close-button');
+                    window.destroyeUibrextInstance()
+                } else {
+                    this.toggleCompleted = this.activateOperator(el);//Activate button
+                    this.toggleDrops(el.id, this.toggleCompleted); //Expand dropdown if exist
+                    if(el.id == 'ui-br-ext-report-bug-button') {
+                        this.removeClickFromBodyOnReport();
+                    }
+                }               
             },  
             
             toggleDrops(id, state){
