@@ -20,6 +20,7 @@
     import SettingsBtn from './menu-buttons/SettingsBtn';
     import CloseBtn from './menu-buttons/CloseBtn';
     import operators from '../shared/operators';
+    import select from '../shared/select';
 
     export default {
         name: 'MainMenu',
@@ -35,7 +36,7 @@
 
         created() { 
             this.activateOperator = operators.activateOperator;
-            this.onSelect = operators.onSelect;
+            this.onDeselect = select.onDeselect;
             this.removeClickFromBodyOnReport = operators.removeClickFromBodyOnReport;
         },
 
@@ -55,6 +56,7 @@
             toggleButton(el) {
                 if (el.id == 'ui-br-ext-close-button') {
                     console.log('ui-br-ext-close-button');
+                    this.onDeselect();
                     window.destroyeUibrextInstance()
                 } else {
                     this.toggleCompleted = this.activateOperator(el);//Activate button
