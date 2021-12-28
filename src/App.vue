@@ -27,6 +27,7 @@ export default {
   created() { 
     this.localStorage = storage;
     this.auth = regKeyAuthentication.auth;
+    //this.fakeGetkey();
     this.getRegKey();
     this.getUserFromLocal();
   },
@@ -43,9 +44,6 @@ export default {
         //globalStore.store.projects = await this.getProjects(globalStore.store.account.token);
         eventBus.$emit('account-loaded')
       }
-      //this.fakeGetkey()
-      //console.log('app 50',globalStore.store.account);
-
     },
 
     async getUserFromLocal() {

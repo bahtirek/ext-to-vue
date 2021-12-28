@@ -40,7 +40,6 @@
         },
 
         mounted: function () {
-            window.reportBugComponent = this;
             this.account = globalStore?.store?.account;
             this.currentProject = globalStore?.store.currentProject;
 

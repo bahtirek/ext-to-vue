@@ -110,15 +110,15 @@
                 if(index == -1) {
                     if(this.project.id) {
                         console.log('edit project');
-                alert(`Project ${this.project.label} successfully saved`);
+                        alert(`Project ${this.project.label} successfully saved`);
                         this.resetProject();
                         // patch
                     } else {
                         console.log('new project');
                         //post
                         this.projects.push({label: this.project.label, description: this.project.description});
-                alert(`Project ${this.project.label} successfully saved`);
-                    this.resetProject();
+                        alert(`Project ${this.project.label} successfully saved`);
+                        this.resetProject();
                     }
                     
                 } else {

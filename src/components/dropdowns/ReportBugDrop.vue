@@ -34,15 +34,15 @@
             </div>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registratonKey">
-            <input type="checkbox" name="jira" v-model="form.saveJira">
+            <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="form.saveJira">
             <label for="ui-br-ext-save-to-jira">Create Jira ticket on save</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-            <input type="checkbox" name="pdf" v-model="form.savePdf">
+            <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf" v-model="form.savePdf">
             <label for="ui-br-ext-save-to-pdf">Save as PDF</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-            <input type="checkbox" name="screenshot" v-model="form.saveScreenshot">
+            <input type="checkbox" name="screenshot" id="ui-br-ext-save-to-screenshot" v-model="form.saveScreenshot">
             <label for="ui-br-ext-save-to-screenshot">Attach screenshot</label>
             <span class="ui-br-ext-disclaimer">Make sure to remove personal identity information</span>
         </div>
@@ -119,7 +119,7 @@
                     height: undefined,
                     width: undefined
                 },
-                filename: 'BugReport',
+                filename: '',
                 name: 'test',
             }
         },
@@ -128,7 +128,7 @@
 
             async saveReport(){
                 
-                if(this.currentProject && this.currentProject.label) this.filename = this.currentProject.label + '_' + this.getDate();
+                this.filename = this.getFileName();
 
                 if(this.form.saveScreenshot) {
                     if(!globalStore.store.dynamicDomFlow) {
@@ -149,17 +149,7 @@
                     console.log('save jira')
                 }
 
-                this.form = {
-                    description: '',
-                    actualResults: '',
-                    expectedResults: '',
-                    stepsToReproduce: '',
-                    saveJira: false,
-                    savePdf: false,
-                    saveScreenshot: false,
-                    screenshot: '',
-                    xPath: '',
-                }                
+                this.resetForm();             
             },
 
             savePdf() {
@@ -213,8 +203,34 @@
                 dlLink.click();
             },
 
+            resetForm(){
+                this.form = {
+                    description: '',
+                    actualResults: '',
+                    expectedResults: '',
+                    stepsToReproduce: '',
+                    saveJira: false,
+                    savePdf: false,
+                    saveScreenshot: false,
+                    screenshot: '',
+                    xPath: '',
+                }
+            },
+
             onMouseDown(e) {
                 this.mouseMove(e)
+            },
+
+            getFileName() {
+                const date = this.getDate();
+                console.log(date);
+                if(this.currentProject && this.currentProject.label) {
+                    console.log('curentpro');
+                    return this.currentProject.label + '_' + date
+                } else {
+                    console.log('bugrep');
+                    return 'BugReport'+ '_' + date
+                }
             },
 
             getDate() {
