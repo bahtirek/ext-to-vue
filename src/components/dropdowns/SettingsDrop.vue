@@ -4,17 +4,17 @@
                 <div class="ui-br-ext-drop-body">
                     
                     <div class="ui-br-ext-settings-container" v-if="account && account.registratonKey">
-                        <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifAccount, ifUser = false">Project</div>
+                        <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifAccount = false; ifUser = false">Project</div>
                         <Project v-if="ifProject" />
                     </div>
                     
                     <div class="ui-br-ext-settings-container">
-                        <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifProject, ifUser = false">Account</div>
+                        <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifProject = false; ifUser = false">Account</div>
                         <Account v-if="ifAccount" />
                     </div>
                     
                     <div class="ui-br-ext-settings-container">
-                        <div class="ui-br-ext-setting-title" @click="ifUser = !ifUser; ifProject, ifAccount = false">User</div>
+                        <div class="ui-br-ext-setting-title" @click="ifUser = !ifUser; ifProject = false; ifAccount = false">User</div>
                         <User v-if="ifUser" />
                     </div>
                     

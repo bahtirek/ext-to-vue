@@ -69,7 +69,7 @@
             async onUserSave(){
                 console.log(this.userForm);
                 const userString = JSON.stringify(this.userForm)
-                //await this.localStorage.set('user', userString)
+                await this.localStorage.set('user', userString)
                 globalStore.store.user = this.userForm;
                 this.user = this.userForm;
                 eventBus.$emit('user-loaded');

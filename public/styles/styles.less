@@ -290,10 +290,43 @@ body {
                         margin: 0;
                         padding: 0;
                         li {
-                            padding: 5px 10px;
+                            padding: 0 10px;
+                            display: flex;
+                            align-items: center;
+                            height: 34px;
+                            justify-content: space-between;
                             &:hover {
                                 background-color: #f7f7f7;
+                                .ui-br-ext-project-icons span {
+                                    display: flex;
+                                }
+                            }
+                        
+                            .ui-br-ext-project-label:hover {
                                 cursor: pointer;
+                                text-shadow: .25px 0px .1px,
+                                            -.25px 0px .1px;
+                                
+                            }
+
+                            .ui-br-ext-project-icons {
+                                display: flex;
+                                cursor: pointer;
+                                span {
+                                    margin: 0 5px;
+                                    align-items: center;
+                                    //display: flex;
+                                    display: none;
+                                    &:hover {
+                                        svg {
+                                            stroke: #00ad55;                                       
+                                        }
+                                        &.trash-icon svg{
+                                            stroke: #d02525;
+                                        }
+
+                                    }
+                                }
                             }
                         }
                     }

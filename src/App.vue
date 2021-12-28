@@ -35,32 +35,26 @@ export default {
 
   },
 
-  mounted() { 
-    //this.getRegKey()
-    this.$nextTick(function () {
-    })
-  },
-
   methods: {
     async getRegKey(){
-      /* this.regKey = await this.localStorage.get('regKey');
+      this.regKey = await this.localStorage.get('regKey');
       if(this.regKey) {
         globalStore.store.account = await this.auth(this.regKey);
         //globalStore.store.projects = await this.getProjects(globalStore.store.account.token);
         eventBus.$emit('account-loaded')
-      } */
-      this.fakeGetkey()
+      }
+      //this.fakeGetkey()
       //console.log('app 50',globalStore.store.account);
 
     },
 
     async getUserFromLocal() {
-        /* const user = await this.localStorage.get('user');
-        console.log(user);
+        const user = await this.localStorage.get('user');
         if (user) {
           this.user = JSON.parse(user);
+          globalStore.store.user = this.user;
           eventBus.$emit('user-loaded')
-        } */
+        }
     },
 
     fakeGetkey(){
