@@ -180,6 +180,8 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   font-size: 15px;
   font-weight: normal !important;
   cursor: pointer;
+  margin: 0;
+  padding: 0;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-form-container.ui-br-ext-checkbox .ui-br-ext-disclaimer {
   font-size: 11px;
