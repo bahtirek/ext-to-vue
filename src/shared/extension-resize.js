@@ -40,7 +40,6 @@ const onTouchResize = function (event) {
     const touchevent = event.touches[0];
     positions.resizeX = positions.width + (touchevent.clientX - positions.clientX);
     if(positions.resizeX > 250 && positions.resizeX < 330) {
-        console.log(positions.resizeX, window.innerWidth);
         positions.element.style.width = positions.resizeX + 'px'
     }
     positions.resizeY = positions.height + (touchevent.clientY - positions.clientY);

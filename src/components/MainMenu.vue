@@ -55,7 +55,6 @@
         methods: {
             toggleButton(el) {
                 if (el.id == 'ui-br-ext-close-button') {
-                    console.log('ui-br-ext-close-button');
                     this.onDeselect();
                     window.destroyeUibrextInstance()
                 } else {
@@ -88,7 +87,6 @@
                 this.positions.movementY = this.positions.clientY - event.clientY
                 this.positions.clientX = event.clientX
                 this.positions.clientY = event.clientY
-                console.log(event);
                 // set the element's new position:
                 if (event.clientY > 0 && event.clientY < window.innerHeight) {
                     draggableContainer.style.top = (draggableContainer.offsetTop - this.positions.movementY) + 'px'

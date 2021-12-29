@@ -87,7 +87,6 @@
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
                 this.currentProject = globalStore.store.currentProject;
-                console.log('reportbug line80', globalStore.store);
             })
                         
             eventBus.$on('user-loaded', () => {
@@ -133,7 +132,6 @@
 
                 if(this.form.saveScreenshot) {
                     if(!globalStore.store.dynamicDomFlow) {
-                        console.log('not dynamic');
                         await this.getScreenshot();
                     }
                 }
@@ -220,12 +218,9 @@
 
             getFileName() {
                 const date = this.getDate();
-                console.log(date);
                 if(this.currentProject && this.currentProject.label) {
-                    console.log('curentpro');
                     return this.currentProject.label + '_' + date
                 } else {
-                    console.log('bugrep');
                     return 'BugReport'+ '_' + date
                 }
             },
@@ -246,10 +241,7 @@
             },
 
             onTouchStart(event){   
-                    console.log(event);
-                    console.log(event.path[1]['id']);
                 if(event.path[1]['id'] == 'ui-br-comment-boxResize') {
-                    console.log(event);
                     this.touchMove(event)
                 }            
             },
