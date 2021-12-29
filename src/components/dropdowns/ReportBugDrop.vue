@@ -49,7 +49,7 @@
         <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveReport" data-listener="off">
             <span>Save</span> 
         </button>
-        <div class="ui-br-ext-box-resize" id="ui-br-comment-boxResize" @mousedown="onMouseDown">
+        <div class="ui-br-ext-box-resize" id="ui-br-comment-boxResize" @mousedown="onMouseDown" @touchstart="onTouchStart">
             <svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" focusable="false"
                 role="img" width="128" height="128" fill="currentColor">
                 <path d="M33,11H3a1,1,0,0,0,0,2H33a1,1,0,0,0,0-2Z" class="ui-br-ext-clr-i-outline clr-i-outline-path-1" />
@@ -64,7 +64,7 @@
 <script>
 
     import screenshot from '../../shared/screenshot';
-    import extensionMove from '../../shared/extension-move';
+    import extensionMove from '../../shared/extension-resize';
     import { globalStore } from './../../main';
     import jsPDF from 'jspdf';
     import eventBus from './../../eventBus'
@@ -75,6 +75,7 @@
         created() { 
             this.onGetScreenshot = screenshot.getScreenshot;
             this.mouseMove = extensionMove.onMouseDown;
+            this.touchMove = extensionMove.onTouchStart;
         },
 
         mounted: function () {
@@ -217,10 +218,6 @@
                 }
             },
 
-            onMouseDown(e) {
-                this.mouseMove(e)
-            },
-
             getFileName() {
                 const date = this.getDate();
                 console.log(date);
@@ -242,7 +239,20 @@
                 return mm + '/' + dd + '/' + yyyy; */
                 let date = Date.now().toString();
                 return date.slice(-6)
-            }
+            },
+
+            onMouseDown(event) {
+                this.mouseMove(event)
+            },
+
+            onTouchStart(event){   
+                    console.log(event);
+                    console.log(event.path[1]['id']);
+                if(event.path[1]['id'] == 'ui-br-comment-boxResize') {
+                    console.log(event);
+                    this.touchMove(event)
+                }            
+            },
         }
     }
 </script>

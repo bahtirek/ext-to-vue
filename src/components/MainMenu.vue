@@ -1,5 +1,5 @@
 <template>
-    <div class="ui-br-ext-header" id="ui-br-ext-header"  style="outline: none !important;" @mousedown="onMouseDown">
+    <div class="ui-br-ext-header" id="ui-br-ext-header"  style="outline: none !important;" @mousedown="onMouseDown" @touchstart="onTouchStart">
         <div class="ui-br-ext-menu-container ui-br-ext-container ui-br-ext-alwaysOn">
             <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
@@ -88,6 +88,7 @@
                 this.positions.movementY = this.positions.clientY - event.clientY
                 this.positions.clientX = event.clientX
                 this.positions.clientY = event.clientY
+                console.log(event);
                 // set the element's new position:
                 if (event.clientY > 0 && event.clientY < window.innerHeight) {
                     draggableContainer.style.top = (draggableContainer.offsetTop - this.positions.movementY) + 'px'
@@ -96,9 +97,41 @@
                     draggableContainer.style.left = (draggableContainer.offsetLeft - this.positions.movementX) + 'px'
                 }
             },
+
             closeDragElement () {
                 document.onmouseup = null
                 document.onmousemove = null
+                document.ontouchend = null
+                document.ontouchmove = null
+            },
+
+            onTouchStart(event){   
+                if(event.target.id == 'ui-br-ext-header') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const touchevent = event.touches[0];
+                    this.positions.clientX = touchevent.clientX
+                    this.positions.clientY = touchevent.clientY
+                    document.ontouchmove = this.onTouchMove
+                    document.ontouchend = this.closeDragElement
+                }            
+            },
+
+            onTouchMove(event) {
+                event.stopPropagation();
+                let touchevent = event.touches[0];
+                const draggableContainer = document.getElementById('ui-br-ext-extension')
+                this.positions.movementX = this.positions.clientX - touchevent.clientX
+                this.positions.movementY = this.positions.clientY - touchevent.clientY
+                this.positions.clientX = touchevent.clientX
+                this.positions.clientY = touchevent.clientY
+                // set the element's new position:
+                if (touchevent.clientY > 0 && touchevent.clientY < window.innerHeight) {
+                    draggableContainer.style.top = (draggableContainer.offsetTop - this.positions.movementY) + 'px'
+                }
+                if (touchevent.clientX > 0 && touchevent.clientX < window.innerWidth){
+                    draggableContainer.style.left = (draggableContainer.offsetLeft - this.positions.movementX) + 'px'
+                }
             }
         }
     }
