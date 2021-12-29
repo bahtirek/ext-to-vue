@@ -154,9 +154,6 @@
             savePdf() {
                 let count = 20;
                 let doc = new jsPDF('p','mm', 'letter');
-                const width = doc.internal.pageSize.getWidth() - 20;
-                const ratio = window.innerWidth / window.innerHeight;
-                const height = width/ratio;
                 const list = ['description', 'actualResults', 'expectedResults', 'stepsToReproduce'];
                 const titles = {
                     description: 'Description',
@@ -181,6 +178,16 @@
                     
                 }
                 if(this.form.saveScreenshot) {
+                    let width = (window.innerWidth * 25.4) / 96;
+                    let height = (window.innerHeight * 25.4) / 96;
+                    const ratio = window.innerWidth / window.innerHeight;
+                    console.log(width, doc.internal.pageSize.getWidth() - 20);
+                    if(width > doc.internal.pageSize.getWidth() - 20) {
+                        console.log(width, doc.internal.pageSize.getWidth() - 20);
+                        width = doc.internal.pageSize.getWidth() - 20                       
+                        height = width/ratio;
+                    }
+
                     doc.addImage(globalStore.store.screenshot, "PNG", 10, count, width, height);
                 }
 
