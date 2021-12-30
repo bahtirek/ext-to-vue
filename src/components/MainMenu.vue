@@ -3,7 +3,7 @@
         <div class="ui-br-ext-menu-container ui-br-ext-container ui-br-ext-alwaysOn">
             <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
-            <ViewReportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
+            <ReviewBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <!-- <ExportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" /> -->
             <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <CloseBtn @toggle-button="toggleButton" />  
@@ -15,7 +15,7 @@
 
     import SelectBtn from './menu-buttons/SelectBtn';
     import ReportBugBtn from './menu-buttons/ReportBugBtn';
-    import ViewReportBtn from './menu-buttons/ViewReportBtn';
+    import ReviewBtn from './menu-buttons/ReviewBtn';
     /* import ExportBtn from './menu-buttons/ExportBtn'; */
     import SettingsBtn from './menu-buttons/SettingsBtn';
     import CloseBtn from './menu-buttons/CloseBtn';
@@ -28,7 +28,7 @@
         components: {
             SelectBtn,
             ReportBugBtn,
-            ViewReportBtn,
+            ReviewBtn,
             /* ExportBtn, */
             SettingsBtn,
             CloseBtn
