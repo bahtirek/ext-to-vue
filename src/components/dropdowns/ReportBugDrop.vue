@@ -64,6 +64,7 @@
 <script>
 
     import screenshot from '../../shared/screenshot';
+    import select from '../../shared/select';
     import extensionMove from '../../shared/extension-resize';
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus'
@@ -75,6 +76,7 @@
             this.onGetScreenshot = screenshot.getScreenshot;
             this.mouseMove = extensionMove.onMouseDown;
             this.touchMove = extensionMove.onTouchStart;
+            this.getElementXpath = select.getElementXpath;
         },
 
         mounted: function () {
@@ -154,7 +156,7 @@
                 }
 
                 if(this.form.savePdf){
-                    this.savePdf()
+                    await this.savePdf()
                 }
 
                 if(this.form.saveScreenshot && !this.form.savePdf){
@@ -165,7 +167,10 @@
                     console.log('save jira')
                 }
 
-                this.resetForm();             
+                globalStore.store.report.xPath = this.getElementXpath(globalStore.store.selectedElement);
+                console.log(globalStore.store.report.xPath);
+
+                this.resetReportData();             
             },
 
             async savePdf() {   
@@ -175,12 +180,13 @@
                     var pdfFonts = require('pdfmake/build/vfs_fonts.js')
                     pdfMake.vfs = pdfFonts.pdfMake.vfs;
                 }
-                let page = this.createPdfContent();
+                let page = await this.createPdfContent();
                 this.pdfPages.content = this.pdfPages.content.concat(page);
-                pdfMake.createPdf(this.pdfPages).download(this.filename + '.pdf')               
+                pdfMake.createPdf(this.pdfPages).download(this.filename + '.pdf');
+                return true;               
             },
 
-            createPdfContent(){
+            async createPdfContent(){
                 const list = ['description', 'actualResults', 'expectedResults', 'stepsToReproduce'];
                 const titles = {
                     description: 'Description',
@@ -239,7 +245,7 @@
                     pageBreak: 'after',
                     style: 'screenshot'
                 };
-                
+
                 return screenshot;
             },
 
@@ -252,7 +258,7 @@
                 dlLink.click();
             },
 
-            resetForm(){
+            resetReportData(){
                 this.form = {
                     description: '',
                     actualResults: '',
@@ -263,7 +269,12 @@
                     saveScreenshot: false,
                     screenshot: '',
                     xPath: '',
-                }
+                };
+                globalStore.store.screenshot = '';
+                globalStore.store.dynamicDomFlow = false;
+                globalStore.store.selectedElement = '';
+                globalStore.store.currentElementInlineStyle = '';
+                globalStore.store.selectedElementRect = '';
             },
 
             getFileName() {
