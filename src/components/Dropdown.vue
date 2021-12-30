@@ -3,6 +3,7 @@
     <div class="ui-br-ext-container ui-br-ext-dropdown">
         <ReportBugDrop  v-show="drops.reportbug" @toggle-extension="$emit('toggle-extension')"/>
         <SettingsDrop v-show="drops.settings" />
+        <ReviewDrop v-show="drops.review" />
     </div>
 </template>
 
@@ -10,12 +11,14 @@
 
     import ReportBugDrop from './dropdowns/ReportBugDrop';
     import SettingsDrop from './dropdowns/SettingsDrop';
+    import ReviewDrop from './dropdowns/ReviewDrop';
 
     export default {
         name: 'Dropdown',
         components: {
             ReportBugDrop,
-            SettingsDrop
+            SettingsDrop,
+            ReviewDrop
         },
         props: [
             'dropToToggle'
@@ -43,6 +46,7 @@
                 drops: {
                     reportbug: false,
                     settings: false,
+                    review: false
                 }
             }
         },
