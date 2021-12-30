@@ -4,7 +4,7 @@
             <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <ViewReportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
-            <ExportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
+            <!-- <ExportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" /> -->
             <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <CloseBtn @toggle-button="toggleButton" />  
         </div>
@@ -16,7 +16,7 @@
     import SelectBtn from './menu-buttons/SelectBtn';
     import ReportBugBtn from './menu-buttons/ReportBugBtn';
     import ViewReportBtn from './menu-buttons/ViewReportBtn';
-    import ExportBtn from './menu-buttons/ExportBtn';
+    /* import ExportBtn from './menu-buttons/ExportBtn'; */
     import SettingsBtn from './menu-buttons/SettingsBtn';
     import CloseBtn from './menu-buttons/CloseBtn';
     import operators from '../shared/operators';
@@ -29,7 +29,7 @@
             SelectBtn,
             ReportBugBtn,
             ViewReportBtn,
-            ExportBtn,
+            /* ExportBtn, */
             SettingsBtn,
             CloseBtn
         },
