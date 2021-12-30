@@ -66,7 +66,6 @@
     import screenshot from '../../shared/screenshot';
     import extensionMove from '../../shared/extension-resize';
     import { globalStore } from './../../main';
-    import jsPDF from 'jspdf';
     import eventBus from './../../eventBus'
 
     export default {
@@ -121,6 +120,24 @@
                 },
                 filename: '',
                 name: 'test',
+                pdfPages: {
+                    content: [],
+                    pageMargins: [20, 40, 20, 40],
+                    styles: {
+                        subheader: {
+                            fontSize: 12,
+                            bold: true,
+                            margin: [0, 0, 0, 5]
+                        },
+                        description: {
+                            fontSize: 12,
+                            margin: [0, 0, 0, 20]
+                        },
+                        screenshot: {
+                            margin: [0, 0, 0, 20]
+                        },
+                    }
+                }
             }
         },
 
@@ -151,9 +168,19 @@
                 this.resetForm();             
             },
 
-            savePdf() {
-                let count = 20;
-                let doc = new jsPDF('p','mm', 'letter');
+            async savePdf() {   
+                this.pdfPages.content = [];            
+                var pdfMake = require('pdfmake/build/pdfmake.js')
+                if (pdfMake.vfs == undefined){
+                    var pdfFonts = require('pdfmake/build/vfs_fonts.js')
+                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                }
+                let page = this.createPdfContent();
+                this.pdfPages.content = this.pdfPages.content.concat(page);
+                pdfMake.createPdf(this.pdfPages).download(this.filename + '.pdf')               
+            },
+
+            createPdfContent(){
                 const list = ['description', 'actualResults', 'expectedResults', 'stepsToReproduce'];
                 const titles = {
                     description: 'Description',
@@ -161,43 +188,59 @@
                     expectedResults: 'Expected results',
                     stepsToReproduce: 'Steps to reproduce'
                 }
+                let content = [];
+
                 for (const item of list) {
-
                     if (this.form[item].length > 0) {
-                        // Title
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(14);
-                        doc.text(titles[item], 10, count);
-                        // Text
-                        count = count + 5;//spacing between title and text
-                        doc.setFont("helvetica", "normal");
-                        doc.setFontSize(12);
-                        doc.text(this.form[item], 10, count);
-                        count = count + 10;//spacing between descriptions
-                    }
-                    
-                }
-                if(this.form.saveScreenshot) {
-                    let width = (window.innerWidth * 25.4) / 96;
-                    let height = (window.innerHeight * 25.4) / 96;
-                    const ratio = window.innerWidth / window.innerHeight;
-                    console.log(width, doc.internal.pageSize.getWidth() - 20);
-                    if(width > doc.internal.pageSize.getWidth() - 20) {
-                        console.log(width, doc.internal.pageSize.getWidth() - 20);
-                        width = doc.internal.pageSize.getWidth() - 20                       
-                        height = width/ratio;
-                    }
+                        let title = {
+                            text: `${titles[item]}`,
+                            style: 'subheader'
+                        }
 
-                    doc.addImage(globalStore.store.screenshot, "PNG", 10, count, width, height);
+                        let description = {
+                            text: `${this.form[item]}`,
+                            style: 'description'
+                        }
+
+                        content.push(title);
+                        content.push(description);
+                    }                   
                 }
 
-                doc.save(this.filename + '.pdf'); 
+                if(this.form.saveScreenshot) {                    
+                    content.push(this.setScreenshotContent());
+                }
+
+                return content;
             },
 
             async getScreenshot(){
                 this.$emit('toggle-extension');
                 globalStore.store.screenshot = await this.onGetScreenshot();
                 this.$emit('toggle-extension');
+            },
+
+            setScreenshotContent() {
+                let width = 550;
+                const mediaQueryTablet = window.matchMedia("(max-width: 1023px)")
+                const mediaQueryPhone = window.matchMedia("(max-width: 767px)")
+
+                if (mediaQueryPhone.matches) {
+                    width = window.innerWidth - ((25/100) * window.innerWidth);
+                }
+
+                if (mediaQueryTablet.matches) {
+                    width = window.innerWidth - ((45/100) * window.innerWidth);
+                }
+
+                let screenshot = {
+                    image: globalStore.store.screenshot,
+                    width: width,
+                    pageBreak: 'after',
+                    style: 'screenshot'
+                };
+                
+                return screenshot;
             },
 
             screenshotLink(dataUrl, filename) {

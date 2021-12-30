@@ -149,6 +149,11 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   cursor: default;
   overflow: auto;
 }
+@media (max-width: 767px) {
+  .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item {
+    max-height: 500px;
+  }
+}
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-drop-title {
   color: #00ad55;
   border-bottom: 1px solid #00ad55;
