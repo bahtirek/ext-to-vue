@@ -26,6 +26,7 @@ export const globalStore = new Vue({
       dynamicDomFlow: false,
       currentProject: {},
       screenshot: '',
+      reports: [],
       report: {
         description: '',
         actualResults: '',
