@@ -168,8 +168,8 @@
                 }
 
                 globalStore.store.report.xPath = this.getElementXpath(globalStore.store.selectedElement);
-                console.log(globalStore.store.report.xPath);
-
+                
+                this.setTempReports();
                 this.resetReportData();             
             },
 
@@ -306,6 +306,18 @@
                     this.touchMove(event)
                 }            
             },
+
+            setTempReports(){
+                let report = {
+                    content: this.form,
+                    screenshot: globalStore.store.screenshot,
+                    xPath: globalStore.store.report.xPath,
+                    user: this.user                   
+                }
+                globalStore.store.reports.push(report);
+                console.log(globalStore.store.reports);
+                eventBus.$on('report-loaded');
+            }
         }
     }
 </script>
