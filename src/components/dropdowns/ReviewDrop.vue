@@ -48,7 +48,7 @@
         },
 
         created() { 
-            
+            this.mouseMove = extensionMove.onMouseDown;           
         },
 
         mounted: function () {
