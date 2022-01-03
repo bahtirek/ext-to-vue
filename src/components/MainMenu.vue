@@ -1,7 +1,7 @@
 <template>
     <div class="ui-br-ext-header" id="ui-br-ext-header"  style="outline: none !important;" @mousedown="onMouseDown" @touchstart="onTouchStart">
         <div class="ui-br-ext-menu-container ui-br-ext-container ui-br-ext-alwaysOn">
-            <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
+            <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted"  @toggle-extension="$emit('toggle-extension')" />
             <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <ReviewBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <!-- <ExportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" /> -->

@@ -1,7 +1,7 @@
 <template>
     <div class="ui-br-ext-extension ui-br-ext-alwaysOn" id="ui-br-ext-extension" style="outline: none !important;" v-show="toggleExtensionVal">
-        <MainMenu @toggle-drop="toggleDrop"/>
-        <Dropdown   :dropToToggle="dropToToggle" @toggle-extension="toggleExtension"/>
+        <MainMenu   @toggle-drop="toggleDrop"   @toggle-extension="toggleExtension" />
+        <Dropdown   :dropToToggle="dropToToggle"   @toggle-extension="toggleExtension" />
     </div>
 </template>  
 

@@ -1,5 +1,5 @@
 <template>
-<span class="ui-br-ext-operator ui-br-ext-alwaysOn" @click="toggleBtn" data-title="Select"  id="ui-br-ext-select-button" ref="selectButton">
+<span class="ui-br-ext-operator ui-br-ext-alwaysOn" @click="toggleBtn" data-title="Select"  id="ui-br-ext-select-button" ref="selectButton" >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round" class="ui-br-ext-feather feather-mouse-pointer">
                     <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
@@ -11,6 +11,7 @@
 
     import operators from '../../shared/operators';
     import { globalStore } from '../../main';
+    import screenshot from '../../shared/screenshot';
 
     export default {
         name: 'SelectBtn',
@@ -19,6 +20,7 @@
         
         created() { 
             this.onSelect = operators.onSelect;
+            this.onGetScreenshot = screenshot.getScreenshot;
         },
 
         mounted: function () {
@@ -53,6 +55,12 @@
                //turning on dynamic flow
                globalStore.store.dynamicDomFlow = true;
                //toggleBtn function turns off  dynamic flow on select click
+            },
+
+            async getScreenshot(){
+                this.$emit('toggle-extension');
+                globalStore.store.screenshot = await this.onGetScreenshot();
+                this.$emit('toggle-extension');
             },
         }
     }
