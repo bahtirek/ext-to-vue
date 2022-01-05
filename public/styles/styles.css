@@ -400,6 +400,15 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   font-size: 15px;
   color: #666666;
 }
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-drop-body .ui-br-ext-review-box.ellipsis .ui-br-ext-review-text,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-select .ui-br-ext-drop-body .ui-br-ext-review-box.ellipsis .ui-br-ext-review-text,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-comments .ui-br-ext-drop-body .ui-br-ext-review-box.ellipsis .ui-br-ext-review-text,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-settings .ui-br-ext-drop-body .ui-br-ext-review-box.ellipsis .ui-br-ext-review-text,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review .ui-br-ext-drop-body .ui-br-ext-review-box.ellipsis .ui-br-ext-review-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-drop-body .ui-br-ext-settings-container .ui-br-ext-setting-title,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-select .ui-br-ext-drop-body .ui-br-ext-settings-container .ui-br-ext-setting-title,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-comments .ui-br-ext-drop-body .ui-br-ext-settings-container .ui-br-ext-setting-title,

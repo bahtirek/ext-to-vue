@@ -12,13 +12,16 @@
                 <div class="ui-br-ext-review-title">Description</div>
                 <div class="ui-br-ext-review-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem voluptas iste similique? Dolores consequuntur necessitatibus exercitationem aperiam ea dolorum deleniti nobis delectus eveniet qui. Sint perspiciatis tenetur asperiores cum distinctio!</div>
             </div> -->
-            <div v-for="(report, index) in reports" :key="index">
-                <div>{{report.content.description}}</div >
-                <div v-if="report.user">Reporter: 
-                    <span v-if="report.user.firstname">{{report.user.firstname}}</span >
-                    <span v-if="report.user.lastname">{{report.user.lastname}}</span >
-                    </div>
-                <button v-if="report.xPath" @click="showElement(report.xPath)">Find Element</button>
+            <div v-for="(report, index) in reports" :key="index" style="padding: 0 10px">
+                <div v-if="report.user.firstname || report.user.lastname">Reporter: 
+                    <span class="ui-br-ext-review-title" v-if="report.user.firstname">{{report.user.firstname}} </span>
+                    <span class="ui-br-ext-review-text" v-if="report.user.lastname"> {{report.user.lastname}}</span>
+                </div>
+                <div class="ui-br-ext-review-box ellipsis" v-if="report.content.description">
+                    <div class="ui-br-ext-review-title">Description:</div>
+                    <div class="ui-br-ext-review-text">{{report.content.description}}</div>
+                </div>
+                <button v-if="report.xPath" @click="showElement(report.xPath, report)">Find Element</button>
                 <button v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</button>
             </div>
             
@@ -28,8 +31,7 @@
                 role="img" width="128" height="128" fill="currentColor">
                 <path d="M33,11H3a1,1,0,0,0,0,2H33a1,1,0,0,0,0-2Z" class="ui-br-ext-clr-i-outline clr-i-outline-path-1" />
                 <path d="M28,17H8a1,1,0,0,0,0,2H28a1,1,0,0,0,0-2Z" class="ui-br-ext-clr-i-outline clr-i-outline-path-2" />
-                <path d="M23,23H13a1,1,0,0,0,0,2H23a1,1,0,0,0,0-2Z"
-                    class="ui-br-ext-clr-i-outline clr-i-outline-path-3" /></svg>
+                <path d="M23,23H13a1,1,0,0,0,0,2H23a1,1,0,0,0,0-2Z" class="ui-br-ext-clr-i-outline clr-i-outline-path-3" /></svg>
         </div>
     </div>
 </template>
@@ -88,7 +90,7 @@
 
         methods: {
 
-            showElement(xPath){
+            showElement(xPath, report){
                 console.log(xPath);
                 let element;
 
@@ -104,11 +106,15 @@
                 this.currentElement.xPath = xPath;
                 element.classList.add('ui-br-ext-outlined-element');
                 element.style.cssText = this.currentElement.inlineStyle + "outline: 3px dashed!important; outline-color: red!important; ";
+                console.log(report);
+            },
+
+            showElements(){
+
             },
 
             showImage(screenshot) {
                 if(screenshot) {
-                    console.log('creensh ', screenshot);
                     let image = new Image();
                     image.src = screenshot;
 
