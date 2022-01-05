@@ -66,11 +66,13 @@
 
         mounted() { 
             this.account = globalStore.store.account;
+            this.currentProject = globalStore.store.currentProject;
             this.projects = globalStore.store.projects;
             this.user = globalStore.store.user;
 
             eventBus.$on('account-loaded', () => {
                 this.account = globalStore.store.account;
+                this.currentProject = globalStore.store.currentProject;
                 this.projects = globalStore.store.projects;
             })
             
@@ -111,6 +113,7 @@
                     if(this.project.id) {
                         console.log('edit project');
                         alert(`Project ${this.project.label} successfully saved`);
+                        this.showAddProject = false;
                         this.resetProject();
                         // patch
                     } else {
@@ -118,6 +121,7 @@
                         //post
                         this.projects.push({label: this.project.label, description: this.project.description});
                         alert(`Project ${this.project.label} successfully saved`);
+                        this.showAddProject = false;
                         this.resetProject();
                     }
                     

@@ -52,7 +52,7 @@
             async onRegKeySave(){
                 this.reg.error = "";
                 if (this.reg.key !== ''){ 
-                    if (this.account && this.account.registratonKey) {
+                    if (this.account && this.account.registrationKey) {
                         let regKeyConfirmation = confirm('Do you want to change the registration key?');
                         if (!regKeyConfirmation) return false;
                     }

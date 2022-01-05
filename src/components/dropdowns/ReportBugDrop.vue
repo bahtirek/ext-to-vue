@@ -3,7 +3,7 @@
         <div class="ui-br-ext-drop-title">Report bug</div>
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
-                <li v-if="account && account.registratonKey">
+                <li v-if="account && account.registrationKey">
                     <span>Project label: </span>
                     <span v-if="currentProject"> <strong> {{currentProject.label || 'No project chosen'}}</strong></span>
                 </li >
@@ -33,7 +33,7 @@
                 <textarea name="ui-br-ext-rep-steps" v-model="form.stepsToReproduce" rows="3" data-gramm="false"></textarea>
             </div>
         </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registratonKey">
+        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
             <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="form.saveJira">
             <label for="ui-br-ext-save-to-jira">Create Jira ticket on save</label>
         </div>
@@ -309,6 +309,7 @@
             setTempReports(){
                 let report = {
                     content: this.form,
+                    url: window.location,
                     screenshot: globalStore.store.screenshot,
                     xPath: globalStore.store.report.xPath,
                     user: this.user                   
