@@ -13,10 +13,10 @@
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="test_id">
-      <button id="button_1_id" style="color: blue;">
+      <button id="button_1_id" style="color: blue;"  onclick="console.log('test 1')">
           TEST 1
       </button>
-      <button style="color: green;">
+      <button style="color: green;" onclick="console.log('test 2')">
           TEST 2
       </button>
       
@@ -24,7 +24,7 @@
 
   <div>
       <div>
-          <button style="color: green;" onclick="clickit()">
+          <button style="color: green;" onclick="clickit()"  onclick="console.log('test 3')">
               TEST 3
           </button>
       </div>
