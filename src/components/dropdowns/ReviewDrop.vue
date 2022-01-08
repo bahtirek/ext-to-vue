@@ -21,7 +21,7 @@
                     <div class="ui-br-ext-review-title">Description:</div>
                     <div class="ui-br-ext-review-text">{{report.content.description}}</div>
                 </div>
-                <button v-if="report.xPath" @click="showElement(report.xPath, report)">Find Element</button>
+                <button v-if="report.xPath" @click="showElement(index)">Find Element</button>
                 <button v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</button>
             </div>
             
@@ -56,13 +56,15 @@
         mounted: function () {
             this.reports = globalStore.store.reports;
             this.currentProject = globalStore?.store.currentProject;
+            this.showElements();
 
             eventBus.$on('account-loaded', (val) => {
                 this.currentProject = globalStore.store.currentProject;
-            })
+            });
+
             eventBus.$on('report-loaded', (val) => {
                 this.reports = globalStore.store.reports;
-            })
+            });
         },
 
         data() {
@@ -73,10 +75,6 @@
                 currentProject: {},
                 account: {},
                 reports: [],
-                currentElement: {
-                    xPath: '',
-                    inlineStyle: ''
-                },
                 positions: {
                     clientX: undefined,
                     clientY: undefined,
@@ -90,27 +88,39 @@
 
         methods: {
 
-            showElement(xPath, report){
-                console.log(xPath);
-                let element;
+            showElement(index){
+                
+                this.deselectElements();
+                this.selectElement(index);              
+                this.reports[index]['element'].scrollIntoView();
 
-                if(this.currentElement.xPath) {
-                    element = document.evaluate(this.currentElement.xPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-                    element.style.cssText = this.currentElement.inlineStyle;
-                    element.classList.remove('ui-br-ext-outlined-element');
-                }
-
-                element = document.evaluate(xPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-                console.log(element);
-                this.currentElement.inlineStyle = element.style.cssText;
-                this.currentElement.xPath = xPath;
-                element.classList.add('ui-br-ext-outlined-element');
-                element.style.cssText = this.currentElement.inlineStyle + "outline: 3px dashed!important; outline-color: red!important; ";
-                console.log(report);
             },
 
             showElements(){
 
+                for (let index = 0; index < this.reports.length; index++) {
+                    this.selectElement(index);                   
+                }
+
+            },
+
+            selectElement(index){
+                let report = this.reports[index];
+                let element = document.evaluate(report.xPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                if(element){
+                    report.element = element;
+                    element.classList.add('ui-br-ext-outlined-element');
+                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";
+                } else {
+                    report.element = false;
+                }
+            },
+
+            deselectElements() {
+                document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
+                    element.classList.remove('ui-br-ext-outlined-element');
+                    element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
+                });
             },
 
             showImage(screenshot) {

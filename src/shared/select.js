@@ -15,7 +15,7 @@ const ui_br_ext_parentLimit = 5;
 let currentElementInlineStyle = '';
 
 const onSelect = function(){
-    const allPointerEvent = 'body *{pointer-events: all!important; }';
+    const allPointerEvent = '';
     const noHighlight = `*{
         -webkit-tap-highlight-color: transparent;
         -webkit-touch-callout: none;
@@ -52,7 +52,7 @@ const onDeselect = function(){
     // Remove outline from any previously selected elements.
     document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
         element.classList.remove('ui-br-ext-outlined-element');
-        element.style.cssText = globalStore.store.currentElementInlineStyle;
+        element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
     });
 
     // Reset the global variable that holds the previously selected element properties.
@@ -189,12 +189,11 @@ const outlineSelectedElement = function(element){
     // Remove outline from any previously selected elements.
     document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
         element.classList.remove('ui-br-ext-outlined-element');
-        element.style.cssText = globalStore.store.currentElementInlineStyle;
+        element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
     });
 
     element.classList.add('ui-br-ext-outlined-element');
-    globalStore.store.currentElementInlineStyle = element.style.cssText;
-    element.style.cssText = globalStore.store.currentElementInlineStyle + "outline: 3px dashed!important; outline-color: red!important; ";
+    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";
 
 }
 /**
