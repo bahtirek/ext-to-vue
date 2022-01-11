@@ -1,23 +1,38 @@
 <template>
-    <div class="ui-br-ext-dropdown-item ui-br-ext-review" id="ui-br-ext-review" ref="divToResize">
-        <div class="ui-br-ext-drop-title">Review</div>
+    <div class="ui-br-ext-dropdown-item ui-br-ext-review" id="ui-br-ext-report-details" ref="divToResize">
+        <div class="ui-br-ext-drop-title">Repor details</div>
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
                 <li v-if="currentProject && currentProject.label">
                     <span>Project label: </span>
                     <span v-if="currentProject"> <strong> {{currentProject.label || 'No project chosen'}}</strong></span>
-                </li>
+                </li >
             </ul >
-            <div v-for="(report, index) in reports" :key="index" style="padding: 0 10px">
+            <!-- <div class="ui-br-ext-review-box">
+                <div class="ui-br-ext-review-title">Description</div>
+                <div class="ui-br-ext-review-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem voluptas iste similique? Dolores consequuntur necessitatibus exercitationem aperiam ea dolorum deleniti nobis delectus eveniet qui. Sint perspiciatis tenetur asperiores cum distinctio!</div>
+            </div> -->
+            <div v-if="report" style="padding: 0 10px">
                 <div v-if="report.user.firstname || report.user.lastname">Reporter: 
                     <span class="ui-br-ext-review-title" v-if="report.user.firstname">{{report.user.firstname}} </span>
                     <span class="ui-br-ext-review-text" v-if="report.user.lastname"> {{report.user.lastname}}</span>
                 </div>
-                <div class="ui-br-ext-review-box ellipsis" v-if="report.content.description" @click="showDetails(index)">
+                <div class="ui-br-ext-review-box ellipsis" v-if="report.content.description">
                     <div class="ui-br-ext-review-title">Description:</div>
                     <div class="ui-br-ext-review-text">{{report.content.description}}</div>
                 </div>
-                <button v-if="report.xPath" @click="showElement(index)">Find Element</button>
+                <div class="ui-br-ext-review-box" v-if="report.content.stepsToReproduce">
+                    <div class="ui-br-ext-review-title">Description:</div>
+                    <div class="ui-br-ext-review-text">{{report.content.stepsToReproduce}}</div>
+                </div>
+                <div class="ui-br-ext-review-box" v-if="report.content.actualResults">
+                    <div class="ui-br-ext-review-title">Description:</div>
+                    <div class="ui-br-ext-review-text">{{report.content.actualResults}}</div>
+                </div>
+                <div class="ui-br-ext-review-box" v-if="report.content.expectedResults">
+                    <div class="ui-br-ext-review-title">Description:</div>
+                    <div class="ui-br-ext-review-text">{{report.content.expectedResults}}</div>
+                </div>
                 <button v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</button>
             </div>
             
@@ -40,24 +55,19 @@
     import extensionMove from '../../shared/extension-resize';
 
     export default {
-        name: 'ReviewDrop',
+        name: 'ReportDetailsDrop',
 
         created() { 
             this.mouseMove = extensionMove.onMouseDown;           
         },
+        props: [
+            'reportIndex'
+        ],
 
         mounted: function () {
             this.reports = globalStore.store.reports;
             this.currentProject = globalStore?.store.currentProject;
-            this.showElements();
-
-            eventBus.$on('account-loaded', (val) => {
-                this.currentProject = globalStore.store.currentProject;
-            });
-
-            eventBus.$on('report-loaded', (val) => {
-                this.reports = globalStore.store.reports;
-            });
+            this.report = globalStore.store.reports[this.reportIndex];           
         },
 
         data() {
@@ -81,45 +91,6 @@
 
         methods: {
 
-            showElement(index){
-                
-                this.deselectElements();
-                this.selectElement(index);              
-                this.reports[index]['element'].scrollIntoView();
-
-            },
-
-            showElements(){
-
-                for (let index = 0; index < this.reports.length; index++) {
-                    this.selectElement(index);                   
-                }
-
-            },
-
-            selectElement(index){
-                let report = this.reports[index];
-                let element = document.evaluate(report.xPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-                if(element){
-                    report.element = element;
-                    element.classList.add('ui-br-ext-outlined-element');
-                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";
-                } else {
-                    report.element = false;
-                    // move report to the bottom of reports array
-                    this.reports.splice(index, 1);
-                    this.reports.push(report);
-                    eventBus.$on('report-loaded');
-                }
-            },
-
-            deselectElements() {
-                document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
-                    element.classList.remove('ui-br-ext-outlined-element');
-                    element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
-                });
-            },
-
             showImage(screenshot) {
                 if(screenshot) {
                     let image = new Image();
@@ -128,11 +99,6 @@
                     let w = window.open("");
                     w.document.write(image.outerHTML);
                 }
-            },
-
-            showDetails(index) {
-                this.showElement(index);
-                this.$emit('show-detailsDrop', index);
             },
 
             onMouseDown(event) {

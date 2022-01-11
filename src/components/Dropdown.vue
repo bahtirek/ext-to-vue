@@ -3,7 +3,8 @@
     <div class="ui-br-ext-container ui-br-ext-dropdown">
         <ReportBugDrop  v-if="drops.reportbug" @toggle-extension="$emit('toggle-extension')"/>
         <SettingsDrop v-if="drops.settings" />
-        <ReviewDrop v-if="drops.review" />
+        <ReviewDrop v-if="drops.review" @show-detailsDrop="showDetailsDrop"/>
+        <ReportDetailsDrop v-if="drops.details" :reportIndex="reportIndex"/>
     </div>
 </template>
 
@@ -12,33 +13,26 @@
     import ReportBugDrop from './dropdowns/ReportBugDrop';
     import SettingsDrop from './dropdowns/SettingsDrop';
     import ReviewDrop from './dropdowns/ReviewDrop';
+    import ReportDetailsDrop from './dropdowns/ReportDetailsDrop';
 
     export default {
         name: 'Dropdown',
         components: {
             ReportBugDrop,
             SettingsDrop,
-            ReviewDrop
+            ReviewDrop,
+            ReportDetailsDrop
         },
         props: [
             'dropToToggle'
         ],
-
-        mounted() { 
-            this.$nextTick(function () {
-            
-            })
-        },
 
         watch: { 
             dropToToggle: function(newVal, prevVal) { // watch it
                 this.toggleDropdown(newVal.id, newVal.state, prevVal.id);
             }
         },
-        
-        created() { 
-            
-        },
+
         data() {
             return {
                 toggleCompleted: false,
@@ -46,8 +40,10 @@
                 drops: {
                     reportbug: false,
                     settings: false,
-                    review: false
-                }
+                    review: false,
+                    details: false
+                },
+                reportIndex: undefined
             }
         },
         methods: {
@@ -55,7 +51,12 @@
             toggleDropdown(id, state, prevId) {
                 this.drops[prevId] = false;
                 this.drops[id] = state;
-            },         
+            }, 
+            
+            showDetailsDrop(index){
+                this.dropToToggle = {id: 'details', state: true};
+                this.reportIndex = index;
+            }
         }
     }
 </script>
