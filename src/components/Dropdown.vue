@@ -3,8 +3,8 @@
     <div class="ui-br-ext-container ui-br-ext-dropdown">
         <ReportBugDrop  v-if="drops.reportbug" @toggle-extension="$emit('toggle-extension')"/>
         <SettingsDrop v-if="drops.settings" />
-        <ReviewDrop v-if="drops.review" @show-detailsDrop="showDetailsDrop"/>
-        <ReportDetailsDrop v-if="drops.details" :reportIndex="reportIndex"/>
+        <ReviewDrop v-if="drops.review"  @show-detailsDrop="showDetailsDrop" />
+        <ReportDetailsDrop v-if="drops.reportdetails" :reportIndex="reportIndex"/>
     </div>
 </template>
 
@@ -41,7 +41,7 @@
                     reportbug: false,
                     settings: false,
                     review: false,
-                    details: false
+                    reportdetails: false
                 },
                 reportIndex: undefined
             }
@@ -52,9 +52,8 @@
                 this.drops[prevId] = false;
                 this.drops[id] = state;
             }, 
-            
+
             showDetailsDrop(index){
-                this.dropToToggle = {id: 'details', state: true};
                 this.reportIndex = index;
             }
         }

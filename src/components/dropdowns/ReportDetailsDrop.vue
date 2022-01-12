@@ -1,5 +1,5 @@
 <template>
-    <div class="ui-br-ext-dropdown-item ui-br-ext-review" id="ui-br-ext-report-details" ref="divToResize">
+    <div class="ui-br-ext-dropdown-item ui-br-ext-review" id="ui-br-ext-reportdetails" ref="divToResize">
         <div class="ui-br-ext-drop-title">Repor details</div>
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
@@ -78,6 +78,7 @@
                 currentProject: {},
                 account: {},
                 reports: [],
+                report: undefined,
                 positions: {
                     clientX: undefined,
                     clientY: undefined,

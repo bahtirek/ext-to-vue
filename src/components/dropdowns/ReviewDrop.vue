@@ -13,7 +13,7 @@
                     <span class="ui-br-ext-review-title" v-if="report.user.firstname">{{report.user.firstname}} </span>
                     <span class="ui-br-ext-review-text" v-if="report.user.lastname"> {{report.user.lastname}}</span>
                 </div>
-                <div class="ui-br-ext-review-box ellipsis" v-if="report.content.description" @click="showDetails(index)">
+                <div class="ui-br-ext-review-box ui-br-ext-ellipsis" v-if="report.content.description" @click="showDetails(index)">
                     <div class="ui-br-ext-review-title">Description:</div>
                     <div class="ui-br-ext-review-text">{{report.content.description}}</div>
                 </div>
@@ -36,7 +36,7 @@
 <script>
 
     import { globalStore } from './../../main';
-    import eventBus from './../../eventBus'
+    import eventBus from './../../eventBus';
     import extensionMove from '../../shared/extension-resize';
 
     export default {
@@ -133,6 +133,7 @@
             showDetails(index) {
                 this.showElement(index);
                 this.$emit('show-detailsDrop', index);
+                eventBus.$emit('toggle-drop', 'ui-br-ext-reportdetails-button');
             },
 
             onMouseDown(event) {

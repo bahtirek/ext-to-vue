@@ -131,7 +131,8 @@ body {
                 width: fit-content;
                 transition: 0.1s ease-out;
                 background: #ffffff;
-                padding: 2px;
+                padding: 2px 4px;
+                border-radius: 3px;
                 white-space: nowrap;
             }
             &:after {
@@ -407,10 +408,14 @@ body {
                         color: #666666;
                     }
 
-                    &.ellipsis .ui-br-ext-review-text {
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
+                    &.ui-br-ext-ellipsis {
+                        cursor: pointer;
+                        
+                        .ui-br-ext-review-text {
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
                     }
                 }
 

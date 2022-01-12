@@ -316,7 +316,7 @@
                 }
                 globalStore.store.reports.push(report);
                 console.log(globalStore.store.reports);
-                eventBus.$on('report-loaded');
+                eventBus.$emit('report-loaded');
             }
         }
     }
