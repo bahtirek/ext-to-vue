@@ -131,7 +131,6 @@
             },
 
             showDetails(index) {
-                this.showElement(index);
                 this.$emit('show-detailsDrop', index);
                 eventBus.$emit('toggle-drop', 'ui-br-ext-reportdetails-button');
             },

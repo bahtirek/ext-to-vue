@@ -22,15 +22,15 @@
                     <div class="ui-br-ext-review-text">{{report.content.description}}</div>
                 </div>
                 <div class="ui-br-ext-review-box" v-if="report.content.stepsToReproduce">
-                    <div class="ui-br-ext-review-title">Description:</div>
+                    <div class="ui-br-ext-review-title">Steps to reproduce:</div>
                     <div class="ui-br-ext-review-text">{{report.content.stepsToReproduce}}</div>
                 </div>
                 <div class="ui-br-ext-review-box" v-if="report.content.actualResults">
-                    <div class="ui-br-ext-review-title">Description:</div>
+                    <div class="ui-br-ext-review-title">Actual results:</div>
                     <div class="ui-br-ext-review-text">{{report.content.actualResults}}</div>
                 </div>
                 <div class="ui-br-ext-review-box" v-if="report.content.expectedResults">
-                    <div class="ui-br-ext-review-title">Description:</div>
+                    <div class="ui-br-ext-review-title">Expected results:</div>
                     <div class="ui-br-ext-review-text">{{report.content.expectedResults}}</div>
                 </div>
                 <button v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</button>
@@ -67,7 +67,8 @@
         mounted: function () {
             this.reports = globalStore.store.reports;
             this.currentProject = globalStore?.store.currentProject;
-            this.report = globalStore.store.reports[this.reportIndex];           
+            this.report = globalStore.store.reports[this.reportIndex];
+            this.showElement();
         },
 
         data() {
@@ -91,6 +92,31 @@
         },
 
         methods: {
+
+            showElement(){
+                let element = document.evaluate(this.report.xPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                if(element){
+                    element.classList.add('ui-br-ext-outlined-element');
+                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";
+                    element.scrollIntoView();
+                } 
+            },
+
+            selectElement(index){
+                let report = this.reports[index];
+                let element = document.evaluate(report.xPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                if(element){
+                    report.element = element;
+                    element.classList.add('ui-br-ext-outlined-element');
+                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";
+                } else {
+                    report.element = false;
+                    // move report to the bottom of reports array
+                    this.reports.splice(index, 1);
+                    this.reports.push(report);
+                    eventBus.$on('report-loaded');
+                }
+            },
 
             showImage(screenshot) {
                 if(screenshot) {
