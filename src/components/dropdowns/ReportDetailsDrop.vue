@@ -4,20 +4,23 @@
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
                 <li v-if="currentProject && currentProject.label">
-                    <span>Project label: </span>
-                    <span v-if="currentProject"> <strong> {{currentProject.label || 'No project chosen'}}</strong></span>
+                    <span><strong>Project label: </strong></span>
+                    <span v-if="currentProject">  {{currentProject.label || 'No project chosen'}}</span>
                 </li >
             </ul >
-            <!-- <div class="ui-br-ext-review-box">
-                <div class="ui-br-ext-review-title">Description</div>
-                <div class="ui-br-ext-review-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem voluptas iste similique? Dolores consequuntur necessitatibus exercitationem aperiam ea dolorum deleniti nobis delectus eveniet qui. Sint perspiciatis tenetur asperiores cum distinctio!</div>
-            </div> -->
-            <div v-if="report" style="padding: 0 10px">
-                <div v-if="report.user.firstname || report.user.lastname">Reporter: 
-                    <span class="ui-br-ext-review-title" v-if="report.user.firstname">{{report.user.firstname}} </span>
-                    <span class="ui-br-ext-review-text" v-if="report.user.lastname"> {{report.user.lastname}}</span>
-                </div>
-                <div class="ui-br-ext-review-box ellipsis" v-if="report.content.description">
+
+            <div  class="ui-br-ext-review-card" v-if="report">
+                <ul class="ui-br-ext-info-list" >
+                    <li v-if="report.user && (report.user.firstname || report.user.lastname)">
+                        <span><strong>User: </strong></span>
+                        <span> {{report.user.firstname}} {{report.user.lastname}}</span>
+                    </li >
+                    <li v-if="report.user && report.user.email">
+                        <span><strong>Email: </strong></span>
+                        <span> {{report.user.email}}</span>
+                    </li >
+                </ul >
+                <div class="ui-br-ext-review-box" v-if="report.content.description">
                     <div class="ui-br-ext-review-title">Description:</div>
                     <div class="ui-br-ext-review-text">{{report.content.description}}</div>
                 </div>
@@ -33,7 +36,7 @@
                     <div class="ui-br-ext-review-title">Expected results:</div>
                     <div class="ui-br-ext-review-text">{{report.content.expectedResults}}</div>
                 </div>
-                <button v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</button>
+                <span class="ui-br-ext-btn-lnk" v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</span>
             </div>
             
         </div>

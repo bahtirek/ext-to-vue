@@ -4,16 +4,16 @@
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
                 <li v-if="account && account.registrationKey">
-                    <span>Project label: </span>
-                    <span v-if="currentProject"> <strong> {{currentProject.label || 'No project chosen'}}</strong></span>
+                    <span><strong>Project label: </strong></span>
+                    <span v-if="currentProject">  {{currentProject.label || 'No project chosen'}}</span>
                 </li >
                 <li v-if="user && (user.firstname || user.lastname)">
-                    <span>User: </span>
-                    <span> <strong> {{user.firstname}} {{user.lastname}}</strong></span>
+                    <span><strong>User:</strong> </span>
+                    <span>  {{user.firstname}} {{user.lastname}}</span>
                 </li >
                 <li v-if="user && user.email">
-                    <span>Email: </span>
-                    <span> <strong> {{user.email}}</strong></span>
+                    <span><strong> Email: </strong></span>
+                    <span> {{user.email}}</span>
                 </li >
             </ul >
             <div class="ui-br-ext-form-container ui-br-ext-textarea">

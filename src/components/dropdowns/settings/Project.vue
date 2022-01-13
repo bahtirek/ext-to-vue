@@ -2,7 +2,7 @@
     
         <div class="ui-br-ext-settings-body">           
             <div class="ui-br-ext-current-project" v-if="currentProject.label">
-                Current project: <span>{{currentProject.label}}</span>
+                <span><strong>Current project: </strong></span><span>{{currentProject.label}}</span>
                 <div>{{currentProject.description}}</div>
             </div  >
             
