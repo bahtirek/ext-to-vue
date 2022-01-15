@@ -1,4 +1,5 @@
 import hoverOutline from './hover-outline';
+import clickBlocker from './click-blocker';
 import { globalStore } from '../main.js';
 
 // Global variable to hold previously clicked element properties.
@@ -72,8 +73,7 @@ const addClickToHtml = function(eventFunction){
     const html = document.getElementsByTagName('html')[0];
 
     html.addEventListener('mousedown', eventFunction, true);
-
-    hoverOutline.addClickBlocker();
+    clickBlocker.addClickBlocker();
 
     hoverOutline.addHover();
 
@@ -85,7 +85,7 @@ const removeClickFromBody = function(eventFunction){
 
     html.removeEventListener('mousedown', eventFunction, true);
 
-    hoverOutline.removeClickBlocker();
+    clickBlocker.removeClickBlocker();
 
     hoverOutline.removeHover();
 
