@@ -1,13 +1,13 @@
 <template>
     
         <div class="ui-br-ext-settings-body">           
-            <div class="ui-br-ext-current-module" v-if="currentModule.label">
-                <span><strong>Current module: </strong></span><span>{{currentModule.label}}</span>
+            <div class="ui-br-ext-current-module" v-if="currentModule.name">
+                <span><strong>Current module: </strong></span><span>{{currentModule.name}}</span>
                 <div>{{currentModule.description}}</div>
             </div  >
             
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                <label for="ui-br-ext-modules">Modules</label>
+                <label for="ui-br-ext-modules">Choose module</label>
                 <input type="text" v-model="searchQuery">
                 <span class="ui-br-ext-message" v-if="searchQuery!=='' && searchResults && searchResults.length == 0">No modules found</span>
                 <span class="ui-br-ext-search-icon">
@@ -16,7 +16,7 @@
                 <div class="ui-br-ext-search-results" v-if="searchResults && searchResults.length > 0">
                     <ul>
                         <li v-for="module in searchResults.slice(0, 10)" :key="module.id">
-                            <span class="ui-br-ext-module-label" @click="onResultClick(module)">{{module.label}}</span>
+                            <span class="ui-br-ext-module-label" @click="onResultClick(module)">{{module.name}}</span>
                             <div class="ui-br-ext-module-icons" v-if="account.isAdmin == 1">
                                 <span @click="onModuleEdit({...module})">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -31,14 +31,18 @@
                 </div>
             </div>
             <div class="ui-br-ext-btn-link" v-if="account.isAdmin == 1">
-                <span id="ui-br-ext-btn-link" @click="showAddModule = !showAddModule; resetModule()" :class="{active: showAddModule}">Add new module</span>  
+                <span id="ui-br-ext-btn-link" @click="showAddModule = !showAddModule; resetModule()" :class="{active: showAddModule}">Create module</span>  
             </div>
             <div  class="ui-br-ext-new-module-cont" v-if="showAddModule">
                 <form novalidate name="ui-br-ext-new-module">
                     <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                        <label for="ui-br-ext-new-module-label">Module label</label>
-                        <input type="text" name="ui-br-ext-new-module-label" v-model="module.label" />
+                        <label for="ui-br-ext-new-module-label">Module name</label>
+                        <input type="text" name="ui-br-ext-new-module-label" v-model="module.name" />
                         <span class="ui-br-ext-message">{{moduleMessage}}</span>
+                    </div>
+                    <div class="ui-br-ext-form-container ui-br-ext-textarea">
+                        <label for="ui-br-ext-new-module-label">JIRA id</label>
+                        <input type="text" name="ui-br-ext-new-module-label" v-model="module.jiraId" />
                     </div>
                     <div class="ui-br-ext-form-container ui-br-ext-textarea">
                         <label for="ui-br-ext-new-module-name">Module description</label>
@@ -85,7 +89,8 @@
             return {
                 showAddModule: false,
                 module: {
-                    label: '',
+                    name: '',
+                    jiraId: '',
                     description: ''
                 },
                 searchQuery: '',
@@ -99,7 +104,7 @@
         computed: {
             searchResults: function () {
                 if(this.searchQuery == '') return [];
-                return this.modules.filter(module => module.label?.includes(this.searchQuery));
+                return this.modules.filter(module => module.name?.includes(this.searchQuery));
             }
         },
 
@@ -107,20 +112,18 @@
             saveModule(){
                 this.moduleMessage = '';
                 const index = this.modules.findIndex(module => {
-                    return module.label == this.module.label
+                    return module.name == this.module.name
                 });
                 if(index == -1) {
                     if(this.module.id) {
-                        console.log('edit module');
-                        alert(`Module ${this.module.label} successfully saved`);
+                        alert(`Module ${this.module.name} successfully saved`);
                         this.showAddModule = false;
                         this.resetModule();
                         // patch
                     } else {
-                        console.log('new module');
                         //post
-                        this.modules.push({label: this.module.label, description: this.module.description});
-                        alert(`Module ${this.module.label} successfully saved`);
+                        this.modules.push({name: this.module.name, description: this.module.description});
+                        alert(`Module ${this.module.name} successfully saved`);
                         this.showAddModule = false;
                         this.resetModule();
                     }
@@ -131,7 +134,7 @@
             },
 
             resetModule() {
-                this.module.label = '';
+                this.module.name = '';
                 this.module.description = '';
                 if(this.module.id) delete this.module.id;
             },

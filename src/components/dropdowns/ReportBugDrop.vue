@@ -4,8 +4,8 @@
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
                 <li v-if="account && account.registrationKey">
-                    <span><strong>Module label: </strong></span>
-                    <span v-if="currentModule">  {{currentModule.label || 'No module chosen'}}</span>
+                    <span><strong>Module: </strong></span>
+                    <span v-if="currentModule">  {{currentModule.name || 'No module chosen'}}</span>
                 </li >
                 <li v-if="user && (user.firstname || user.lastname)">
                     <span><strong>User:</strong> </span>
@@ -278,8 +278,8 @@
 
             getFileName() {
                 const date = this.getDate();
-                if(this.currentModule && this.currentModule.label) {
-                    return this.currentModule.label + '_' + date
+                if(this.currentModule && this.currentModule.name) {
+                    return this.currentModule.name + '_' + date
                 } else {
                     return 'BugReport'+ '_' + date
                 }

@@ -67,27 +67,27 @@ export default {
         globalStore.store.modules = [
           {
             id: 1,
-            label: 'bu senlarga',
+            name: 'bu senlarga',
             description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
           },
           {
             id: 2,
-            label: 'tralivali',
+            name: 'tralivali',
             description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
           },
           {
             id: 3,
-            label: 'emas',
+            name: 'emas',
             description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
           },
           {
             id: 4,
-            label: 'tilitili',
+            name: 'tilitili',
             description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
           },
           {
             id: 5,
-            label: 'bubblegum',
+            name: 'bubblegum',
             description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
           },
         ]

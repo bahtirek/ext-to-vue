@@ -3,9 +3,9 @@
         <div class="ui-br-ext-drop-title">Repor details</div>
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
-                <li v-if="currentModule && currentModule.label">
+                <li v-if="currentModule && currentModule.name">
                     <span><strong>Module label: </strong></span>
-                    <span v-if="currentModule">  {{currentModule.label || 'No module chosen'}}</span>
+                    <span v-if="currentModule">  {{currentModule.name || 'No module chosen'}}</span>
                 </li >
             </ul >
 
