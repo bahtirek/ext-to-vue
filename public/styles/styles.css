@@ -426,7 +426,6 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   color: #00ad55;
   cursor: pointer;
   font-size: 14px;
-  font-weight: bold;
   padding-right: 20px;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-drop-body .ui-br-ext-review-card ul,
