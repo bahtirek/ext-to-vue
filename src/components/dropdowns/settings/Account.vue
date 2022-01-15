@@ -1,9 +1,14 @@
 <template>
     
     <div class="ui-br-ext-settings-body">
+        <ul class="ui-br-ext-info-list">
+            <li v-if="account && account.registrationKey ">
+                <span><strong>Regkey:</strong> </span><span>  {{account.registrationKey}}</span>
+            </li >
+        </ul >
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="regKey">Registration Key</label>
-            <input type="text" name="regKey" v-model="reg.key" :placeholder="reg.placeholder"/>
+            <input type="text" name="regKey" v-model="reg.key"/>
             <span class="ui-br-ext-message">{{reg.error}}</span>
         </div>
         <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
@@ -32,7 +37,6 @@
 
         mounted() {
             this.account = globalStore.store.account;
-            this.updatePlaceholder()
         },
 
         data() {
@@ -43,7 +47,6 @@
                     key: '',
                     error: '',
                     spinner: false,
-                    placeholder: '***_**********************',
                 }
             }
         },
@@ -74,17 +77,7 @@
                     this.reg.spinner = false
                 }
             },
-            
-            updatePlaceholder() {
-                if(this.account) {
-                    console.log(JSON.parse(JSON.stringify(this.account)));
-                    if (this.account.isAdmin == 1 ){
-                        this.reg.placeholder = 'sup_**********************'
-                    } else {
-                        this.reg.placeholder = 'reg_**********************'
-                    }
-                }
-            }
+
         }
     }
 </script>
