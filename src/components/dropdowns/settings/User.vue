@@ -24,7 +24,7 @@
             <input type="text" name="email" v-model="userForm.email"/>
             <span class="ui-br-ext-message"></span>
         </div>
-        <button class="ui-br-ext-btn" id="ui-br-ext-save-new-project" data-listener="off">
+        <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
             <span class="ui-br-ext-spinner" :class="{ active: spinner }"></span>
             <span @click="onUserSave">Save</span > 
         </button>

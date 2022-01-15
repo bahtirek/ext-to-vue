@@ -4,8 +4,8 @@
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
                 <li v-if="account && account.registrationKey">
-                    <span><strong>Project label: </strong></span>
-                    <span v-if="currentProject">  {{currentProject.label || 'No project chosen'}}</span>
+                    <span><strong>Module label: </strong></span>
+                    <span v-if="currentModule">  {{currentModule.label || 'No module chosen'}}</span>
                 </li >
                 <li v-if="user && (user.firstname || user.lastname)">
                     <span><strong>User:</strong> </span>
@@ -81,12 +81,12 @@
 
         mounted: function () {
             this.account = globalStore?.store?.account;
-            this.currentProject = globalStore?.store.currentProject;
+            this.currentModule = globalStore?.store.currentModule;
             this.user = globalStore?.store.user;
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
-                this.currentProject = globalStore.store.currentProject;
+                this.currentModule = globalStore.store.currentModule;
             })
                         
             eventBus.$on('user-loaded', () => {
@@ -97,7 +97,7 @@
         data() {
             return {
                 next: false,
-                currentProject: {},
+                currentModule: {},
                 account: {},
                 user: {},
                 form: {
@@ -278,8 +278,8 @@
 
             getFileName() {
                 const date = this.getDate();
-                if(this.currentProject && this.currentProject.label) {
-                    return this.currentProject.label + '_' + date
+                if(this.currentModule && this.currentModule.label) {
+                    return this.currentModule.label + '_' + date
                 } else {
                     return 'BugReport'+ '_' + date
                 }

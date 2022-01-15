@@ -3,9 +3,9 @@
         <div class="ui-br-ext-drop-title">Repor details</div>
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
-                <li v-if="currentProject && currentProject.label">
-                    <span><strong>Project label: </strong></span>
-                    <span v-if="currentProject">  {{currentProject.label || 'No project chosen'}}</span>
+                <li v-if="currentModule && currentModule.label">
+                    <span><strong>Module label: </strong></span>
+                    <span v-if="currentModule">  {{currentModule.label || 'No module chosen'}}</span>
                 </li >
             </ul >
 
@@ -69,17 +69,17 @@
 
         mounted: function () {
             this.reports = globalStore.store.reports;
-            this.currentProject = globalStore?.store.currentProject;
+            this.currentModule = globalStore?.store.currentModule;
             this.report = globalStore.store.reports[this.reportIndex];
             this.showElement();
         },
 
         data() {
             return {
-                ifProject: false,
+                ifModule: false,
                 ifAccount: false,
                 ifUser: false,
-                currentProject: {},
+                currentModule: {},
                 account: {},
                 reports: [],
                 report: undefined,

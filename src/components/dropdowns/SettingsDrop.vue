@@ -4,17 +4,17 @@
                 <div class="ui-br-ext-drop-body">
                     
                     <div class="ui-br-ext-settings-container" v-if="account && account.registrationKey">
-                        <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifAccount = false; ifUser = false">Project</div>
-                        <Project v-if="ifProject" />
+                        <div class="ui-br-ext-setting-title" @click="ifModule = !ifModule; ifAccount = false; ifUser = false">Module</div>
+                        <Module v-if="ifModule" />
                     </div>
                     
                     <div class="ui-br-ext-settings-container">
-                        <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifProject = false; ifUser = false">Account</div>
+                        <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifModule = false; ifUser = false">Account</div>
                         <Account v-if="ifAccount" />
                     </div>
                     
                     <div class="ui-br-ext-settings-container">
-                        <div class="ui-br-ext-setting-title" @click="ifUser = !ifUser; ifProject = false; ifAccount = false">User</div>
+                        <div class="ui-br-ext-setting-title" @click="ifUser = !ifUser; ifModule = false; ifAccount = false">User</div>
                         <User v-if="ifUser" />
                     </div>
                     
@@ -25,7 +25,7 @@
 
 <script>
 
-    import Project from './settings/Project';
+    import Module from './settings/Module';
     import Account from './settings/Account';
     import User from './settings/User';
     import { globalStore } from './../../main';
@@ -34,27 +34,27 @@
     export default {
         name: 'SettingsDrop',
         components: {
-            Project,
+            Module,
             Account,
             User
         },
 
         mounted: function () {
             this.account = globalStore?.store?.account;
-            this.currentProject = globalStore?.store.currentProject;
+            this.currentModule = globalStore?.store.currentModule;
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
-                this.currentProject = globalStore.store.currentProject;
+                this.currentModule = globalStore.store.currentModule;
             })
         },
 
         data() {
             return {
-                ifProject: false,
+                ifModule: false,
                 ifAccount: false,
                 ifUser: false,
-                currentProject: {},
+                currentModule: {},
                 account: {},
             }
         },

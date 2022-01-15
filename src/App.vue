@@ -41,7 +41,7 @@ export default {
       this.regKey = await this.localStorage.get('regKey');
       if(this.regKey) {
         globalStore.store.account = await this.auth(this.regKey);
-        //globalStore.store.projects = await this.getProjects(globalStore.store.account.token);
+        //globalStore.store.modules = await this.getmModules(globalStore.store.account.token);
         eventBus.$emit('account-loaded')
       }
     },
@@ -64,7 +64,7 @@ export default {
           repositoryServer: "http://127.0.0.1:8000/api/",
           token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i.",
         };
-        globalStore.store.projects = [
+        globalStore.store.modules = [
           {
             id: 1,
             label: 'bu senlarga',

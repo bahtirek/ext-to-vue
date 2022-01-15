@@ -3,9 +3,9 @@
         <div class="ui-br-ext-drop-title">Review</div>
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
-                <li v-if="currentProject && currentProject.label">
-                    <span><strong> Project label: </strong></span>
-                    <span v-if="currentProject"> {{currentProject.label || 'No project chosen'}}</span>
+                <li v-if="currentModule && currentModule.label">
+                    <span><strong> Module label: </strong></span>
+                    <span v-if="currentModule"> {{currentModule.label || 'No module chosen'}}</span>
                 </li>
             </ul >
             <div class="ui-br-ext-review-card" v-for="(report, index) in reports" :key="index">
@@ -54,11 +54,11 @@
 
         mounted: function () {
             this.reports = globalStore.store.reports;
-            this.currentProject = globalStore?.store.currentProject;
+            this.currentModule = globalStore?.store.currentModule;
             this.showElements();
 
             eventBus.$on('account-loaded', (val) => {
-                this.currentProject = globalStore.store.currentProject;
+                this.currentModule = globalStore.store.currentModule;
             });
 
             eventBus.$on('report-loaded', (val) => {
@@ -68,10 +68,10 @@
 
         data() {
             return {
-                ifProject: false,
+                ifModule: false,
                 ifAccount: false,
                 ifUser: false,
-                currentProject: {},
+                currentModule: {},
                 account: {},
                 reports: [],
                 positions: {

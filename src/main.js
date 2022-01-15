@@ -21,10 +21,10 @@ export const globalStore = new Vue({
       currentElementInlineStyle: '',
       selectedElementRect: '',
       account: {},
-      projects: [],
+      modules: [],
       user: {},
       dynamicDomFlow: false,
-      currentProject: {},
+      currentModule: {},
       screenshot: '',
       reports: [],
       report: {
