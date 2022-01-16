@@ -4,7 +4,6 @@
             <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted"  @toggle-extension="$emit('toggle-extension')" />
             <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <ReviewBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
-            <ReportDetailsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <!-- <ExportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" /> -->
             <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
             <CloseBtn @toggle-button="toggleButton" />  
@@ -17,7 +16,6 @@
     import SelectBtn from './menu-buttons/SelectBtn';
     import ReportBugBtn from './menu-buttons/ReportBugBtn';
     import ReviewBtn from './menu-buttons/ReviewBtn';
-    import ReportDetailsBtn from './menu-buttons/ReportDetailsBtn';
     /* import ExportBtn from './menu-buttons/ExportBtn'; */
     import SettingsBtn from './menu-buttons/SettingsBtn';
     import CloseBtn from './menu-buttons/CloseBtn';
@@ -31,7 +29,6 @@
             SelectBtn,
             ReportBugBtn,
             ReviewBtn,
-            ReportDetailsBtn,
             /* ExportBtn, */
             SettingsBtn,
             CloseBtn
