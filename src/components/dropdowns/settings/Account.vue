@@ -57,7 +57,10 @@
                 if (this.reg.key !== ''){ 
                     if (this.account && this.account.registrationKey) {
                         let regKeyConfirmation = confirm('Do you want to change the registration key?');
-                        if (!regKeyConfirmation) return false;
+                        if (!regKeyConfirmation) {
+                            this.reg.key = '';
+                            return false
+                        }
                     }
                     this.reg.spinner = true;
                     // Get request
@@ -77,7 +80,6 @@
                     this.reg.spinner = false
                 }
             },
-
         }
     }
 </script>
