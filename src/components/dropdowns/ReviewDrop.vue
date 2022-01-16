@@ -7,26 +7,12 @@
                     <span><strong> Module label: </strong></span>
                     <span v-if="currentModule"> {{currentModule.name || 'No module chosen'}}</span>
                 </li>
-            </ul >
-            <div class="ui-br-ext-review-card" v-for="(report, index) in reports" :key="index">
-                <ul class="ui-br-ext-info-list" >
-                    <li v-if="report.user && (report.user.firstname || report.user.lastname)">
-                        <span><strong>User: </strong></span>
-                        <span> {{report.user.firstname}} {{report.user.lastname}}</span>
-                    </li >
-                    <li v-if="report.user && report.user.email">
-                        <span><strong>Email: </strong></span>
-                        <span> {{report.user.email}}</span>
-                    </li >
-                </ul >
-                <div class="ui-br-ext-review-box ui-br-ext-ellipsis" v-if="report.content.description" @click="showDetails(index)">
-                    <div class="ui-br-ext-review-title">Description:</div>
-                    <div class="ui-br-ext-review-text">{{report.content.description}}</div>
-                </div>
-                <span class="ui-br-ext-btn-lnk" v-if="report.xPath" @click="showElement(index)">Find Element</span>
-                <span class="ui-br-ext-btn-lnk" v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</span>
-            </div>
-            
+            </ul>
+
+            <AllReports v-if="toggle.allReports" @show-details="showDetails" :reports="reports"/>
+
+            <ReportDetails v-if="toggle.details" @close-details="closeDetails" :report="report"/>
+           
         </div>
         <div class="ui-br-ext-box-resize" id="ui-br-review-reviewResize" @mousedown="onMouseDown" @touchstart="onTouchStart">
             <svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" focusable="false"
@@ -44,9 +30,16 @@
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus';
     import extensionMove from '../../shared/extension-resize';
+    import AllReports from './review/AllReports';
+    import ReportDetails from './review/ReportDetails';
 
     export default {
         name: 'ReviewDrop',
+
+        components: {
+            AllReports,
+            ReportDetails
+        },
 
         created() { 
             this.mouseMove = extensionMove.onMouseDown;           
@@ -82,17 +75,20 @@
                     height: undefined,
                     width: undefined
                 },
+                report: undefined,
+                toggle: {
+                    allReports: true,
+                    details: false
+                }
             }
         },
 
         methods: {
 
-            showElement(index){
-                
+            showElement(index){                
                 this.deselectElements();
                 this.selectElement(index);              
                 this.reports[index]['element'].scrollIntoView();
-
             },
 
             showElements(){
@@ -119,6 +115,17 @@
                 }
             },
 
+            closeDetails() {
+                this.toggle.allReports = true;
+                this.toggle.details = false;
+            },
+
+            showDetails(index) {
+                this.report = this.reports[index];
+                this.toggle.allReports = false;
+                this.toggle.details = true;
+            },
+
             deselectElements() {
                 document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
                     element.classList.remove('ui-br-ext-outlined-element');
@@ -134,11 +141,6 @@
                     let w = window.open("");
                     w.document.write(image.outerHTML);
                 }
-            },
-
-            showDetails(index) {
-                this.$emit('show-detailsDrop', index);
-                eventBus.$emit('toggle-drop', 'ui-br-ext-reportdetails-button');
             },
 
             onMouseDown(event) {
