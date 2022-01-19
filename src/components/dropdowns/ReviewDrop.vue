@@ -1,6 +1,6 @@
 <template>
     <div class="ui-br-ext-dropdown-item ui-br-ext-review" id="ui-br-ext-review" ref="divToResize">
-        <div class="ui-br-ext-drop-title">Review</div>
+        <div class="ui-br-ext-drop-title">Reports</div>
         <div class="ui-br-ext-drop-body">
             <ul class="ui-br-ext-info-list">
                 <li v-if="currentModule && currentModule.name">
@@ -12,7 +12,7 @@
             <AllReports v-if="toggle.allReports" @show-details="showDetails" :reports="reports"/>
 
             <ReportDetails v-if="toggle.details" @close-details="closeDetails" :report="report"/>
-           
+
         </div>
         <div class="ui-br-ext-box-resize" id="ui-br-review-reviewResize" @mousedown="onMouseDown" @touchstart="onTouchStart">
             <svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" focusable="false"
@@ -32,6 +32,7 @@
     import extensionMove from '../../shared/extension-resize';
     import AllReports from './review/AllReports';
     import ReportDetails from './review/ReportDetails';
+    import clickBlocker from '../../shared/click-blocker';
 
     export default {
         name: 'ReviewDrop',
@@ -42,7 +43,9 @@
         },
 
         created() { 
-            this.mouseMove = extensionMove.onMouseDown;           
+            this.mouseMove = extensionMove.onMouseDown;
+            this.addClickBlocker = clickBlocker.addClickBlocker;         
+            this.removeClickBlocker = clickBlocker.removeClickBlocker;               
         },
 
         mounted: function () {
@@ -56,6 +59,10 @@
 
             eventBus.$on('report-loaded', (val) => {
                 this.reports = globalStore.store.reports;
+            });
+
+            eventBus.$on('show-details', (index) => {
+                this.showDetails(index)
             });
         },
 
@@ -85,13 +92,8 @@
 
         methods: {
 
-            showElement(index){                
-                this.deselectElements();
-                this.selectElement(index);              
-                this.reports[index]['element'].scrollIntoView();
-            },
-
             showElements(){
+                this.addClickBlocker();
 
                 for (let index = 0; index < this.reports.length; index++) {
                     this.selectElement(index);                   
@@ -106,6 +108,8 @@
                     report.element = element;
                     element.classList.add('ui-br-ext-outlined-element');
                     element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";
+                    element.setAttribute('data-ext-index', index);                 
+                    //element.addEventListener('mousedown', this.showDetailsOnClick, true);                   
                 } else {
                     report.element = false;
                     // move report to the bottom of reports array
@@ -124,13 +128,6 @@
                 this.report = this.reports[index];
                 this.toggle.allReports = false;
                 this.toggle.details = true;
-            },
-
-            deselectElements() {
-                document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
-                    element.classList.remove('ui-br-ext-outlined-element');
-                    element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
-                });
             },
 
             showImage(screenshot) {

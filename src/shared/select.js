@@ -54,6 +54,7 @@ const onDeselect = function(){
     document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
         element.classList.remove('ui-br-ext-outlined-element');
         element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
+        element.removeAttribute('data-ext-index');
     });
 
     // Reset the global variable that holds the previously selected element properties.

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="ui-br-ext-review-card" v-for="(report, index) in reports" :key="index">
+        <div class="ui-br-ext-review-card" v-for="(report, index) in reportsToDisplay" :key="index">
             <ul class="ui-br-ext-info-list" >
                 <li v-if="report.user && (report.user.firstname || report.user.lastname)">
                     <span><strong>User: </strong></span>
@@ -28,6 +28,17 @@
         props: [
             'reports'
         ],
+
+        mounted() {
+            this.reportsToDisplay = this.reports.filter(report => !report.element);
+            console.log(this.reportsToDisplay);
+        },
+
+        data() {
+            return {
+                reportsToDisplay: []
+            }
+        },
 
         methods: {
 
