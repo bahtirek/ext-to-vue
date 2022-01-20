@@ -9,9 +9,9 @@
 
 <script>
 
-    import operators from '../../shared/operators';
+    import operators from '../../common/operators';
     import { globalStore } from '../../main';
-    import screenshot from '../../shared/screenshot';
+    import screenshot from '../../common/screenshot';
 
     export default {
         name: 'SelectBtn',

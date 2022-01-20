@@ -63,10 +63,10 @@
 
 <script>
 
-    import screenshot from '../../shared/screenshot';
-    import exportPdf from '../../shared/export-pdf';
-    import select from '../../shared/select';
-    import extensionMove from '../../shared/extension-resize';
+    import screenshot from '../../common/screenshot';
+    import exportPdf from '../../common/export-pdf';
+    import select from '../../common/select';
+    import extensionMove from '../../common/extension-resize';
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus'
 

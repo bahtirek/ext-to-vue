@@ -36,8 +36,8 @@
 <script>
 
     import { globalStore } from './../../../main';
-    import regKeyAuth from './../../../shared/regkey';
-    import storage from './../../../shared/storage';
+    import regKeyAuth from './../../../common/regkey';
+    import storage from './../../../common/storage';
     import eventBus from './../../../eventBus'
 
     export default {

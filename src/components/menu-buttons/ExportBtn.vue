@@ -6,7 +6,7 @@
 
 <script>
 
-    //import operators from '../../shared/operators';
+    //import operators from '../../common/operators';
 
     export default {
         name: 'ExportBtn',

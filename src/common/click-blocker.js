@@ -1,4 +1,4 @@
-import eventBus from './../eventBus';
+import eventBus from '../eventBus';
 
 
 const addClickBlocker = function() {

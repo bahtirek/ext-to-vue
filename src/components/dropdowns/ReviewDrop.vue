@@ -29,10 +29,10 @@
 
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus';
-    import extensionMove from '../../shared/extension-resize';
+    import extensionMove from '../../common/extension-resize';
     import AllReports from './review/AllReports';
     import ReportDetails from './review/ReportDetails';
-    import clickBlocker from '../../shared/click-blocker';
+    import clickBlocker from '../../common/click-blocker';
 
     export default {
         name: 'ReviewDrop',

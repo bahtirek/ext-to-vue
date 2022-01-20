@@ -5,8 +5,8 @@
 <script>
 
     import Extension from './components/Extension';
-    import storage from './shared/storage';
-    import regKeyAuthentication from './shared/regkey';
+    import storage from './common/storage';
+    import regKeyAuthentication from './common/regkey';
     import { globalStore } from './main';
     import eventBus from './eventBus'
         

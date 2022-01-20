@@ -19,8 +19,8 @@
     /* import ExportBtn from './menu-buttons/ExportBtn'; */
     import SettingsBtn from './menu-buttons/SettingsBtn';
     import CloseBtn from './menu-buttons/CloseBtn';
-    import operators from '../shared/operators';
-    import select from '../shared/select';
+    import operators from '../common/operators';
+    import select from '../common/select';
 
     export default {
         name: 'MainMenu',
