@@ -64,6 +64,7 @@
 <script>
 
     import screenshot from '../../shared/screenshot';
+    import exportPdf from '../../shared/export-pdf';
     import select from '../../shared/select';
     import extensionMove from '../../shared/extension-resize';
     import { globalStore } from './../../main';
@@ -74,6 +75,9 @@
         
         created() { 
             this.onGetScreenshot = screenshot.getScreenshot;
+            this.getQueryWidth = screenshot.getQueryWidth;
+            this.getFileName = exportPdf.getFileName;
+            this.savePdf = exportPdf.savePdf;
             this.mouseMove = extensionMove.onMouseDown;
             this.touchMove = extensionMove.onTouchStart;
             this.getElementXpath = select.getElementXpath;
@@ -120,25 +124,7 @@
                     width: undefined
                 },
                 filename: '',
-                name: 'test',
-                pdfPages: {
-                    content: [],
-                    pageMargins: [20, 40, 20, 40],
-                    styles: {
-                        subheader: {
-                            fontSize: 12,
-                            bold: true,
-                            margin: [0, 0, 0, 5]
-                        },
-                        description: {
-                            fontSize: 12,
-                            margin: [0, 0, 0, 20]
-                        },
-                        screenshot: {
-                            margin: [0, 0, 0, 20]
-                        },
-                    }
-                }
+                name: 'test'
             }
         },
 
@@ -146,7 +132,7 @@
 
             async saveReport(){
                 
-                this.filename = this.getFileName();
+                this.filename = this.getFileName(this.currentModule.name);
 
                 if(this.form.saveScreenshot) {
                     if(!globalStore.store.dynamicDomFlow) {
@@ -155,7 +141,7 @@
                 }
 
                 if(this.form.savePdf){
-                    await this.savePdf()
+                    await this.savePdf(this.form, globalStore.store.screenshot, globalStore.store.queryWidth)
                 }
 
                 if(this.form.saveScreenshot && !this.form.savePdf){
@@ -172,80 +158,11 @@
                 this.resetReportData();             
             },
 
-            async savePdf() {   
-                this.pdfPages.content = [];            
-                var pdfMake = require('pdfmake/build/pdfmake.js')
-                if (pdfMake.vfs == undefined){
-                    var pdfFonts = require('pdfmake/build/vfs_fonts.js')
-                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
-                }
-                let page = await this.createPdfContent();
-                this.pdfPages.content = this.pdfPages.content.concat(page);
-                pdfMake.createPdf(this.pdfPages).download(this.filename + '.pdf');
-                return true;               
-            },
-
-            async createPdfContent(){
-                const list = ['description', 'actualResults', 'expectedResults', 'stepsToReproduce'];
-                const titles = {
-                    description: 'Description',
-                    actualResults: 'Actual results',
-                    expectedResults: 'Expected results',
-                    stepsToReproduce: 'Steps to reproduce'
-                }
-                let content = [];
-
-                for (const item of list) {
-                    if (this.form[item].length > 0) {
-                        let title = {
-                            text: `${titles[item]}`,
-                            style: 'subheader'
-                        }
-
-                        let description = {
-                            text: `${this.form[item]}`,
-                            style: 'description'
-                        }
-
-                        content.push(title);
-                        content.push(description);
-                    }                   
-                }
-
-                if(this.form.saveScreenshot) {                    
-                    content.push(this.setScreenshotContent());
-                }
-
-                return content;
-            },
-
             async getScreenshot(){
                 this.$emit('toggle-extension');
                 globalStore.store.screenshot = await this.onGetScreenshot();
+                globalStore.store.queryWidth = await this.getQueryWidth();
                 this.$emit('toggle-extension');
-            },
-
-            setScreenshotContent() {
-                let width = 550;
-                const mediaQueryTablet = window.matchMedia("(max-width: 1023px)")
-                const mediaQueryPhone = window.matchMedia("(max-width: 767px)")
-
-                if (mediaQueryPhone.matches) {
-                    width = window.innerWidth - ((25/100) * window.innerWidth);
-                }
-
-                if (mediaQueryTablet.matches) {
-                    width = window.innerWidth - ((45/100) * window.innerWidth);
-                }
-
-                let screenshot = {
-                    image: globalStore.store.screenshot,
-                    width: width,
-                    pageBreak: 'after',
-                    style: 'screenshot'
-                };
-
-                return screenshot;
             },
 
             screenshotLink(dataUrl, filename) {
@@ -274,26 +191,6 @@
                 globalStore.store.selectedElement = '';
                 globalStore.store.currentElementInlineStyle = '';
                 globalStore.store.selectedElementRect = '';
-            },
-
-            getFileName() {
-                const date = this.getDate();
-                if(this.currentModule && this.currentModule.name) {
-                    return this.currentModule.name + '_' + date
-                } else {
-                    return 'BugReport'+ '_' + date
-                }
-            },
-
-            getDate() {
-                /* var today = new Date();
-                var dd = String(today.getDate()).padStart(2, '0');
-                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-                var yyyy = today.getFullYear();
-
-                return mm + '/' + dd + '/' + yyyy; */
-                let date = Date.now().toString();
-                return date.slice(-6)
             },
 
             onMouseDown(event) {
