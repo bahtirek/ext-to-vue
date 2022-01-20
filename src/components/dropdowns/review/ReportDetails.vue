@@ -28,7 +28,13 @@
                 <div class="ui-br-ext-review-title">Expected results:</div>
                 <div class="ui-br-ext-review-text">{{report.content.expectedResults}}</div>
             </div>
-            <span class="ui-br-ext-btn-lnk" v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</span>
+            <div>
+                <span class="ui-br-ext-btn-lnk" v-bind:class="{'disabled': !report.screenshot}" @click="showImage(report.screenshot)">Screenshot</span>
+                <span class="ui-br-ext-btn-lnk" @click="pdf">Export PDF</span>
+                <span class="ui-br-ext-btn-lnk" @click="addJira">Add JIRA ticket</span>
+                <span class="ui-br-ext-btn-lnk" @click="createJira">Create JIRA issue</span>
+                <span class="ui-br-ext-btn-lnk" @click="deleteReport">Delete report</span>
+            </div>
         </div>
     </div>
 </template>
@@ -54,8 +60,27 @@
                 }
             },
 
+            addJira(){
+                console.log('addjira');
+            },
+
+            createJira(){
+                console.log('create jira');
+            },
+
+            pdf() {
+                console.log('download pdf');
+            },
+
             close(){
                 this.$emit('close-details')
+            },
+
+            deleteReport(){
+                const deleteConfirmation = confirm('Are you sure?');
+                if (deleteConfirmation) {
+                    this.$emit('delete-report', this.report)
+                }
             }
         }
     }

@@ -11,7 +11,7 @@
 
             <AllReports v-if="toggle.allReports" @show-details="showDetails" :reports="reports"/>
 
-            <ReportDetails v-if="toggle.details" @close-details="closeDetails" :report="report"/>
+            <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" :report="report"/>
 
         </div>
         <div class="ui-br-ext-box-resize" id="ui-br-review-reviewResize" @mousedown="onMouseDown" @touchstart="onTouchStart">
@@ -45,6 +45,7 @@
         created() { 
             this.mouseMove = extensionMove.onMouseDown;
             this.addClickBlocker = clickBlocker.addClickBlocker;         
+            this.removeSingleClickBlocker = clickBlocker.removeSingleClickBlocker;               
             this.removeClickBlocker = clickBlocker.removeClickBlocker;               
         },
 
@@ -138,6 +139,19 @@
                     let w = window.open("");
                     w.document.write(image.outerHTML);
                 }
+            },
+
+            deleteReport(report) {
+                const index = this.reports.findIndex(item => item.xPath == report.xPath);// will change to id
+                console.log(index);
+                console.log(report);
+                this.closeDetails();
+                this.reports.splice(index, 1);
+                this.removeClickBlocker();
+                report.element.classList.remove('ui-br-ext-outlined-element');
+                report.element.style.cssText = report.element.style.cssText.replace('outline: red dashed 3px !important;', '');
+                report.element.removeAttribute('data-ext-index');
+                this.showElements();
             },
 
             onMouseDown(event) {

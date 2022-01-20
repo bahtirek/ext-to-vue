@@ -437,11 +437,28 @@ body {
                         cursor: pointer;
                         font-size: 14px;
                         padding-right: 20px;
+                        display: block;
+                        margin-top: 10px;
+                        &:hover {
+                            font-weight: bold;
+                        }
+                        &:first-child {
+                            margin-top: 25px;
+                        }
+
+                        &.disabled {
+                            color: #c4c8c7;
+                            pointer-events: none;
+                            cursor: not-allowed;
+                        }
                     }
 
                     ul {
                         padding: 0 0 0 0px;
                         margin: 0 0 15px 0;
+                    }
+                    &:last-child {
+                         border-bottom: none;
                     }
                 }
 
