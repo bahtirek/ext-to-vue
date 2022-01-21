@@ -1,14 +1,9 @@
 <template>
     
     <div class="ui-br-ext-settings-body">
-        <ul class="ui-br-ext-info-list">
-            <li v-if="user && (user.firstname || user.lastname)">
-                <span><strong>User:</strong> </span><span>  {{user.firstname}} {{user.lastname}}</span>
-            </li >
-            <li v-if="user && user.email">
-                <span><strong>Email: </strong></span> <span>  {{user.email}}</span>
-            </li >
-        </ul >
+        
+        <UserDetails :user="user" />
+
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="firstname">First name</label>
             <input type="text" name="firstname" v-model="userForm.firstname"/>
@@ -38,11 +33,17 @@
     import { globalStore } from './../../../main';
     import regKeyAuth from './../../../common/regkey';
     import storage from './../../../common/storage';
-    import eventBus from './../../../eventBus'
+    import eventBus from './../../../eventBus';
+    import UserDetails from '../../shared/UserDetails';
+
 
     export default {
         name: 'Account',
-        
+
+        components: {
+            UserDetails
+        },
+
         created() { 
             this.auth = regKeyAuth.auth,
             this.localStorage = storage

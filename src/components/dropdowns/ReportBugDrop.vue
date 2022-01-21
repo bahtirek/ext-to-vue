@@ -4,17 +4,9 @@
         <div class="ui-br-ext-drop-body">
 
             <ModuleDetails :module="currentModule" />
-            
-            <ul class="ui-br-ext-info-list">
-                <li v-if="user && (user.firstname || user.lastname)">
-                    <span><strong>User:</strong> </span>
-                    <span>  {{user.firstname}} {{user.lastname}}</span>
-                </li >
-                <li v-if="user && user.email">
-                    <span><strong> Email: </strong></span>
-                    <span> {{user.email}}</span>
-                </li >
-            </ul >
+
+            <UserDetails :user="user" />
+
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-description">Description</label>
                 <textarea name="ui-br-ext-description" v-model="form.description" rows="2" data-gramm="false"></textarea>
@@ -69,12 +61,14 @@
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus';
     import ModuleDetails from '../shared/ModuleDetails';
-
+    import UserDetails from '../shared/UserDetails';
+            
     export default {
         name: 'ReportBugDrop',
 
         components: {
-            ModuleDetails
+            ModuleDetails,
+            UserDetails
         },
         
         created() { 

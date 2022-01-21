@@ -4,17 +4,8 @@
         <div  class="ui-br-ext-review-card" v-if="report">
 
             <ModuleDetails :module="module" />
+            <UserDetails :user="report.user" />
 
-            <ul class="ui-br-ext-info-list" >
-                <li v-if="report.user && (report.user.firstname || report.user.lastname)">
-                    <span><strong>User: </strong></span>
-                    <span> {{report.user.firstname}} {{report.user.lastname}}</span>
-                </li >
-                <li v-if="report.user && report.user.email">
-                    <span><strong>Email: </strong></span>
-                    <span> {{report.user.email}}</span>
-                </li >
-            </ul >
             <div class="ui-br-ext-review-box" v-if="report.content.description">
                 <div class="ui-br-ext-review-title">Description:</div>
                 <div class="ui-br-ext-review-text">{{report.content.description}}</div>
@@ -45,12 +36,14 @@
 <script>
 
     import ModuleDetails from '../../shared/ModuleDetails';
+    import UserDetails from '../../shared/UserDetails';
 
     export default {
         name: 'ReportDetails',
 
         components: {
-            ModuleDetails
+            ModuleDetails,
+            UserDetails
         },
 
         props: [

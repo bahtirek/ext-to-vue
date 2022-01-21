@@ -1,16 +1,9 @@
 <template>
     <div>
         <div class="ui-br-ext-review-card" v-for="(report, index) in reportsToDisplay" :key="index">
-            <ul class="ui-br-ext-info-list" >
-                <li v-if="report.user && (report.user.firstname || report.user.lastname)">
-                    <span><strong>User: </strong></span>
-                    <span> {{report.user.firstname}} {{report.user.lastname}}</span>
-                </li >
-                <li v-if="report.user && report.user.email">
-                    <span><strong>Email: </strong></span>
-                    <span> {{report.user.email}}</span>
-                </li >
-            </ul >
+            
+            <UserDetails :user="report.user" />
+
             <div class="ui-br-ext-review-box ui-br-ext-ellipsis" v-if="report.content.description" @click="showDetails(index)">
                 <div class="ui-br-ext-review-title">Description:</div>
                 <div class="ui-br-ext-review-text">{{report.content.description}}</div>
@@ -22,9 +15,16 @@
 
 <script>
 
+    import UserDetails from '../../shared/UserDetails';
+
+
     export default {
         name: 'AllReports',
 
+        components: {
+            UserDetails
+        },
+        
         props: [
             'reports'
         ],
