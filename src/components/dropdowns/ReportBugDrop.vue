@@ -2,11 +2,10 @@
     <div class="ui-br-ext-dropdown-item ui-br-ext-report-bug" id="ui-br-ext-report-bug" ref="divToResize">
         <div class="ui-br-ext-drop-title">Report bug</div>
         <div class="ui-br-ext-drop-body">
+
+            <ModuleDetails :module="currentModule" />
+            
             <ul class="ui-br-ext-info-list">
-                <li v-if="account && account.registrationKey">
-                    <span><strong>Module: </strong></span>
-                    <span v-if="currentModule">  {{currentModule.name || 'No module chosen'}}</span>
-                </li >
                 <li v-if="user && (user.firstname || user.lastname)">
                     <span><strong>User:</strong> </span>
                     <span>  {{user.firstname}} {{user.lastname}}</span>
@@ -68,10 +67,15 @@
     import select from '../../common/select';
     import extensionMove from '../../common/extension-resize';
     import { globalStore } from './../../main';
-    import eventBus from './../../eventBus'
+    import eventBus from './../../eventBus';
+    import ModuleDetails from '../shared/ModuleDetails';
 
     export default {
         name: 'ReportBugDrop',
+
+        components: {
+            ModuleDetails
+        },
         
         created() { 
             this.onGetScreenshot = screenshot.getScreenshot;

@@ -1,11 +1,9 @@
 <template>
     
         <div class="ui-br-ext-settings-body">           
-            <div class="ui-br-ext-current-module" v-if="currentModule.name">
-                <span><strong>Current module: </strong></span><span>{{currentModule.name}}</span>
-                <div>{{currentModule.description}}</div>
-            </div  >
             
+            <ModuleDetails :module="currentModule" />
+
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-modules">Choose module</label>
                 <input type="text" v-model="searchQuery">
@@ -63,10 +61,15 @@
 
 <script>
     import { globalStore } from './../../../main';
-    import eventBus from './../../../eventBus'
+    import eventBus from './../../../eventBus';
+    import ModuleDetails from '../../shared/ModuleDetails';
 
     export default {
         name: 'Module',
+
+        components: {
+            ModuleDetails
+        },
 
         mounted() { 
             this.account = globalStore.store.account;

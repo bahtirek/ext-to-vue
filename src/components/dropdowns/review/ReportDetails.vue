@@ -2,6 +2,9 @@
     <div >  
         <div class="ui-br-ext-close-details" @click="close">Close</div>  
         <div  class="ui-br-ext-review-card" v-if="report">
+
+            <ModuleDetails :module="module" />
+
             <ul class="ui-br-ext-info-list" >
                 <li v-if="report.user && (report.user.firstname || report.user.lastname)">
                     <span><strong>User: </strong></span>
@@ -41,11 +44,18 @@
 
 <script>
 
+    import ModuleDetails from '../../shared/ModuleDetails';
+
     export default {
         name: 'ReportDetails',
 
+        components: {
+            ModuleDetails
+        },
+
         props: [
-            'report'
+            'report', 
+            'module'
         ],
 
         methods: {

@@ -2,16 +2,12 @@
     <div class="ui-br-ext-dropdown-item ui-br-ext-review" id="ui-br-ext-review" ref="divToResize">
         <div class="ui-br-ext-drop-title">Reports</div>
         <div class="ui-br-ext-drop-body">
-            <ul class="ui-br-ext-info-list">
-                <li v-if="currentModule && currentModule.name">
-                    <span><strong> Module label: </strong></span>
-                    <span v-if="currentModule"> {{currentModule.name || 'No module chosen'}}</span>
-                </li>
-            </ul>
+
+            <ModuleDetails v-if="toggle.allReports" :module="currentModule" />
 
             <AllReports v-if="toggle.allReports" @show-details="showDetails" :reports="reports"/>
 
-            <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" :report="report"/>
+            <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" :report="report" :module="currentModule" />
 
         </div>
         <div class="ui-br-ext-box-resize" id="ui-br-review-reviewResize" @mousedown="onMouseDown" @touchstart="onTouchStart">
@@ -32,6 +28,7 @@
     import extensionMove from '../../common/extension-resize';
     import AllReports from './review/AllReports';
     import ReportDetails from './review/ReportDetails';
+    import ModuleDetails from '../shared/ModuleDetails';
     import clickBlocker from '../../common/click-blocker';
 
     export default {
@@ -39,7 +36,8 @@
 
         components: {
             AllReports,
-            ReportDetails
+            ReportDetails,
+            ModuleDetails
         },
 
         created() { 
