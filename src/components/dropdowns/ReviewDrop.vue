@@ -10,13 +10,9 @@
             <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" :report="report" :module="currentModule" />
 
         </div>
-        <div class="ui-br-ext-box-resize" id="ui-br-review-reviewResize" @mousedown="onMouseDown" @touchstart="onTouchStart">
-            <svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" focusable="false"
-                role="img" width="128" height="128" fill="currentColor">
-                <path d="M33,11H3a1,1,0,0,0,0,2H33a1,1,0,0,0,0-2Z" class="ui-br-ext-clr-i-outline clr-i-outline-path-1" />
-                <path d="M28,17H8a1,1,0,0,0,0,2H28a1,1,0,0,0,0-2Z" class="ui-br-ext-clr-i-outline clr-i-outline-path-2" />
-                <path d="M23,23H13a1,1,0,0,0,0,2H23a1,1,0,0,0,0-2Z" class="ui-br-ext-clr-i-outline clr-i-outline-path-3" /></svg>
-        </div>
+        
+        <Resize :elementId="elementId" />
+
     </div>
 </template>
 
@@ -25,11 +21,11 @@
 
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus';
-    import extensionMove from '../../common/extension-resize';
     import AllReports from './review/AllReports';
     import ReportDetails from './review/ReportDetails';
     import ModuleDetails from '../shared/ModuleDetails';
     import clickBlocker from '../../common/click-blocker';
+    import Resize from '../shared/Resize';
 
     export default {
         name: 'ReviewDrop',
@@ -37,11 +33,11 @@
         components: {
             AllReports,
             ReportDetails,
-            ModuleDetails
+            ModuleDetails,
+            Resize
         },
 
         created() { 
-            this.mouseMove = extensionMove.onMouseDown;
             this.addClickBlocker = clickBlocker.addClickBlocker;         
             this.removeSingleClickBlocker = clickBlocker.removeSingleClickBlocker;               
             this.removeClickBlocker = clickBlocker.removeClickBlocker;               
@@ -73,19 +69,12 @@
                 currentModule: {},
                 account: {},
                 reports: [],
-                positions: {
-                    clientX: undefined,
-                    clientY: undefined,
-                    resizeX: 0,
-                    resizeY: 0,
-                    height: undefined,
-                    width: undefined
-                },
                 report: undefined,
                 toggle: {
                     allReports: true,
                     details: false
-                }
+                },
+                elementId: 'ui-br-ext-review'
             }
         },
 
@@ -150,16 +139,6 @@
                 report.element.style.cssText = report.element.style.cssText.replace('outline: red dashed 3px !important;', '');
                 report.element.removeAttribute('data-ext-index');
                 this.showElements();
-            },
-
-            onMouseDown(event) {
-                this.mouseMove(event)
-            },
-
-            onTouchStart(event){   
-                if(event.path[1]['id'] == 'ui-br-comment-reviewResize') {
-                    this.touchMove(event)
-                }            
             },
         }
     }

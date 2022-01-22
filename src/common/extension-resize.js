@@ -1,29 +1,32 @@
 let positions = {};
+let element;
 
-const onMouseDown = function (event) {
+const onMouseDown = function (event, elementId) {
     event.preventDefault();
-    positions.width = this.$refs.divToResize.getBoundingClientRect().width;
-    positions.height = this.$refs.divToResize.getBoundingClientRect().height;
-    positions.clientX = event.clientX
-    positions.clientY = event.clientY
-    positions.element = this.$refs.divToResize
-    document.onmousemove = elementResize
-    document.onmouseup = closeElementResize
+    element = document.getElementById(elementId);
+    positions.width = element.getBoundingClientRect().width;
+    positions.height = element.getBoundingClientRect().height;
+    positions.clientX = event.clientX;
+    positions.clientY = event.clientY;
+    positions.element = element;
+    document.onmousemove = setInitialSize;
+    document.onmouseup = closeElementResize;
 }
 const onTouchStart = function (event) {
     event.preventDefault();
     event.stopPropagation();
     const touchevent = event.touches[0];
-    positions.width = this.$refs.divToResize.getBoundingClientRect().width;
-    positions.height = this.$refs.divToResize.getBoundingClientRect().height;
-    positions.clientX = touchevent.clientX
-    positions.clientY = touchevent.clientY
-    positions.element = this.$refs.divToResize
-    document.ontouchmove = onTouchResize
-    document.ontouchend = closeElementResize
+    positions.width = element.getBoundingClientRect().width;
+    positions.height = element.getBoundingClientRect().height;
+    positions.clientX = touchevent.clientX;
+    positions.clientY = touchevent.clientY;
+    //positions.element = element;
+    document.ontouchmove = onTouchResize;
+    document.ontouchend = closeElementResize;
+    element = undefined;
 }
 
-const elementResize = function (event) {
+const setInitialSize = function (event) {
     event.preventDefault();
     positions.resizeX = positions.width + (event.clientX - positions.clientX);
     if(positions.resizeX > 350) {
@@ -57,7 +60,7 @@ const closeElementResize = function() {
 
 export default {
     onMouseDown,
-    elementResize,
+    setInitialSize,
     closeElementResize,
     onTouchResize,
     onTouchStart
