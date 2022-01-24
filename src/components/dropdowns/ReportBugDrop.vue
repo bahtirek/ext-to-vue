@@ -6,23 +6,9 @@
             <ModuleDetails :module="currentModule" />
 
             <UserDetails :user="user" />
+            
+            <ReportForm ref="reportForm" />
 
-            <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                <label for="ui-br-ext-description">Description</label>
-                <textarea name="ui-br-ext-description" v-model="form.description" rows="2" data-gramm="false"></textarea>
-            </div>
-            <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                <label for="ui-br-ext-act-results">Actual results</label>
-                <textarea name="ui-br-ext-act-results" v-model="form.actualResults" rows="3" data-gramm="false"></textarea>
-            </div>
-            <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                <label for="ui-br-ext-exp-results">Expected results</label>
-                <textarea name="ui-br-ext-exp-results" v-model="form.expectedResults" rows="3" data-gramm="false"></textarea>
-            </div>
-            <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                <label for="ui-br-ext-rep-steps">Steps to reproduce</label>
-                <textarea name="ui-br-ext-rep-steps" v-model="form.stepsToReproduce" rows="3" data-gramm="false"></textarea>
-            </div>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
             <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="form.saveJira">
@@ -57,6 +43,7 @@
     import ModuleDetails from '../shared/ModuleDetails';
     import UserDetails from '../shared/UserDetails';
     import Resize from '../shared/Resize';
+    import ReportForm from '../shared/ReportForm';
             
     export default {
         name: 'ReportBugDrop',
@@ -64,7 +51,8 @@
         components: {
             ModuleDetails,
             UserDetails,
-            Resize
+            Resize,
+            ReportForm
         },
         
         created() { 
@@ -116,7 +104,7 @@
         methods: {
 
             async saveReport(){
-                
+                this.reportForm();
                 this.filename = this.getFileName(this.currentModule.name);
 
                 if(this.form.saveScreenshot) {
@@ -176,6 +164,7 @@
                 globalStore.store.selectedElement = '';
                 globalStore.store.currentElementInlineStyle = '';
                 globalStore.store.selectedElementRect = '';
+                this.$refs.reportForm.resetReportData();
             },
 
             setTempReports(){
@@ -189,6 +178,13 @@
                 globalStore.store.reports.push(report);
                 console.log(globalStore.store.reports);
                 eventBus.$emit('report-loaded');
+            },
+
+            reportForm() {            
+                this.form.description = this.$refs.reportForm.form.description,
+                this.form.actualResults = this.$refs.reportForm.form.actualResults,
+                this.form.expectedResults = this.$refs.reportForm.form.expectedResults,
+                this.form.stepsToReproduce = this.$refs.reportForm.form.stepsToReproduce  
             }
         }
     }
