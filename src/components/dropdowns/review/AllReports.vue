@@ -1,5 +1,6 @@
 <template>
     <div>
+        <ModuleDetails :module="currentModule" />
         <div class="ui-br-ext-review-card" v-for="(report, index) in reportsToDisplay" :key="index">
             
             <UserDetails :user="report.user" />
@@ -16,22 +17,23 @@
 <script>
 
     import UserDetails from '../../shared/UserDetails';
-
+    import ModuleDetails from '../../shared/ModuleDetails';
 
     export default {
         name: 'AllReports',
 
         components: {
-            UserDetails
+            UserDetails,
+            ModuleDetails
         },
         
         props: [
-            'reports'
+            'reports',
+            'currentModule'
         ],
 
         mounted() {
             this.reportsToDisplay = this.reports.filter(report => !report.element);
-            console.log(this.reportsToDisplay);
         },
 
         data() {

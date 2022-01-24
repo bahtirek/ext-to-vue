@@ -3,9 +3,7 @@
         <div class="ui-br-ext-drop-title">Reports</div>
         <div class="ui-br-ext-drop-body">
 
-            <ModuleDetails v-if="toggle.allReports" :module="currentModule" />
-
-            <AllReports v-if="toggle.allReports" @show-details="showDetails" :reports="reports"/>
+            <AllReports v-if="toggle.allReports" @show-details="showDetails" :reports="reports" :module="currentModule"/>
 
             <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" :report="report" :module="currentModule" />
 
@@ -23,7 +21,6 @@
     import eventBus from './../../eventBus';
     import AllReports from './review/AllReports';
     import ReportDetails from './review/ReportDetails';
-    import ModuleDetails from '../shared/ModuleDetails';
     import clickBlocker from '../../common/click-blocker';
     import Resize from '../shared/Resize';
 
@@ -33,7 +30,6 @@
         components: {
             AllReports,
             ReportDetails,
-            ModuleDetails,
             Resize
         },
 
@@ -72,7 +68,8 @@
                 report: undefined,
                 toggle: {
                     allReports: true,
-                    details: false
+                    details: false,
+                    edit: false
                 },
                 elementId: 'ui-br-ext-review'
             }
