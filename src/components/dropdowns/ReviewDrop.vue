@@ -82,10 +82,13 @@
         methods: {
 
             showElements(){
-                this.addClickBlocker();
-
+                
                 for (let index = 0; index < this.reports.length; index++) {
-                    this.selectElement(index);                   
+                    this.selectElement(index); 
+                    if(index == this.reports.length - 1) {
+                        const els = document.querySelectorAll('.ui-br-ext-outlined-element');
+                        this.addClickBlocker(els);
+                    }                  
                 }
 
             },

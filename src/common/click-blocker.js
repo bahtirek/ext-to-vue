@@ -1,16 +1,20 @@
 import eventBus from '../eventBus';
 
 
-const addClickBlocker = function() {
-    const bodyChildren = document.querySelectorAll('body > *:not(#ui-br-ext-extension):not(script):not(noscript):not(style)');
+const addClickBlocker = function(bodyChildren) {
+    if(!bodyChildren) {
+        bodyChildren = document.querySelectorAll('body > *:not(#ui-br-ext-extension):not(script):not(noscript):not(style)')
+    }
     bodyChildren.forEach(el => {
         el.addEventListener('click', preventClick, {capture: true});
         el.addEventListener('mousedown', preventClick, {capture: true});
     });
 }
 
-const removeClickBlocker = function() {
-    const bodyChildren = document.querySelectorAll('body > *:not(#ui-br-ext-extension):not(script):not(noscript):not(style)');
+const removeClickBlocker = function(bodyChildren) {
+    if(!bodyChildren) {
+        bodyChildren = document.querySelectorAll('body > *:not(#ui-br-ext-extension):not(script):not(noscript):not(style)')
+    }
     bodyChildren.forEach(el => {
         el.removeEventListener('click', preventClick, {capture: true});
         el.removeEventListener('mousedown', preventClick, {capture: true});
