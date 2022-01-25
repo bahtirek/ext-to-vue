@@ -5,7 +5,9 @@
 
             <AllReports v-if="toggle.allReports" @show-details="showDetails" :reports="reports" :module="currentModule"/>
 
-            <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" :report="report" :module="currentModule" />
+            <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" @edit-report="editReport" :report="report" :module="currentModule" />
+
+            <EditReport v-if="toggle.edit" :report="report" @save-edited-report="saveEditedReport"/>
 
         </div>
         
@@ -23,6 +25,7 @@
     import ReportDetails from './review/ReportDetails';
     import clickBlocker from '../../common/click-blocker';
     import Resize from '../shared/Resize';
+    import EditReport from './review/EditReport';
 
     export default {
         name: 'ReviewDrop',
@@ -30,7 +33,8 @@
         components: {
             AllReports,
             ReportDetails,
-            Resize
+            Resize,
+            EditReport
         },
 
         created() { 
@@ -105,14 +109,12 @@
             },
 
             closeDetails() {
-                this.toggle.allReports = true;
-                this.toggle.details = false;
+                this.toggleChildren('allReports')
             },
 
             showDetails(index) {
                 this.report = this.reports[index];
-                this.toggle.allReports = false;
-                this.toggle.details = true;
+                this.toggleChildren('details')
             },
 
             showImage(screenshot) {
@@ -127,8 +129,6 @@
 
             deleteReport(report) {
                 const index = this.reports.findIndex(item => item.xPath == report.xPath);// will change to id
-                console.log(index);
-                console.log(report);
                 this.closeDetails();
                 this.reports.splice(index, 1);
                 this.removeClickBlocker();
@@ -137,6 +137,27 @@
                 report.element.removeAttribute('data-ext-index');
                 this.showElements();
             },
+
+            editReport(reportToEdit){
+                this.toggleChildren('edit');
+                this.report = reportToEdit;
+            },
+
+            saveEditedReport(report) {
+                const index = this.reports.findIndex(item => item.xPath == report.xPath);// will change to id
+                this.reports[index].content = report.content;
+                this.showDetails(index);
+            },
+
+            toggleChildren(child) {
+                Object.keys(this.toggle).forEach(key => {
+                    if(key == child) {
+                        this.toggle[key] = true
+                    } else {
+                        this.toggle[key] = false
+                    }
+                })
+            }
         }
     }
 </script>

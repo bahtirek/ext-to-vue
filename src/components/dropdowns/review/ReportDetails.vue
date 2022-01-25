@@ -25,6 +25,7 @@
             <div>
                 <span class="ui-br-ext-btn-lnk" v-bind:class="{'disabled': !report.screenshot}" @click="showImage(report.screenshot)">Screenshot</span>
                 <span class="ui-br-ext-btn-lnk" @click="pdf">Export PDF</span>
+                <span class="ui-br-ext-btn-lnk" @click="edit">Edit report</span>
                 <span class="ui-br-ext-btn-lnk" @click="addJira">Add JIRA ticket</span>
                 <span class="ui-br-ext-btn-lnk" @click="createJira">Create JIRA issue</span>
                 <span class="ui-br-ext-btn-lnk" @click="deleteReport">Delete report</span>
@@ -77,6 +78,10 @@
 
             close(){
                 this.$emit('close-details')
+            },
+
+            edit() {
+                this.$emit('edit-report', this.report)
             },
 
             deleteReport(){
