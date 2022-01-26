@@ -4,17 +4,21 @@
                 <div class="ui-br-ext-drop-body">
                     
                     <div class="ui-br-ext-settings-container" v-if="account && account.registrationKey">
-                        <div class="ui-br-ext-setting-title" @click="ifModule = !ifModule; ifAccount = false; ifUser = false">Module</div>
+                        <div class="ui-br-ext-setting-title" @click="ifModule = !ifModule; ifProject = false; ifAccount = false; ifUser = false">Module</div>
                         <Module v-if="ifModule" />
+                    </div>
+                    <div class="ui-br-ext-settings-container" v-if="account && account.registrationKey">
+                        <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifModule = false; ifAccount = false; ifUser = false">Project</div>
+                        <Project v-if="ifProject" />
                     </div>
                     
                     <div class="ui-br-ext-settings-container">
-                        <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifModule = false; ifUser = false">Account</div>
+                        <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifProject = false; ifModule = false; ifUser = false">Account</div>
                         <Account v-if="ifAccount" />
                     </div>
                     
                     <div class="ui-br-ext-settings-container">
-                        <div class="ui-br-ext-setting-title" @click="ifUser = !ifUser; ifModule = false; ifAccount = false">User</div>
+                        <div class="ui-br-ext-setting-title" @click="ifUser = !ifUser; ifProject = false; ifModule = false; ifAccount = false">User</div>
                         <User v-if="ifUser" />
                     </div>
                     
@@ -27,6 +31,7 @@
 
     import Module from './settings/Module';
     import Account from './settings/Account';
+    import Project from './settings/Project';
     import User from './settings/User';
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus'
@@ -36,7 +41,8 @@
         components: {
             Module,
             Account,
-            User
+            User,
+            Project
         },
 
         mounted: function () {
@@ -54,6 +60,7 @@
                 ifModule: false,
                 ifAccount: false,
                 ifUser: false,
+                ifProject: false, 
                 currentModule: {},
                 account: {},
             }

@@ -21,6 +21,11 @@ export const globalStore = new Vue({
       currentElementInlineStyle: '',
       selectedElementRect: '',
       account: {},
+      projects: [],
+      project: {
+        key: '',
+        id: ''
+      },
       modules: [],
       user: {},
       dynamicDomFlow: false,

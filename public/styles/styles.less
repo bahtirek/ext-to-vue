@@ -1,4 +1,5 @@
 @primary-color: #00ad55;
+@danger-color: #e04414;
 @extensionId :~"__MSG_@@extension_id__";
 
 body {
@@ -182,6 +183,12 @@ body {
                 }
             }
 
+            .ui-br-ext-btn-create-project {
+                position: absolute;
+                top: -28px;
+                right: 5px;
+            }
+
             .ui-br-ext-new-module-cont {
                 padding-bottom: 30px;
                 .ui-br-ext-form-container.ui-br-ext-textarea {
@@ -334,7 +341,7 @@ body {
                 }
             }
 
-            .ui-br-ext-btn {
+            .ui-br-ext-btn, .ui-br-ext-btn-danger{
                 font-size: 14px !important;
                 height: 29px !important;
                 padding: 7px 12px;
@@ -342,7 +349,6 @@ body {
                 margin: 20px 25px 0 auto;
                 display: block;
                 border: none;
-                color: @primary-color;
                 background-color: #ffffff;
                 font-weight: bold;
                 box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
@@ -356,10 +362,21 @@ body {
                 }
             }
 
+            .ui-br-ext-btn {
+                color: @primary-color;
+            }
+            .ui-br-ext-btn-danger {
+                color: @danger-color;
+            }
+
             .ui-br-ext-btn-group {
                 display: flex;
-                justify-content: space-around;
+                justify-content: flex-end;
                 align-items: center;
+
+                .ui-br-ext-btn, .ui-br-ext-btn-danger{
+                    margin: 20px 14px 0;
+                }
             }
 
             &::-webkit-scrollbar {
@@ -483,6 +500,7 @@ body {
                     }
                     .ui-br-ext-settings-body {
                         padding: 15px 0;
+                        position: relative;
 
                         .ui-br-ext-current-module {
                             padding: 0 5px;
