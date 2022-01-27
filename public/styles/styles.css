@@ -154,8 +154,9 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-btn-create-project {
   position: absolute;
-  top: -28px;
+  top: -37px;
   right: 5px;
+  padding: 10px 0;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-new-module-cont {
   padding-bottom: 30px;
@@ -542,6 +543,13 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review .ui-br-ext-drop-body .ui-br-ext-settings-container .ui-br-ext-settings-body .ui-br-ext-form-container {
   margin-top: 20px;
 }
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-drop-body .ui-br-ext-info-list,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-select .ui-br-ext-drop-body .ui-br-ext-info-list,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-comments .ui-br-ext-drop-body .ui-br-ext-info-list,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-settings .ui-br-ext-drop-body .ui-br-ext-info-list,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review .ui-br-ext-drop-body .ui-br-ext-info-list {
+  margin: 0;
+}
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-drop-body .ui-br-ext-info-list:empty,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-select .ui-br-ext-drop-body .ui-br-ext-info-list:empty,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-comments .ui-br-ext-drop-body .ui-br-ext-info-list:empty,
@@ -562,6 +570,15 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-settings .ui-br-ext-drop-body .ui-br-ext-info-list li span:last-child,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review .ui-br-ext-drop-body .ui-br-ext-info-list li span:last-child {
   font-size: 15px;
+}
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-drop-body .ui-br-ext-warning-text,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-select .ui-br-ext-drop-body .ui-br-ext-warning-text,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-comments .ui-br-ext-drop-body .ui-br-ext-warning-text,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-settings .ui-br-ext-drop-body .ui-br-ext-warning-text,
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review .ui-br-ext-drop-body .ui-br-ext-warning-text {
+  font-size: 14px;
+  margin-left: 5px;
+  color: #ffab40;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-box-resize,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-select .ui-br-ext-box-resize,
@@ -696,6 +713,21 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 .ui-br-ext-report-bug-inactive * {
   pointer-events: none !important;
   color: #a6a6a6;
+}
+.ui-br-ext-spacer-1 {
+  height: 10px;
+}
+.ui-br-ext-spacer-2 {
+  height: 20px;
+}
+.ui-br-ext-spacer-3 {
+  height: 30px;
+}
+.ui-br-ext-spacer-4 {
+  height: 40px;
+}
+.ui-br-ext-spacer-5 {
+  height: 50px;
 }
 @font-face {
   font-family: 'Roboto';

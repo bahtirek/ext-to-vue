@@ -1,5 +1,6 @@
 @primary-color: #00ad55;
 @danger-color: #e04414;
+@warning-color: #ffab40;
 @extensionId :~"__MSG_@@extension_id__";
 
 body {
@@ -185,8 +186,9 @@ body {
 
             .ui-br-ext-btn-create-project {
                 position: absolute;
-                top: -28px;
+                top: -37px;
                 right: 5px;
+                padding: 10px 0;
             }
 
             .ui-br-ext-new-module-cont {
@@ -527,6 +529,14 @@ body {
                             font-size: 15px;
                         }
                     }
+
+                    margin: 0;
+                }
+
+                .ui-br-ext-warning-text {
+                    font-size: 14px;
+                    margin-left: 5px;
+                    color: @warning-color;
                 }
             }
 
@@ -683,6 +693,13 @@ body {
         color: #a6a6a6;
     }
 }
+
+
+.ui-br-ext-spacer-1 { height: 10px;}
+.ui-br-ext-spacer-2 { height: 20px;}
+.ui-br-ext-spacer-3 { height: 30px;}
+.ui-br-ext-spacer-4 { height: 40px;}
+.ui-br-ext-spacer-5 { height: 50px;}
 
   @font-face {
     font-family: 'Roboto';

@@ -39,11 +39,16 @@
                     <div class="ui-br-ext-form-container ui-br-ext-textarea">
                         <label for="ui-br-ext-new-project-label">Project key</label>
                         <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.key" />
-                        <span class="ui-br-ext-message">{{projectMessage}}</span>
+                        <span class="ui-br-ext-message">{{projectMessage.key}}</span>
                     </div>
                     <div class="ui-br-ext-form-container ui-br-ext-textarea">
                         <label for="ui-br-ext-new-project-label">Project id</label>
                         <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.id" />
+                        <span class="ui-br-ext-message">{{projectMessage.id}}</span>
+                    </div>
+                    <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
+                    <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.jira">
+                        <label for="ui-br-ext-save-to-jira">Jira project</label>
                     </div>
                 </form>
                 <div class="ui-br-ext-btn-group">
@@ -99,10 +104,11 @@
                 project: {},
                 newProject: {
                     key: '',
-                    id: ''
+                    id: '',
+                    jira: false
                 },
                 searchQuery: '',
-                projectMessage: '',
+                projectMessage: {key: '', id: ''},
                 account: {},
                 projects: []
             }
@@ -117,23 +123,30 @@
 
         methods: {
             saveProject(){
-                this.projectMessage = '';
-                    console.log(this.projects);
-                    console.log(this.newProject);
-                const index = this.projects.findIndex(project => {
-                    return project.key == this.newProject.key
-                });
-
-                if(index == -1) {
-                    
-                    //post
-                    this.projects.push({key: this.newProject.key, id: this.newProject.id});
-                    alert(`project ${this.newProject.key} successfully saved`);
-                    this.showAddProject = false;
-                    this.resetProject();
-                    console.log(this.projects);         
+                this.projectMessage.key = '';
+                this.projectMessage.id = '';
+                
+                if(this.newProject.key != ''){
+                    if(this.newProject.jira && this.newProject.id == '') {
+                        this.projectMessage.id = 'Enter project id ';
+                        return false;
+                    }
+                    const index = this.projects.findIndex(project => {
+                        return project.key == this.newProject.key
+                    });
+    
+                    if(index == -1) {
+                        //post
+                        this.projects.push({key: this.newProject.key, id: this.newProject.id, jira: this.newProject.jira});
+                        alert(`project ${this.newProject.key} successfully saved`);
+                        this.showAddProject = false;
+                        this.resetProject();
+                        console.log(this.projects);         
+                    } else {
+                        this.projectMessage.key = 'project exist'
+                    }
                 } else {
-                    this.projectMessage = 'project exist'
+                    this.projectMessage.key = 'Enter project key'
                 }
             },
 
@@ -146,7 +159,7 @@
                 this.searchQuery = '';
                 this.project = project;
                 globalStore.store.project = project;
-                eventBus.$emit('account-loaded')
+                eventBus.$emit('account-loaded');
             },
 
             onProjectEdit(project) {
@@ -161,7 +174,7 @@
             },
 
             onProjectDelete(project) {
-console.log(project);
+                console.log(project);
             }
         }
     }

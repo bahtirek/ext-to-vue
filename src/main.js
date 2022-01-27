@@ -24,7 +24,8 @@ export const globalStore = new Vue({
       projects: [],
       project: {
         key: '',
-        id: ''
+        id: '', 
+        jira: false,
       },
       modules: [],
       user: {},
@@ -41,7 +42,7 @@ export const globalStore = new Vue({
         savePdf: false,
         saveScreenshot: false,
         xPath: '',
-    }
+      }
     }
   }
 })

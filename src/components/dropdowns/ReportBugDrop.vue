@@ -3,9 +3,13 @@
         <div class="ui-br-ext-drop-title">Report bug</div>
         <div class="ui-br-ext-drop-body">
 
+            <ProjectDetails :project="project" />
+
             <ModuleDetails :module="currentModule" />
 
             <UserDetails :user="user" />
+
+            <div class="ui-br-ext-spacer-3"></div>
             
             <ReportForm ref="reportForm" />
 
@@ -42,6 +46,7 @@
     import eventBus from './../../eventBus';
     import ModuleDetails from '../shared/ModuleDetails';
     import UserDetails from '../shared/UserDetails';
+    import ProjectDetails from '../shared/ProjectDetails';
     import Resize from '../shared/Resize';
     import ReportForm from '../shared/ReportForm';
             
@@ -52,7 +57,8 @@
             ModuleDetails,
             UserDetails,
             Resize,
-            ReportForm
+            ReportForm,
+            ProjectDetails
         },
         
         created() { 
@@ -67,10 +73,12 @@
             this.account = globalStore?.store?.account;
             this.currentModule = globalStore?.store.currentModule;
             this.user = globalStore?.store.user;
+            this.project = globalStore.store.project;
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
                 this.currentModule = globalStore.store.currentModule;
+                this.project = globalStore.store.project;
             })
                         
             eventBus.$on('user-loaded', () => {
@@ -84,6 +92,7 @@
                 currentModule: {},
                 account: {},
                 user: {},
+                project: {},
                 form: {
                     description: '',
                     actualResults: '',

@@ -27,8 +27,8 @@ export default {
   created() { 
     this.localStorage = storage;
     this.auth = regKeyAuthentication.auth;
-    //this.fakeGetkey();
-    this.getRegKey();
+    this.fakeGetkey();
+    //this.getRegKey();
     this.getUserFromLocal();
   },
 
@@ -64,6 +64,13 @@ export default {
           repositoryServer: "http://127.0.0.1:8000/api/",
           token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i.",
         };
+
+        globalStore.store.user = {
+          firstname: 'John',
+          lastname: 'Doe',
+          email: 'john_doe@gmail.com'
+        };
+
         globalStore.store.modules = [
           {
             id: 1,
