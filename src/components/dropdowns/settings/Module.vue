@@ -1,7 +1,7 @@
 <template>
     
         <div class="ui-br-ext-settings-body"> 
-            <div v-if="project">
+            <div v-if="project.key">
                 <div class="ui-br-ext-btn-link ui-br-ext-btn-create-project" v-if="account.isAdmin == 1">
                     <span id="ui-br-ext-btn-link" @click="showAddModule = !showAddModule; resetModule()" :class="{active: showAddModule}">Create module</span>  
                 </div>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            <div v-if="!project" class="ui-br-ext-warning-text" >
+            <div v-if="!project.key" class="ui-br-ext-warning-text" >
                 Choose project first
             </div>
         </div>
@@ -90,6 +90,7 @@
             this.modules = globalStore.store.modules;
             this.user = globalStore.store.user;
             this.project = globalStore.store.project;
+            console.log(this.project);
 
             eventBus.$on('account-loaded', () => {
                 this.account = globalStore.store.account;
