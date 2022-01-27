@@ -1,20 +1,27 @@
 <template>
     
     <div class="ui-br-ext-settings-body">
-        <ul class="ui-br-ext-info-list">
+        <div class="ui-br-ext-btn-link ui-br-ext-btn-create-project">
+            <span id="ui-br-ext-btn-link" @click="showAddKey = !showAddKey;" :class="{active: showAddKey}">Add license key</span>  
+        </div>
+        <ul class="ui-br-ext-info-list" v-if="!showAddKey">
+            <div class="ui-br-ext-spacer-1"></div>
             <li v-if="account && account.registrationKey ">
                 <span><strong>Regkey:</strong> </span><span>  {{account.registrationKey}}</span>
             </li >
+            <div class="ui-br-ext-spacer-1"></div>
         </ul >
-        <div class="ui-br-ext-form-container ui-br-ext-textarea">
-            <label for="regKey">Registration Key</label>
-            <input type="text" name="regKey" v-model="reg.key"/>
-            <span class="ui-br-ext-message">{{reg.error}}</span>
+        <div v-if="showAddKey">
+            <div class="ui-br-ext-form-container ui-br-ext-textarea">
+                <label for="regKey">Registration Key</label>
+                <input type="text" name="regKey" v-model="reg.key"/>
+                <span class="ui-br-ext-message">{{reg.error}}</span>
+            </div>
+            <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
+                <span class="ui-br-ext-spinner" :class="{ active: reg.spinner }"></span>
+                <span @click="onRegKeySave">Save</span > 
+            </button>
         </div>
-        <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
-            <span class="ui-br-ext-spinner" :class="{ active: reg.spinner }"></span>
-            <span @click="onRegKeySave">Save</span > 
-        </button>
     </div>
     
 </template>
@@ -43,6 +50,7 @@
             return {
                 account: {},
                 isRegKeySaved: false,
+                showAddKey: false,
                 reg: {
                     key: '',
                     error: '',
@@ -74,6 +82,7 @@
                         eventBus.$emit('account-loaded');
                         await this.localStorage.set('regKey', this.reg.key);
                         this.reg.spinner = false;
+                        this.showAddKey = false;
                     }
                 } else {
                     this.reg.error = "Enter registration key";
