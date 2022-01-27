@@ -5,7 +5,7 @@
 
             <AllReports v-if="toggle.allReports" @show-details="showDetails" :reports="reports" :module="currentModule"/>
 
-            <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" @edit-report="editReport" :report="report" :module="currentModule" />
+            <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" @edit-report="editReport" :project="project" :report="report" :module="currentModule" />
 
             <EditReport v-if="toggle.edit" :report="report" @save-edited-report="saveEditedReport"/>
 
@@ -46,6 +46,7 @@
         mounted: function () {
             this.reports = globalStore.store.reports;
             this.currentModule = globalStore?.store.currentModule;
+            this.project = globalStore.store.project;
             this.showElements();
 
             eventBus.$on('account-loaded', (val) => {
@@ -70,6 +71,7 @@
                 account: {},
                 reports: [],
                 report: undefined,
+                project: {},
                 toggle: {
                     allReports: true,
                     details: false,

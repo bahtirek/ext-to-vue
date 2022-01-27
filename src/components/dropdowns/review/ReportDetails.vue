@@ -2,10 +2,10 @@
     <div >  
         <div class="ui-br-ext-close-details" @click="close">Close</div>  
         <div  class="ui-br-ext-review-card" v-if="report">
-
+            <ProjectDetails :project="project" />
             <ModuleDetails :module="module" />
             <UserDetails :user="report.user" />
-
+            <div class="ui-br-ext-spacer-3"></div>
             <div class="ui-br-ext-review-box" v-if="report.content.description">
                 <div class="ui-br-ext-review-title">Description:</div>
                 <div class="ui-br-ext-review-text">{{report.content.description}}</div>
@@ -38,18 +38,21 @@
 
     import ModuleDetails from '../../shared/ModuleDetails';
     import UserDetails from '../../shared/UserDetails';
+    import ProjectDetails from '../../shared/ProjectDetails';
 
     export default {
         name: 'ReportDetails',
 
         components: {
             ModuleDetails,
-            UserDetails
+            UserDetails,
+            ProjectDetails
         },
 
         props: [
             'report', 
-            'module'
+            'module',
+            'project'
         ],
 
         methods: {

@@ -90,7 +90,6 @@
             this.modules = globalStore.store.modules;
             this.user = globalStore.store.user;
             this.project = globalStore.store.project;
-            console.log(this.project);
 
             eventBus.$on('account-loaded', () => {
                 this.account = globalStore.store.account;
