@@ -1,7 +1,7 @@
 <template>
     <ul class="ui-br-ext-info-list">
         <li v-if="module && module.name">
-            <span><strong> Module label: </strong></span>
+            <span><strong> Module: </strong></span>
             <span v-if="module"> {{module.name || 'No module chosen'}}</span>
         </li>
     </ul>
@@ -14,10 +14,6 @@
 
         props: [
             'module'
-        ],
-
-        methods: {
-
-        }
+        ]
     }
 </script>

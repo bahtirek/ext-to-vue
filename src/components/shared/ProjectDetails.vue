@@ -14,10 +14,6 @@
 
         props: [
             'project'
-        ],
-
-        methods: {
-
-        }
+        ]
     }
 </script>
