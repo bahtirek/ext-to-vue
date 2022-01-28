@@ -37,26 +37,23 @@
 <script>
 
     import { globalStore } from './../../../main';
-    import regKeyAuth from './../../../common/regkey';
     import storage from './../../../common/storage';
     import eventBus from './../../../eventBus';
     import UserDetails from '../../shared/UserDetails';
 
 
     export default {
-        name: 'Account',
+        name: 'User',
 
         components: {
             UserDetails
         },
 
         created() { 
-            this.auth = regKeyAuth.auth,
             this.localStorage = storage
         },
 
         mounted() {
-            this.account = globalStore.store.account;
             this.user = globalStore.store.user;
         },
 

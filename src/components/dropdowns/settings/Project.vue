@@ -73,12 +73,17 @@
     import { globalStore } from './../../../main';
     import eventBus from './../../../eventBus';
     import ProjectDetails from '../../shared/ProjectDetails';
+    import storage from './../../../common/storage';
 
     export default {
         name: 'Project',
 
         components: {
             ProjectDetails
+        },
+
+        created() {
+            this.localStorage = storage
         },
 
         mounted() { 
@@ -122,7 +127,7 @@
         },
 
         methods: {
-            saveProject(){
+            async saveProject(){
                 this.projectMessage.key = '';
                 this.projectMessage.id = '';
                 
@@ -137,7 +142,10 @@
     
                     if(index == -1) {
                         //post
-                        this.projects.push({key: this.newProject.key, id: this.newProject.id, jira: this.newProject.jira});
+                        const project = {key: this.newProject.key, id: this.newProject.id, jira: this.newProject.jira}
+                        this.projects.push(project);
+                        const projectString = JSON.stringify(project)
+                        await this.localStorage.set('project', projectString)
                         alert(`project ${this.newProject.key} successfully saved`);
                         this.showAddProject = false;
                         this.resetProject();
@@ -159,6 +167,7 @@
                 this.searchQuery = '';
                 this.project = project;
                 globalStore.store.project = project;
+                globalStore.store.currentModule = {};
                 eventBus.$emit('account-loaded');
             },
 

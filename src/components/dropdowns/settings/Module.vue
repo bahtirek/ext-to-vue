@@ -75,6 +75,7 @@
     import eventBus from './../../../eventBus';
     import ModuleDetails from '../../shared/ModuleDetails';
     import ProjectDetails from '../../shared/ProjectDetails';
+    import storage from './../../../common/storage';
 
     export default {
         name: 'Module',
@@ -82,6 +83,10 @@
         components: {
             ModuleDetails,
             ProjectDetails
+        },
+
+        created() {
+            this.localStorage = storage
         },
 
         mounted() { 
@@ -127,7 +132,7 @@
         },
 
         methods: {
-            saveModule(){
+            async saveModule(){
                 this.moduleMessage = '';
                 if(this.module.name != ''){
                     const index = this.modules.findIndex(module => {
@@ -141,7 +146,9 @@
                             // patch
                         } else {
                             //post
-                            this.modules.push({name: this.module.name, description: this.module.description});
+                            const moduleString = JSON.stringify(this.module)
+                            await this.localStorage.set('module', moduleString)
+                            this.modules.push(this.module);
                             alert(`Module ${this.module.name} successfully saved`);
                             this.showAddModule = false;
                             this.resetModule();

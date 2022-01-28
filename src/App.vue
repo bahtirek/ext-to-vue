@@ -27,9 +27,10 @@ export default {
   created() { 
     this.localStorage = storage;
     this.auth = regKeyAuthentication.auth;
-    this.fakeGetkey();
-    //this.getRegKey();
+    //this.fakeGetkey();
+    this.getRegKey();
     this.getUserFromLocal();
+    this.getProjectFromLocal();
   },
 
   watch: {
@@ -49,9 +50,21 @@ export default {
     async getUserFromLocal() {
         const user = await this.localStorage.get('user');
         if (user) {
-          this.user = JSON.parse(user);
-          globalStore.store.user = this.user;
-          eventBus.$emit('user-loaded')
+          globalStore.store.user = JSON.parse(user);
+        }
+    },
+
+    async getModuleFromLocal() {
+        const module = await this.localStorage.get('module');
+        if (module) {
+          globalStore.store.currentModule = JSON.parse(module);
+        }
+    },
+
+    async getProjectFromLocal() {
+        const project = await this.localStorage.get('project');
+        if (project) {
+          globalStore.store.project = JSON.parse(project);
         }
     },
 
@@ -69,6 +82,18 @@ export default {
           firstname: 'John',
           lastname: 'Doe',
           email: 'john_doe@gmail.com'
+        };
+        
+        globalStore.store.project = {
+          key: 'EXTBR',
+          id: '1212',
+          jira: true
+        };
+
+        globalStore.store.currentModule = {
+          id: 3,
+          name: 'emas',
+          description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
         };
 
         globalStore.store.modules = [
