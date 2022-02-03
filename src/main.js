@@ -42,6 +42,10 @@ export const globalStore = new Vue({
         savePdf: false,
         saveScreenshot: false,
         xPath: '',
+        screenshot: '',
+        url:'',
+        queryWidth: 550,
+        user: undefined
       }
     }
   }

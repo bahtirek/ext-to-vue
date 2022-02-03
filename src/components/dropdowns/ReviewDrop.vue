@@ -7,7 +7,7 @@
 
             <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" @edit-report="editReport" :project="project" :report="report" :module="currentModule" />
 
-            <EditReport v-if="toggle.edit" :report="report" @save-edited-report="saveEditedReport"/>
+            <EditReport v-if="toggle.edit" :report="report" @save-edited-report="saveEditedReport" @cancel-edit-report="cancelEditReport" />
 
         </div>
         
@@ -119,7 +119,7 @@
 
             showDetails(index) {
                 this.report = this.reports[index];
-                this.toggleChildren('details')
+                this.toggleChildren('details');
             },
 
             showImage(screenshot) {
@@ -144,14 +144,20 @@
             },
 
             editReport(reportToEdit){
-                this.toggleChildren('edit');
                 this.report = reportToEdit;
+                this.toggleChildren('edit');
+                console.log(reportToEdit);
             },
 
             saveEditedReport(report) {
                 const index = this.reports.findIndex(item => item.xPath == report.xPath);// will change to id
-                this.reports[index].content = report.content;
+                this.reports[index] = report;
+                console.log(report);
                 this.showDetails(index);
+            },
+
+            cancelEditReport() {
+                this.toggleChildren('details');
             },
 
             toggleChildren(child) {

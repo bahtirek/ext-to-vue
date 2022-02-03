@@ -17,7 +17,7 @@ const pdfPages = {
         }
     }
 };
-const savePdf = async function (report, screenshot, queryWidth) {   
+const savePdf = async function (report) {   
     const filename = getFileName();
     pdfPages.content = [];            
     var pdfMake = require('pdfmake/build/pdfmake.js')
@@ -25,14 +25,14 @@ const savePdf = async function (report, screenshot, queryWidth) {
         var pdfFonts = require('pdfmake/build/vfs_fonts.js')
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
     }
-    let page = await createPdfContent(report, screenshot, queryWidth);
+    let page = await createPdfContent(report);
     console.log(page);
     pdfPages.content = pdfPages.content.concat(page);
     pdfMake.createPdf(pdfPages).download(filename + '.pdf');
     return true;               
 }
 
-const createPdfContent = async function (report, screenshot, queryWidth) {
+const createPdfContent = async function (report) {
     const list = ['description', 'actualResults', 'expectedResults', 'stepsToReproduce'];
     const titles = {
         description: 'Description',
@@ -43,7 +43,7 @@ const createPdfContent = async function (report, screenshot, queryWidth) {
     let content = [];
 
     for (const item of list) {
-        if (report[item].length > 0) {
+        if (report[item] && report[item].length > 0) {
             let title = {
                 text: `${titles[item]}`,
                 style: 'subheader'
@@ -59,10 +59,10 @@ const createPdfContent = async function (report, screenshot, queryWidth) {
         }                   
     }
 
-    if(report.saveScreenshot) { 
+    if(report.saveScreenshot && report.screenshot) { 
         const screenshotContent = {
-            image: screenshot,
-            width: queryWidth,
+            image: report.screenshot,
+            width: report.queryWidth || 550,
             pageBreak: 'after',
             style: 'screenshot'
         };

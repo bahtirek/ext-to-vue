@@ -60,6 +60,7 @@
             async getScreenshot(){
                 this.$emit('toggle-extension');
                 globalStore.store.screenshot = await this.onGetScreenshot();
+                globalStore.store.queryWidth = await this.getQueryWidth();
                 this.$emit('toggle-extension');
             },
         }

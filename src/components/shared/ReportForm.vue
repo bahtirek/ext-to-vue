@@ -51,10 +51,10 @@
 
             setFormValue(){
                 if(this.report) {
-                    this.form.description= this.report.description,
-                    this.form.actualResults= this.report.actualResults,
-                    this.form.expectedResults= this.report.expectedResults,
-                    this.form.stepsToReproduce= this.report.stepsToReproduce
+                    this.form.description= this.report.description || "",
+                    this.form.actualResults= this.report.actualResults || "",
+                    this.form.expectedResults= this.report.expectedResults || "",
+                    this.form.stepsToReproduce= this.report.stepsToReproduce || ""
                 }
             },
 

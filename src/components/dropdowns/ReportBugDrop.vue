@@ -15,15 +15,15 @@
 
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
-            <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="form.saveJira">
+            <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveJira">
             <label for="ui-br-ext-save-to-jira">Create Jira ticket on save</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-            <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf" v-model="form.savePdf">
+            <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf" v-model="report.savePdf">
             <label for="ui-br-ext-save-to-pdf">Save as PDF</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-            <input type="checkbox" name="screenshot" id="ui-br-ext-save-to-screenshot" v-model="form.saveScreenshot">
+            <input type="checkbox" name="screenshot" id="ui-br-ext-save-to-screenshot" v-model="report.saveScreenshot">
             <label for="ui-br-ext-save-to-screenshot">Attach screenshot</label>
             <span class="ui-br-ext-disclaimer">Make sure to remove personal identity information</span>
         </div>
@@ -93,7 +93,7 @@
                 account: {},
                 user: {},
                 project: {},
-                form: {
+                report: {
                     description: '',
                     actualResults: '',
                     expectedResults: '',
@@ -103,6 +103,9 @@
                     saveScreenshot: false,
                     screenshot: '',
                     xPath: '',
+                    queryWidth: undefined,
+                    url: '',
+                    user: {}
                 },
                 filename: '',
                 name: 'test',
@@ -113,28 +116,36 @@
         methods: {
 
             async saveReport(){
-                this.reportForm();
+                Object.assign(this.report, this.$refs.reportForm.form);
+
                 this.filename = this.getFileName(this.currentModule.name);
 
-                if(this.form.saveScreenshot) {
+                if(this.report.saveScreenshot) {
                     if(!globalStore.store.dynamicDomFlow) {
                         await this.getScreenshot();
+                    } else {
+                        this.report.screenshot = globalStore.store.screenshot;
+                        this.report.queryWidth = globalStore.store.queryWidth;
+                    }
+
+                    if(!this.report.savePdf){
+                        this.screenshotLink(this.report.screenshot, this.filename);
                     }
                 }
 
-                if(this.form.savePdf){
-                    await this.savePdf(this.form, globalStore.store.screenshot, globalStore.store.queryWidth)
+                if(this.report.savePdf){
+                    await this.savePdf(this.report)
                 }
 
-                if(this.form.saveScreenshot && !this.form.savePdf){
-                    this.screenshotLink(globalStore.store.screenshot, this.filename);
-                }
-
-                if(this.form.saveJira){
+                if(this.report.saveJira){
                     console.log('save jira')
                 }
 
-                globalStore.store.report.xPath = this.getElementXpath(globalStore.store.selectedElement);
+                this.report.xPath = this.getElementXpath(globalStore.store.selectedElement);
+
+                this.report.url = window.location;
+
+                this.report.user = this.user;
                 
                 this.setTempReports();
                 this.resetReportData();             
@@ -142,8 +153,8 @@
 
             async getScreenshot(){
                 this.$emit('toggle-extension');
-                globalStore.store.screenshot = await this.onGetScreenshot();
-                globalStore.store.queryWidth = await this.getQueryWidth();
+                this.report.screenshot = await this.onGetScreenshot();
+                this.report.queryWidth = await this.getQueryWidth();
                 this.$emit('toggle-extension');
             },
 
@@ -157,7 +168,7 @@
             },
 
             resetReportData(){
-                this.form = {
+                this.report = {
                     description: '',
                     actualResults: '',
                     expectedResults: '',
@@ -167,6 +178,8 @@
                     saveScreenshot: false,
                     screenshot: '',
                     xPath: '',
+                    url: '',
+                    queryWidth: 550
                 };
                 globalStore.store.screenshot = '';
                 globalStore.store.dynamicDomFlow = false;
@@ -177,23 +190,9 @@
             },
 
             setTempReports(){
-                let report = {
-                    content: this.form,
-                    url: window.location,
-                    screenshot: globalStore.store.screenshot,
-                    xPath: globalStore.store.report.xPath,
-                    user: this.user                   
-                }
-                globalStore.store.reports.push(report);
+                globalStore.store.reports.push(this.report);
                 console.log(globalStore.store.reports);
                 eventBus.$emit('report-loaded');
-            },
-
-            reportForm() {            
-                this.form.description = this.$refs.reportForm.form.description,
-                this.form.actualResults = this.$refs.reportForm.form.actualResults,
-                this.form.expectedResults = this.$refs.reportForm.form.expectedResults,
-                this.form.stepsToReproduce = this.$refs.reportForm.form.stepsToReproduce  
             }
         }
     }

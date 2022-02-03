@@ -6,21 +6,21 @@
             <ModuleDetails :module="module" />
             <UserDetails :user="report.user" />
             <div class="ui-br-ext-spacer-3"></div>
-            <div class="ui-br-ext-review-box" v-if="report.content.description">
+            <div class="ui-br-ext-review-box" v-if="report.description">
                 <div class="ui-br-ext-review-title">Description:</div>
-                <div class="ui-br-ext-review-text">{{report.content.description}}</div>
+                <div class="ui-br-ext-review-text">{{report.description}}</div>
             </div>
-            <div class="ui-br-ext-review-box" v-if="report.content.stepsToReproduce">
+            <div class="ui-br-ext-review-box" v-if="report.stepsToReproduce">
                 <div class="ui-br-ext-review-title">Steps to reproduce:</div>
-                <div class="ui-br-ext-review-text">{{report.content.stepsToReproduce}}</div>
+                <div class="ui-br-ext-review-text">{{report.stepsToReproduce}}</div>
             </div>
-            <div class="ui-br-ext-review-box" v-if="report.content.actualResults">
+            <div class="ui-br-ext-review-box" v-if="report.actualResults">
                 <div class="ui-br-ext-review-title">Actual results:</div>
-                <div class="ui-br-ext-review-text">{{report.content.actualResults}}</div>
+                <div class="ui-br-ext-review-text">{{report.actualResults}}</div>
             </div>
-            <div class="ui-br-ext-review-box" v-if="report.content.expectedResults">
+            <div class="ui-br-ext-review-box" v-if="report.expectedResults">
                 <div class="ui-br-ext-review-title">Expected results:</div>
-                <div class="ui-br-ext-review-text">{{report.content.expectedResults}}</div>
+                <div class="ui-br-ext-review-text">{{report.expectedResults}}</div>
             </div>
             <div>
                 <span class="ui-br-ext-btn-lnk" v-bind:class="{'disabled': !report.screenshot}" @click="showImage(report.screenshot)">View screenshot</span>
@@ -39,6 +39,7 @@
     import ModuleDetails from '../../shared/ModuleDetails';
     import UserDetails from '../../shared/UserDetails';
     import ProjectDetails from '../../shared/ProjectDetails';
+    import exportPdf from '../../../common/export-pdf';
 
     export default {
         name: 'ReportDetails',
@@ -54,6 +55,17 @@
             'module',
             'project'
         ],
+
+        created() { 
+            this.getFileName = exportPdf.getFileName;
+            this.savePdf = exportPdf.savePdf;
+        },
+
+        data() {
+            return {
+                filename: '',
+            }
+        },
 
         methods: {
 
@@ -75,8 +87,10 @@
                 console.log('create jira');
             },
 
-            pdf() {
-                console.log('download pdf');
+            async pdf() {
+                this.filename = this.getFileName(this.module.name);
+                console.log(this.report);
+                await this.savePdf(this.report)
             },
 
             close(){
@@ -84,6 +98,8 @@
             },
 
             edit() {
+                //emits to parent. parent displays edit view
+                console.log(this.report);
                 this.$emit('edit-report', this.report)
             },
 

@@ -1,11 +1,18 @@
 <template>
     <div > 
 
-        <ReportForm ref="reportForm" :report="report.content" />
+        <ReportForm ref="reportForm" :report="report" />
 
-        <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveReport" data-listener="off">
-            <span>Save</span> 
-        </button>
+        
+        <div class="ui-br-ext-btn-group">
+            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveReport" data-listener="off">
+                <span>Save</span> 
+            </button>
+            <button class="ui-br-ext-btn-danger" @click="cancel" data-listener="off">
+                <span class="ui-br-ext-spinner"></span>
+                <span>Cancel</span> 
+            </button>
+        </div>
 
     </div>
 </template>
@@ -35,17 +42,12 @@
         methods: {
 
             async saveReport(){
-                this.reportForm();
-                
-                console.log(this.form);
-                this.$emit('save-edited-report', { content: this.$refs.reportForm.form, xPath: this.report.xPath} )            
+                Object.assign(this.report, this.$refs.reportForm.form);
+                this.$emit('save-edited-report', this.report );            
             },
 
-            reportForm() {            
-                this.report.content.description = this.$refs.reportForm.form.description,
-                this.report.content.actualResults = this.$refs.reportForm.form.actualResults,
-                this.report.content.expectedResults = this.$refs.reportForm.form.expectedResults,
-                this.report.content.stepsToReproduce = this.$refs.reportForm.form.stepsToReproduce  
+            cancel(){
+                this.$emit('cancel-edit-report')            
             }
         }
     }
