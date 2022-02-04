@@ -1,7 +1,7 @@
 <template>
     
         <div class="ui-br-ext-settings-body"> 
-            <div v-if="project.key">
+            <div v-if="project && project.projectKey">
                 <div class="ui-br-ext-btn-link ui-br-ext-btn-create-project" v-if="account.isAdmin == 1">
                     <span id="ui-br-ext-btn-link" @click="showAddModule = !showAddModule; resetModule()" :class="{active: showAddModule}">Create module</span>  
                 </div>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            <div v-if="!project.key" class="ui-br-ext-warning-text" >
+            <div v-if="!project.projectKey" class="ui-br-ext-warning-text" >
                 Choose project first
             </div>
         </div>

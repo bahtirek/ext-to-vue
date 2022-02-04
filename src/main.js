@@ -23,9 +23,9 @@ export const globalStore = new Vue({
       account: {},
       projects: [],
       project: {
-        key: '',
-        id: '', 
-        jira: false,
+        projectKey: '',
+        jiraId: '', 
+        saveToJira: false,
       },
       modules: [],
       user: {},

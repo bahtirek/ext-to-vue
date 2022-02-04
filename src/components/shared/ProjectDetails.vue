@@ -1,8 +1,8 @@
 <template>
     <ul class="ui-br-ext-info-list">
-        <li v-if="project && project.key">
+        <li v-if="project && project.projectKey">
             <span><strong>Project key: </strong></span>
-            <span v-if="project"> {{project.key || 'No project chosen'}}</span>
+            <span v-if="project"> {{project.projectKey || 'No project chosen'}}</span>
         </li>
     </ul>
 </template>

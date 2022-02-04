@@ -27,10 +27,10 @@ export default {
   created() { 
     this.localStorage = storage;
     this.auth = regKeyAuthentication.auth;
-    //this.fakeGetkey();
-    this.getRegKey();
+    this.fakeGetkey();
+    /* this.getRegKey();
     this.getUserFromLocal();
-    this.getProjectFromLocal();
+    this.getProjectFromLocal(); */
   },
 
   watch: {
@@ -85,9 +85,9 @@ export default {
         };
         
         globalStore.store.project = {
-          key: 'EXTBR',
-          id: '1212',
-          jira: true
+          projectKey: 'EXTBR',
+          jiraId: '1212',
+          saveToJira: true
         };
 
         globalStore.store.currentModule = {
