@@ -6,7 +6,7 @@
 
     import Extension from './components/Extension';
     import storage from './common/storage';
-    import regKeyAuthentication from './common/regkey';
+    import regKeyAuthentication from './services/regkey.service';
     import { globalStore } from './main';
     import eventBus from './eventBus'
         

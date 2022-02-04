@@ -30,7 +30,7 @@
 <script>
 
     import { globalStore } from './../../../main';
-    import regKeyAuth from './../../../common/regkey';
+    import regKeyAuth from './../../../services/regkey.service';
     import storage from './../../../common/storage';
     import eventBus from './../../../eventBus'
 
