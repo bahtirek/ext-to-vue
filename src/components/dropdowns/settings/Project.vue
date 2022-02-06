@@ -3,7 +3,7 @@
         <div class="ui-br-ext-settings-body">           
             
             <div class="ui-br-ext-btn-link ui-br-ext-btn-create-project" v-if="account.isAdmin == 1">
-                <span id="ui-br-ext-btn-link" @click="showAddProject = !showAddProject; resetProject()" :class="{active: showAddProject}">Create project</span>  
+                <span id="ui-br-ext-btn-link" @click="showAddProject = !showAddProject; resetProject" :class="{active: showAddProject}">Create project</span>  
             </div>
 
 
@@ -16,8 +16,8 @@
                 </span >
                 <div class="ui-br-ext-search-results" v-if="searchResults && searchResults.length > 0">
                     <ul>
-                        <li v-for="project in searchResults.slice(0, 10)" :key="project.id">
-                            <span class="ui-br-ext-module-label" @click="onResultClick(project)">{{project.key}}</span>
+                        <li v-for="project in searchResults.slice(0, 10)" :key="project.jiraId">
+                            <span class="ui-br-ext-module-label" @click="onResultClick(project)">{{project.projectKey}}</span>
                             <div class="ui-br-ext-module-icons" v-if="account.isAdmin == 1">
                                 <span @click="onProjectEdit({...project})">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -38,25 +38,25 @@
                 <form novalidate name="ui-br-ext-new-project">
                     <div class="ui-br-ext-form-container ui-br-ext-textarea">
                         <label for="ui-br-ext-new-project-label">Project key</label>
-                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.key" />
-                        <span class="ui-br-ext-message">{{projectMessage.key}}</span>
+                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" />
+                        <span class="ui-br-ext-message">{{errorMessage.projectKey}}</span>
                     </div>
                     <div class="ui-br-ext-form-container ui-br-ext-textarea">
                         <label for="ui-br-ext-new-project-label">Project id</label>
-                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.id" />
-                        <span class="ui-br-ext-message">{{projectMessage.id}}</span>
+                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.jiraId" />
+                        <span class="ui-br-ext-message">{{errorMessage.jiraId}}</span>
                     </div>
-                    <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
-                    <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.jira">
+                    <!-- <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
+                    <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.saveToJira">
                         <label for="ui-br-ext-save-to-jira">Jira project</label>
-                    </div>
+                    </div> -->
                 </form>
                 <div class="ui-br-ext-btn-group">
                     <button class="ui-br-ext-btn" @click="saveProject" data-listener="off">
                         <span class="ui-br-ext-spinner"></span>
                         <span>Save</span> 
                     </button>
-                    <button class="ui-br-ext-btn-danger" @click="cancel" data-listener="off">
+                    <button class="ui-br-ext-btn-danger" @click="showAddProject=false" data-listener="off">
                         <span class="ui-br-ext-spinner"></span>
                         <span>Cancel</span> 
                     </button>
@@ -74,6 +74,7 @@
     import eventBus from './../../../eventBus';
     import ProjectDetails from '../../shared/ProjectDetails';
     import storage from './../../../common/storage';
+    import projectService from '../../../services/project.service'
 
     export default {
         name: 'Project',
@@ -83,24 +84,15 @@
         },
 
         created() {
-            this.localStorage = storage
+            this.localStorage = storage;
+            this.post = projectService.postProject;
+            this.get = projectService.getProjects;
         },
 
         mounted() { 
             this.account = globalStore.store.account;
             this.project = globalStore.store.project;
-            this.projects = globalStore.store.projects;
             this.user = globalStore.store.user;
-
-            eventBus.$on('account-loaded', () => {
-                this.account = globalStore.store.account;
-                this.project = globalStore.store.project;
-                this.projects = globalStore.store.projects;
-            })
-            
-            eventBus.$on('user-loaded', () => {
-                this.user = globalStore.store.user;
-            })
         },
 
         data() {
@@ -108,12 +100,12 @@
                 showAddProject: false,
                 project: {},
                 newProject: {
-                    key: '',
-                    id: '',
-                    jira: false
+                    projectKey: '',
+                    jiraId: '', 
+                    saveToJira: 0,
                 },
                 searchQuery: '',
-                projectMessage: {key: '', id: ''},
+                errorMessage: {projectKey: '', jiraId: ''},
                 account: {},
                 projects: []
             }
@@ -122,48 +114,59 @@
         computed: {
             searchResults: function () {
                 if(this.searchQuery == '') return [];
-                return this.projects.filter(project => project.key?.includes(this.searchQuery));
+                return this.projects.filter(project => project.projectKey?.includes(this.searchQuery));
             }
         },
 
         methods: {
             async saveProject(){
-                this.projectMessage.key = '';
-                this.projectMessage.id = '';
+
+                this.errorMessage.projectKey = '';
+                this.errorMessage.jiraId = '';
+                    //await this.getProjects();
                 
-                if(this.newProject.key != ''){
-                    if(this.newProject.jira && this.newProject.id == '') {
-                        this.projectMessage.id = 'Enter project id ';
+                if(this.newProject.projectKey != ''){
+                    // Request jira id if Jira
+                    if(this.newProject.jira && this.newProject.jiraId == '') {
+                        this.errorMessage.jiraId = 'Enter project id ';
                         return false;
                     }
-                    const index = this.projects.findIndex(project => {
-                        return project.key == this.newProject.key
-                    });
     
-                    if(index == -1) {
-                        //post
-                        const project = {key: this.newProject.key, id: this.newProject.id, jira: this.newProject.jira}
-                        this.projects.push(project);
-                        const projectString = JSON.stringify(project)
-                        await this.localStorage.set('project', projectString)
-                        alert(`project ${this.newProject.key} successfully saved`);
-                        this.showAddProject = false;
-                        this.resetProject();
-                        console.log(this.projects);         
-                    } else {
-                        this.projectMessage.key = 'project exist'
-                    }
+                    await this.submitProject()
+                    //await this.saveToLocal();
+                    this.onResultClick(this.newProject);
+                    console.log(this.project);
+                    alert(`project ${this.newProject.projectKey} successfully saved`);
+                    this.showAddProject = false;
+                
+                    //this.errorMessage.projectKey = 'Project exist'
+                    
                 } else {
-                    this.projectMessage.key = 'Enter project key'
+                    this.errorMessage.projectKey = 'Enter project key'
                 }
             },
 
+            async submitProject() {
+                let response = await this.post({...this.newProject, ...this.account});
+                console.log(response);
+            },
+            async getProjects() {
+                let response = await this.get(this.account);
+                console.log(response);
+            },
+
+            async saveToLocal(){
+                const projectString = JSON.stringify(this.newProject)
+                await this.localStorage.set('project', projectString)
+            },
+
             resetProject() {
-                this.newProject.key = '';
-                this.newProject.id = '';
+                this.newProject.projectKey = '';
+                this.newProject.jiraId = '';
             },
 
             onResultClick(project) {
+                console.log(project);
                 this.searchQuery = '';
                 this.project = project;
                 globalStore.store.project = project;
@@ -175,11 +178,6 @@
                 console.log(project);
                 this.showAddProject = true;
                 this.newProject = project
-            },
-
-            cancel() {
-                this.project = { key: '', id: '' };
-                this.showAddProject = false;
             },
 
             onProjectDelete(project) {

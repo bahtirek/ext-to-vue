@@ -28,8 +28,8 @@ export default {
     this.localStorage = storage;
     this.auth = regKeyAuthentication.auth;
     this.fakeGetkey();
-    /* this.getRegKey();
-    this.getUserFromLocal();
+    this.getRegKey();
+    /* this.getUserFromLocal();
     this.getProjectFromLocal(); */
   },
 
@@ -39,7 +39,8 @@ export default {
 
   methods: {
     async getRegKey(){
-      this.regKey = await this.localStorage.get('regKey');
+      //this.regKey = await this.localStorage.get('regKey');
+      this.regKey = 'sup_61b589b5f03c42.30439098';
       if(this.regKey) {
         globalStore.store.account = await this.auth(this.regKey);
         //globalStore.store.modules = await this.getmModules(globalStore.store.account.token);
