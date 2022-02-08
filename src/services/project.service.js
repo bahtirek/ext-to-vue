@@ -1,7 +1,45 @@
 
 import axios from 'axios';
 
+const submitProject = (data) => {
+    if (data.id) patchProject(data)
+    postProject(data)
+}
+
+
 const postProject = (data) => {
+    let saveToJira = 0;
+    if (data.saveToJira) saveToJira = 1;
+
+    return new Promise((resolve, reject) => {
+        axios.post(`${data.repositoryServer}/project`, {
+            registrationKey: data.registrationKey, 
+            token: data.token,
+            saveToJira: saveToJira,
+            projectKey: data.projectKey,
+            jiraId: data.jiraId
+        }).then(function (response) {
+            console.log(response.data);
+            resolve(response.data)
+        }).catch(function (error) {
+            
+            console.log(error.response);
+            if (error.response) {
+                if(error.response.status == 401){
+                    alert("Unauthorized");
+                    return false
+                }
+                reject(error.response.data);
+            } else if (error.request) {
+                alert('Please check connection');
+            } else {
+                alert('Sorry, something went wrong please try again later');
+            }
+        });
+    });
+}
+
+const patchProject = (data) => {
     let saveToJira = 0;
     if (data.saveToJira) saveToJira = 1;
 
@@ -65,6 +103,6 @@ const getProjects = (account, query) => {
 }
 
 export default {
-    postProject,
+    submitProject,
     getProjects
 }

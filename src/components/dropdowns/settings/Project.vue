@@ -3,7 +3,7 @@
         <div class="ui-br-ext-settings-body">           
             
             <div class="ui-br-ext-btn-link ui-br-ext-btn-create-project" v-if="account.isAdmin == 1">
-                <span id="ui-br-ext-btn-link" @click="showAddProject = !showAddProject; resetProject" :class="{active: showAddProject}">Create project</span>  
+                <span id="ui-br-ext-btn-link" @click="showAddProject = !showAddProject; resetProject()" :class="{active: showAddProject}">Create project</span>  
             </div>
 
 
@@ -35,15 +35,18 @@
             <ProjectDetails :project="project" v-if="!showAddProject" />
 
             <div  class="ui-br-ext-new-module-cont" v-if="showAddProject">
+
+                <div class="ui-br-ext-form-title">{{action}}</div >
+
                 <form novalidate name="ui-br-ext-new-project">
                     <div class="ui-br-ext-form-container ui-br-ext-textarea">
                         <label for="ui-br-ext-new-project-label">Project key</label>
-                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" />
+                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" maxlength="10" minlength="2"/>
                         <span class="ui-br-ext-message">{{errorMessage.projectKey}}</span>
                     </div>
                     <div class="ui-br-ext-form-container ui-br-ext-textarea" v-show="newProject.saveToJira">
                         <label for="ui-br-ext-new-project-label">Jira id</label>
-                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.jiraId" />
+                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.jiraId" maxlength="10" minlength="2" />
                         <span class="ui-br-ext-message">{{errorMessage.jiraId}}</span>
                     </div>
                     <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
@@ -56,7 +59,7 @@
                         <span class="ui-br-ext-spinner"></span>
                         <span>Save</span> 
                     </button>
-                    <button class="ui-br-ext-btn-danger" @click="showAddProject=false" data-listener="off">
+                    <button class="ui-br-ext-btn-danger" @click="showAddProject=false; resetProject()" data-listener="off">
                         <span class="ui-br-ext-spinner"></span>
                         <span>Cancel</span> 
                     </button>
@@ -85,7 +88,7 @@
 
         created() {
             this.localStorage = storage;
-            this.post = projectService.postProject;
+            this.post = projectService.submitProject;
             this.get = projectService.getProjects;
         },
 
@@ -102,14 +105,14 @@
                 newProject: {
                     projectKey: '',
                     jiraId: '', 
-                    saveToJira: 0,
+                    saveToJira: false,
                 },
                 searchQuery: '',
                 errorMessage: {projectKey: '', jiraId: ''},
                 account: {},
-                projects: [],
                 timeout: null,
-                searchResults: []
+                searchResults: [],
+                action: 'Create new project'
             }
         },
 
@@ -142,11 +145,11 @@
 
             async onResultClick(project) {
                 this.searchQuery = '';
+                this.searchResults = [];
                 this.project = project;
                 globalStore.store.project = project;
                 globalStore.store.currentModule = {};
                 eventBus.$emit('account-loaded');
-                this.searchResults = []
                 await this.saveToLocal();
             },
 
@@ -180,14 +183,25 @@
             },
 
             resetProject() {
+                this.searchQuery = '';
+                this.searchResults = [];
                 this.newProject.projectKey = '';
                 this.newProject.jiraId = '';
+                this.newProject.saveToJira = false;
+                this.action = 'Create new project';
+                delete this.newProject.id;
             },
 
 
             onProjectEdit(project) {
+                this.searchQuery = '';
+                this.searchResults = [];
+                this.action = 'Edit project';
                 this.showAddProject = true;
-                this.newProject = project
+                this.newProject = project;
+                if(project.jiraId) {
+                    this.newProject.saveToJira = true;
+                }
             },
 
             onProjectDelete(project) {
