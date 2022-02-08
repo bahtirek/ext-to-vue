@@ -9,8 +9,8 @@
 
             <div class="ui-br-ext-form-container ui-br-ext-textarea" v-if="!showAddProject">
                 <label for="ui-br-ext-modules">Choose project</label>
-                <input type="text" v-model="searchQuery">
-                <span class="ui-br-ext-message" v-if="searchQuery!=='' && searchResults && searchResults.length == 0">No project found</span>
+                <input type="text" v-model="searchQuery" @input="onSearch">
+                <span class="ui-br-ext-message" v-if="searchQuery!=='' && searchQuery.length > 2 && searchResults && searchResults.length == 0">No project found</span>
                 <span class="ui-br-ext-search-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ad55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </span >
@@ -41,15 +41,15 @@
                         <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" />
                         <span class="ui-br-ext-message">{{errorMessage.projectKey}}</span>
                     </div>
-                    <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                        <label for="ui-br-ext-new-project-label">Project id</label>
+                    <div class="ui-br-ext-form-container ui-br-ext-textarea" v-show="newProject.saveToJira">
+                        <label for="ui-br-ext-new-project-label">Jira id</label>
                         <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.jiraId" />
                         <span class="ui-br-ext-message">{{errorMessage.jiraId}}</span>
                     </div>
-                    <!-- <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
+                    <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
                     <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.saveToJira">
                         <label for="ui-br-ext-save-to-jira">Jira project</label>
-                    </div> -->
+                    </div>
                 </form>
                 <div class="ui-br-ext-btn-group">
                     <button class="ui-br-ext-btn" @click="saveProject" data-listener="off">
@@ -107,14 +107,9 @@
                 searchQuery: '',
                 errorMessage: {projectKey: '', jiraId: ''},
                 account: {},
-                projects: []
-            }
-        },
-
-        computed: {
-            searchResults: function () {
-                if(this.searchQuery == '') return [];
-                return this.projects.filter(project => project.projectKey?.includes(this.searchQuery));
+                projects: [],
+                timeout: null,
+                searchResults: []
             }
         },
 
@@ -123,41 +118,66 @@
 
                 this.errorMessage.projectKey = '';
                 this.errorMessage.jiraId = '';
-                    //await this.getProjects();
                 
                 if(this.newProject.projectKey != ''){
+
                     // Request jira id if Jira
                     if(this.newProject.jira && this.newProject.jiraId == '') {
                         this.errorMessage.jiraId = 'Enter project id ';
                         return false;
                     }
     
-                    await this.submitProject()
-                    //await this.saveToLocal();
-                    this.onResultClick(this.newProject);
-                    console.log(this.project);
-                    alert(`project ${this.newProject.projectKey} successfully saved`);
-                    this.showAddProject = false;
-                
-                    //this.errorMessage.projectKey = 'Project exist'
-                    
+                    try {
+                        const projectId = await this.post({...this.newProject, ...this.account});                       
+                        this.onResultClick({...this.newProject, projectId: projectId});
+                        this.showAddProject = false;
+                    } catch(error) {
+                        this.errorMessage.jiraId = error.error
+                    }
+                                       
                 } else {
                     this.errorMessage.projectKey = 'Enter project key'
                 }
             },
 
-            async submitProject() {
-                let response = await this.post({...this.newProject, ...this.account});
-                console.log(response);
+            async onResultClick(project) {
+                this.searchQuery = '';
+                this.project = project;
+                globalStore.store.project = project;
+                globalStore.store.currentModule = {};
+                eventBus.$emit('account-loaded');
+                this.searchResults = []
+                await this.saveToLocal();
             },
+
+            onSearch() {
+                if (this.timeout) clearTimeout(this.timeout)
+                this.timeout = setTimeout(() => {
+                    this.getProjects()
+                }, 300);
+            },
+
             async getProjects() {
-                let response = await this.get(this.account);
-                console.log(response);
+                if (this.searchQuery.length != '') {
+                    try {
+                        this.searchResults = await this.get(this.account, this.searchQuery);
+                        console.log(this.searchResults);
+                    } catch(error) {
+                        console.log(error);
+                    }                   
+                } else {
+                    this.searchResults = []
+                }
             },
 
             async saveToLocal(){
-                const projectString = JSON.stringify(this.newProject)
-                await this.localStorage.set('project', projectString)
+                const projectString = JSON.stringify(this.project)
+                try{
+                    await this.localStorage.set('project', projectString)
+                    alert(`project ${this.newProject.projectKey} successfully saved`);
+                } catch(error) {
+                    console.log(error);
+                }
             },
 
             resetProject() {
@@ -165,17 +185,8 @@
                 this.newProject.jiraId = '';
             },
 
-            onResultClick(project) {
-                console.log(project);
-                this.searchQuery = '';
-                this.project = project;
-                globalStore.store.project = project;
-                globalStore.store.currentModule = {};
-                eventBus.$emit('account-loaded');
-            },
 
             onProjectEdit(project) {
-                console.log(project);
                 this.showAddProject = true;
                 this.newProject = project
             },
