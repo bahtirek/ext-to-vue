@@ -39,11 +39,11 @@ export default {
 
   methods: {
     async getRegKey(){
-      //this.regKey = await this.localStorage.get('regKey');
-      this.regKey = 'sup_61b589b5f03c42.30439098';
-      if(this.regKey) {
-        globalStore.store.account = await this.auth(this.regKey);
-        //globalStore.store.modules = await this.getmModules(globalStore.store.account.token);
+      //const regKey = await this.localStorage.get('regKey');
+      const regKey = 'sup_61b589b5f03c42.30439098';
+      if(regKey) {
+        globalStore.store.account = await this.auth(regKey);
+        console.log(globalStore.store.account);
         eventBus.$emit('account-loaded')
       }
     },
@@ -71,14 +71,7 @@ export default {
 
     fakeGetkey(){
       setTimeout(()=>{
-        globalStore.store.account = {
-          client: "My Test Company",
-          isAdmin: 1,
-          registrationKey: "sup_61b589b5f03c42.30439098",
-          repositoryServer: "http://127.0.0.1:8000/api/",
-          token: "$5$rounds=5000mzcHt$YZZLVq4ssfOss/w5F5O3rxDIhcKwTwQzI9f86Kow2i.",
-        };
-
+    
         globalStore.store.user = {
           firstname: 'John',
           lastname: 'Doe',

@@ -123,7 +123,7 @@
 
                     // Request jira id if Jira
                     if(this.newProject.jira && this.newProject.jiraId == '') {
-                        this.errorMessage.jiraId = 'Enter project id ';
+                        this.errorMessage.jiraId = 'Enter jira id ';
                         return false;
                     }
     
@@ -132,7 +132,7 @@
                         this.onResultClick({...this.newProject, projectId: projectId});
                         this.showAddProject = false;
                     } catch(error) {
-                        this.errorMessage.jiraId = error.error
+                        this.errorMessage.projectKey = error.error
                     }
                                        
                 } else {
@@ -160,8 +160,7 @@
             async getProjects() {
                 if (this.searchQuery.length != '') {
                     try {
-                        this.searchResults = await this.get(this.account, this.searchQuery);
-                        console.log(this.searchResults);
+                        this.searchResults = await this.get(this.account, this.searchQuery)
                     } catch(error) {
                         console.log(error);
                     }                   
