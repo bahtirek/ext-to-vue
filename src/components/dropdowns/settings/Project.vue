@@ -3,9 +3,8 @@
         <div class="ui-br-ext-settings-body">           
             
             <div class="ui-br-ext-btn-link ui-br-ext-btn-create-project" v-if="account.isAdmin == 1">
-                <span id="ui-br-ext-btn-link" @click="showAddProject = !showAddProject; resetProject()" :class="{active: showAddProject}">Create project</span>  
+                <span id="ui-br-ext-btn-link" @click="showAddProject = !showAddProject; projectToEdit = undefined;" :class="{active: showAddProject}">Create project</span>  
             </div>
-
 
             <div class="ui-br-ext-form-container ui-br-ext-textarea" v-if="!showAddProject">
                 <label for="ui-br-ext-modules">Choose project</label>
@@ -30,50 +29,8 @@
             </div>
 
             <ProjectDetails :project="project" v-if="!showAddProject" />
+            <EditProject v-if="showAddProject" @saveProject="saveProject" @cancelEditing="cancelEditing" :project="projectToEdit" :account="account" :user="user" />
 
-            <div  class="ui-br-ext-new-module-cont" v-if="showAddProject">
-
-                <div class="ui-br-ext-form-title">{{action}}</div >
-
-                <form novalidate name="ui-br-ext-new-project">
-                    <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                        <label for="ui-br-ext-new-project-label">Project key</label>
-                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" maxlength="10" minlength="2"/>
-                        <span class="ui-br-ext-message">{{errorMessage.projectKey}}</span>
-                    </div>
-                    <div class="ui-br-ext-form-container ui-br-ext-textarea" v-if="newProject.saveToJira">
-                        <label for="ui-br-ext-new-project-label">Jira id</label>
-                        <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.jiraId" maxlength="10" minlength="2" />
-                        <span class="ui-br-ext-message">{{errorMessage.jiraId}}</span>
-                    </div>
-                    <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
-                        <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.saveToJira">
-                        <label for="ui-br-ext-save-to-jira">Jira project</label>
-                    </div>
-                    <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="newProject.id && !newProject.allowDelete">
-                        <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.inactivate">
-                        <label for="ui-br-ext-save-to-jira">Inactivate</label>
-                    </div>
-                </form>
-                <div class="ui-br-ext-btn-group">
-                    <button class="ui-br-ext-btn" @click="activateProject" data-listener="off" v-if="newProject.id && false">
-                        <span class="ui-br-ext-spinner"></span>
-                        <span>Activate</span> 
-                    </button>
-                    <button class="ui-br-ext-btn" @click="deleteProject" data-listener="off" v-if="newProject.id && newProject.allowDelete">
-                        <span class="ui-br-ext-spinner"></span>
-                        <span>Delete</span> 
-                    </button>
-                    <button class="ui-br-ext-btn" @click="saveProject" data-listener="off">
-                        <span class="ui-br-ext-spinner"></span>
-                        <span>Save</span> 
-                    </button>
-                    <button class="ui-br-ext-btn-danger" @click="showAddProject=false; resetProject()" data-listener="off">
-                        <span class="ui-br-ext-spinner"></span>
-                        <span>Cancel</span> 
-                    </button>
-                </div>
-            </div>
         </div>
    
 </template>
@@ -84,20 +41,18 @@
     import eventBus from './../../../eventBus';
     import ProjectDetails from '../../shared/ProjectDetails';
     import storage from './../../../common/storage';
-    import projectService from '../../../services/project.service'
+    import EditProject from './EditProject';
 
     export default {
         name: 'Project',
 
         components: {
-            ProjectDetails
+            ProjectDetails,
+            EditProject
         },
 
         created() {
             this.localStorage = storage;
-            this.post = projectService.postProject;
-            this.patch = projectService.patchProject;
-            this.get = projectService.getProjects;
         },
 
         mounted() { 
@@ -106,73 +61,19 @@
             this.user = globalStore.store.user;
         },
 
-        computed: {
-            jira: function () {
-                return console.log(this.newProject.saveToJira);
-            }
-        },
-
         data() {
             return {
                 showAddProject: false,
                 project: {},
-                newProject: {
-                    projectKey: '',
-                    jiraId: '', 
-                    saveToJira: false,
-                    inactivate: false
-                },
                 searchQuery: '',
-                errorMessage: {projectKey: '', jiraId: ''},
-                account: {},
                 timeout: null,
                 searchResults: [],
-                action: 'Create new project',
-                projectStatusEnum: {
-                    active: 1,
-                    inactive: 2
-                }
+                projectToEdit: undefined,
+                account: {}
             }
         },
 
         methods: {
-            async saveProject(){
-
-                this.errorMessage.projectKey = '';
-                this.errorMessage.jiraId = '';
-                
-                if(this.newProject.projectKey != ''){
-
-                    // Request jira id if Jira
-                    if(this.newProject.saveToJira && this.newProject.jiraId == '') {
-                        this.errorMessage.jiraId = 'Enter jira id ';
-                        return false;
-                    }
-
-                    try {
-                        let projectId = undefined;
-
-                        if (this.newProject.id) {
-                            projectId = await this.patch({...this.newProject, ...this.account});
-                        } else {
-                            projectId = await this.post({...this.newProject, ...this.account});
-                        }
-                        
-                        console.log(projectId);
-                        if(projectId){
-                            this.onResultClick({...this.newProject, projectId: projectId});
-                            this.showAddProject = false;
-                        }                    
-                    } catch(error) {
-                        console.log(error.error);
-                        this.errorMessage.projectKey = error.error
-                    }
-                    
-                                       
-                } else {
-                    this.errorMessage.projectKey = 'Enter project key'
-                }
-            },
 
             async onResultClick(project) {
                 this.searchQuery = '';
@@ -213,36 +114,22 @@
                 }
             },
 
-            resetProject() {
-                this.searchQuery = '';
-                this.searchResults = [];
-                this.newProject.projectKey = '';
-                this.newProject.jiraId = '';
-                this.newProject.saveToJira = undefined;
-                this.action = 'Create new project';
-                delete this.newProject.id;
-            },
-
             onProjectEdit(project) {
                 this.searchQuery = '';
                 this.searchResults = [];
-                this.action = 'Edit project';
                 this.showAddProject = true;
-                this.newProject = {...project};
-                this.newProject.inactivate = 
-                    this.newProject.lkProjectStatusId == this.projectStatusEnum.active
-                    ? false : true;
+                this.projectToEdit = {...project};
             },
 
-            deleteProject(project) {
-                if (confirm('Are you suuure?')) {
-                    console.log('delete');
-                }
+            saveProject(project){
+                this.onResultClick(project);
+                this.cancelEditing();
             },
 
-            activateProject(project) {
-                console.log(project);
-            }
+            cancelEditing(){
+                this.showAddProject = false;
+                this.projectToEdit = undefined;
+            },
         }
     }
 </script>

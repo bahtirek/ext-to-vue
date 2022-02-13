@@ -39,12 +39,14 @@ const patchProject = (data) => {
     console.log(saveToJira);
 
     return new Promise((resolve, reject) => {
-        axios.post(`${data.repositoryServer}project`, {
+        axios.patch(`${data.repositoryServer}project`, {
             registrationKey: data.registrationKey, 
             token: data.token,
             saveToJira: saveToJira,
             projectKey: data.projectKey,
-            jiraId: data.jiraId
+            jiraId: data.jiraId,
+            lkProjectStatusId: data.lkProjectStatusId,
+            id: data.id
         }).then(function (response) {
             console.log(response.data);
             resolve(response.data)
