@@ -65,7 +65,7 @@
         created() {
             this.post = projectService.postProject;
             this.patch = projectService.patchProject;
-            this.get = projectService.getProjects;
+            this.delete = projectService.deleteProject;
         },
 
         data() {
@@ -115,9 +115,7 @@
                     } catch(error) {
                         console.log(error.error);
                         this.errorMessage.projectKey = error.error
-                    }
-                    
-                                       
+                    }                                      
                 } else {
                     this.errorMessage.projectKey = 'Enter project key'
                 }
@@ -132,9 +130,22 @@
                 this.$emit('cancelEditing');
             },
 
-            deleteProject(project) {
+            async deleteProject(project) {
                 if (confirm('Are you suuure?')) {
-                    console.log('delete');
+                    try {
+                        const result = await this.delete(this.project.id, this.account);
+                        console.log(result.status == 'success');
+
+                        if(result){ 
+                            this.$emit('deleteProject')
+                        } else {
+                            alert('Sorry. Something went wrong. Please try later.')
+                        }
+
+                    } catch(error) {
+                        console.log(error);
+                        alert('Sorry. Something went wrong. Please try later.')
+                    }
                 }
             },
 

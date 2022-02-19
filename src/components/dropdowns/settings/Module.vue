@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            <div v-if="!project.projectKey" class="ui-br-ext-warning-text" >
+            <div v-if="!project" class="ui-br-ext-warning-text" >
                 Choose project first
             </div>
         </div>

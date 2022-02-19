@@ -29,7 +29,7 @@
             </div>
 
             <ProjectDetails :project="project" v-if="!showAddProject" />
-            <EditProject v-if="showAddProject" @saveProject="saveProject" @cancelEditing="cancelEditing" :project="projectToEdit" :account="account" :user="user" />
+            <EditProject v-if="showAddProject" @saveProject="saveProject" @cancelEditing="cancelEditing" @deleteProject="deleteProject" :project="projectToEdit" :account="account" :user="user" />
 
         </div>
    
@@ -42,6 +42,7 @@
     import ProjectDetails from '../../shared/ProjectDetails';
     import storage from './../../../common/storage';
     import EditProject from './EditProject';
+    import projectService from '../../../services/project.service'
 
     export default {
         name: 'Project',
@@ -59,6 +60,7 @@
             this.account = globalStore.store.account;
             this.project = globalStore.store.project;
             this.user = globalStore.store.user;
+            this.get = projectService.getProjects;
         },
 
         data() {
@@ -130,6 +132,11 @@
                 this.showAddProject = false;
                 this.projectToEdit = undefined;
             },
+
+            deleteProject(){
+                this.onResultClick(undefined);
+                this.cancelEditing();
+            }
         }
     }
 </script>

@@ -100,8 +100,39 @@ const getProjects = (account, query) => {
     })
 }
 
+const deleteProject = (id, account) => {
+    console.log(id);
+    console.log(account.token);
+    return new Promise((resolve, reject) => {       
+        axios.delete(`${account.repositoryServer}project`, {
+            params: {
+                registrationKey: account.registrationKey, 
+                token: account.token,
+                id: id
+            }
+        }).then(function (response) {
+            console.log(response.data);
+            resolve(response.data)
+        }).catch(function (error) {
+            console.log(error.reponse);
+            if (error.response) {
+                if(error.response.status == 401){
+                    alert("Unauthorized");
+                    return false
+                }
+                reject(error.response.data);
+            } else if (error.request) {
+                alert('Please check connection');
+            } else {
+                alert('Sorry, something went wrong please try again later');
+            }
+        });     
+    })
+}
+
 export default {
     postProject,
     patchProject,
-    getProjects
+    getProjects,
+    deleteProject
 }
