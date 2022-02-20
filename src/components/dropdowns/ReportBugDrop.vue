@@ -23,6 +23,10 @@
             <label for="ui-br-ext-save-to-pdf">Save as PDF</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+            <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="report.sendEmail">
+            <label for="ui-br-ext-send-email">Send email</label>
+        </div>
+        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
             <input type="checkbox" name="screenshot" id="ui-br-ext-save-to-screenshot" v-model="report.saveScreenshot">
             <label for="ui-br-ext-save-to-screenshot">Attach screenshot</label>
             <span class="ui-br-ext-disclaimer">Make sure to remove personal identity information</span>
@@ -49,6 +53,7 @@
     import ProjectDetails from '../shared/ProjectDetails';
     import Resize from '../shared/Resize';
     import ReportForm from '../shared/ReportForm';
+    import email from '../../common/email';
             
     export default {
         name: 'ReportBugDrop',
@@ -67,6 +72,7 @@
             this.getFileName = exportPdf.getFileName;
             this.savePdf = exportPdf.savePdf;
             this.getElementXpath = select.getElementXpath;
+            this.sendEmail = email.sendEmail;
         },
 
         mounted: function () {
@@ -100,6 +106,7 @@
                     stepsToReproduce: '',
                     saveJira: false,
                     savePdf: false,
+                    sendEmail: false,
                     saveScreenshot: false,
                     screenshot: '',
                     xPath: '',
@@ -129,7 +136,8 @@
                     }
 
                     if(!this.report.savePdf){
-                        this.screenshotLink(this.report.screenshot, this.filename);
+                        if(!this.report.sendEmail)
+                            this.screenshotLink(this.report.screenshot, this.filename);
                     }
                 }
 
@@ -139,6 +147,10 @@
 
                 if(this.report.saveJira){
                     console.log('save jira')
+                }
+
+                if(this.report.sendEmail){
+                    await this.sendEmail(this.report)
                 }
 
                 this.report.xPath = this.getElementXpath(globalStore.store.selectedElement);
