@@ -8,6 +8,7 @@ const addClickBlocker = function(bodyChildren) {
     bodyChildren.forEach(el => {
         el.addEventListener('click', preventClick, {capture: true});
         el.addEventListener('mousedown', preventClick, {capture: true});
+        el.addEventListener('mouseup', preventClick, {capture: true});
     });
 }
 
@@ -16,8 +17,9 @@ const removeClickBlocker = function(bodyChildren) {
         bodyChildren = document.querySelectorAll('body > *:not(#ui-br-ext-extension):not(script):not(noscript):not(style)')
     }
     bodyChildren.forEach(el => {
-        el.removeEventListener('click', preventClick, {capture: true});
-        el.removeEventListener('mousedown', preventClick, {capture: true});
+        el.removeEventListener('click', preventClick, true);
+        el.removeEventListener('mousedown', preventClick, true);
+        el.removeEventListener('mouseup', preventClick, true);
     });
 }
 
