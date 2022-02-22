@@ -1,4 +1,3 @@
-
 const sendEmail = async function(report, user) {  
     const emailBody = await createEmailContent(report, user);
     const email = makeTextFile(emailBody);
@@ -29,11 +28,13 @@ const createEmailContent = function (report) {
     }
 
     if(report.saveScreenshot && report.screenshot) { 
-        content += `<br><div class="image"> <img src=${report.screenshot} width="500px" height="400px"></div>`
+        content += '<img src="cid:screenshot">';       
     }
-    const emailBody = 
-   `Subject: Bug Report\nX-Unsent: 1\nContent-Type: text/html
+    
+    let emailBody = 
+`X-Unsent: 1\nSubject: Bug Report\nContent-Type: multipart/related;\n boundary="multipart_related_boundary"\n\nThis is a multi-part message in MIME format\n--multipart_related_boundary\nContent-Type: text/html\nContent-Transfer-Encoding: 7bit
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
     <html>
     <head>
     <style>
@@ -43,7 +44,14 @@ const createEmailContent = function (report) {
     <body>
     <div class="main">${content}</div>
     </body>
-    </html>`
+    </html>\n`;
+
+    if(report.saveScreenshot && report.screenshot) { 
+        let image = report.screenshot.replace("data:image/png;base64,", "");
+        const cid = `\n--multipart_related_boundary\nContent-Type: image/png; name="screenshot.png"\nContent-Transfer-Encoding: base64\nContent-ID: <screenshot>\nContent-Disposition: inline; filename="screenshot.png"\n\n${image}`
+        emailBody += cid;       
+    }
+
     return emailBody;
 }
 
