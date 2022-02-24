@@ -7,13 +7,13 @@
         <ul class="ui-br-ext-info-list" v-if="!showAddKey">
             <div class="ui-br-ext-spacer-1"></div>
             <li v-if="account && account.registrationKey ">
-                <span><strong>Regkey:</strong> </span><span>  {{account.registrationKey}}</span>
+                <span><strong>License Key:</strong> </span><br><span>  {{account.registrationKey}}</span>
             </li >
             <div class="ui-br-ext-spacer-1"></div>
         </ul >
         <div v-if="showAddKey">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                <label for="regKey">Registration Key</label>
+                <label for="regKey">License Key</label>
                 <input type="text" name="regKey" v-model="reg.key"/>
                 <span class="ui-br-ext-message">{{reg.error}}</span>
             </div>
@@ -80,7 +80,11 @@
                     if(this.account) {
                         globalStore.store.account = this.account;
                         eventBus.$emit('account-loaded');
-                        await this.localStorage.set('regKey', this.reg.key);
+                        try {
+                            await this.localStorage.set('regKey', this.reg.key);
+                        } catch(error) {
+                            console.log(error);
+                        }
                         this.reg.spinner = false;
                         this.showAddKey = false;
                     }

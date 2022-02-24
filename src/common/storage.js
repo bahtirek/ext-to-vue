@@ -16,6 +16,7 @@ const set = (key, value) => {
                 resolve(true);
             });
         } catch (error) {
+            console.log(error)
             reject(false)
         }
     })
