@@ -1,12 +1,18 @@
 <template>
     <div class="ui-br-ext-header" id="ui-br-ext-header"  style="outline: none !important;" @mousedown="onMouseDown" @touchstart="onTouchStart">
         <div class="ui-br-ext-menu-container ui-br-ext-container ui-br-ext-alwaysOn">
-            <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted"  @toggle-extension="$emit('toggle-extension')" />
-            <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
-            <ReviewBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
-            <!-- <ExportBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" /> -->
-            <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
-            <CloseBtn @toggle-button="toggleButton" />  
+            <template v-if="!videoMode">
+                <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted"  @toggle-extension="$emit('toggle-extension')" />
+                <VideoBtn @toggle-button="toggleButton" @start-record="startRecord" :toggleCompleted="toggleCompleted" />
+                <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
+                <ReviewBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
+                <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
+                <CloseBtn @toggle-button="toggleButton" />  
+            </template>
+            <template v-if="videoMode">
+                <VideoRecord @stop-record="stopRecord" />
+            </template>
+            
         </div>
     </div>
 </template>
@@ -16,9 +22,10 @@
     import SelectBtn from './menu-buttons/SelectBtn';
     import ReportBugBtn from './menu-buttons/ReportBugBtn';
     import ReviewBtn from './menu-buttons/ReviewBtn';
-    /* import ExportBtn from './menu-buttons/ExportBtn'; */
+    import VideoBtn from './menu-buttons/VideoBtn';
     import SettingsBtn from './menu-buttons/SettingsBtn';
     import CloseBtn from './menu-buttons/CloseBtn';
+    import VideoRecord from './VideoRecord';
     import operators from '../common/operators';
     import select from '../common/select';
 
@@ -29,9 +36,10 @@
             SelectBtn,
             ReportBugBtn,
             ReviewBtn,
-            /* ExportBtn, */
+            VideoBtn,
             SettingsBtn,
-            CloseBtn
+            CloseBtn,
+            VideoRecord,
         },
 
         created() { 
@@ -48,7 +56,8 @@
                     clientY: undefined,
                     movementX: 0,
                     movementY: 0
-                }
+                },
+                videoMode: false
             }
         },
 
@@ -130,6 +139,14 @@
                 if (touchevent.clientX > 0 && touchevent.clientX < window.innerWidth){
                     draggableContainer.style.left = (draggableContainer.offsetLeft - this.positions.movementX) + 'px'
                 }
+            },
+
+            stopRecord() {
+                this.videoMode = false;
+            },
+
+            startRecord() {
+                this.videoMode = true;
             }
         }
     }

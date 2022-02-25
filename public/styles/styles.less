@@ -28,7 +28,7 @@ body {
     font-family: Roboto;
     flex-direction: column;
     pointer-events: initial !important;
-    min-width: 350px;
+    min-width: 300px;
     padding-bottom: 10px;
     background-color: #ffffff;
     z-index: 99999999;
@@ -102,6 +102,10 @@ body {
                     top: 2px;
                     left: 2px;
                 }
+
+                &.ui-bt-ext-stop-button {
+                    color: @danger-color;
+                }
             }
 
             &:last-child {
@@ -145,6 +149,15 @@ body {
                 left: 0;
                 right: 0;
             }
+        }
+
+        .ui-bt-ext-video-timer {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            border: 1px solid #d7d7d7;
+            height: 10px;
+            border-radius: 6px
         }
     }
 
@@ -320,7 +333,7 @@ body {
 
                             .ui-br-ext-module-icons {
                                 display: flex;
-                                //width: 60px;
+                                width: 30px;
                                 cursor: pointer;
                                 span {
                                     margin: 0 5px;

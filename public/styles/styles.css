@@ -17,7 +17,7 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   font-family: Roboto;
   flex-direction: column;
   pointer-events: initial !important;
-  min-width: 350px;
+  min-width: 300px;
   padding-bottom: 10px;
   background-color: #ffffff;
   z-index: 99999999;
@@ -83,6 +83,9 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   top: 2px;
   left: 2px;
 }
+.ui-br-ext-extension .ui-br-ext-menu-container span svg.ui-bt-ext-stop-button {
+  color: #e04414;
+}
 .ui-br-ext-extension .ui-br-ext-menu-container span:last-child {
   /* margin-right: 2px;
                 margin-left: 8px; */
@@ -118,6 +121,14 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   bottom: 0;
   left: 0;
   right: 0;
+}
+.ui-br-ext-extension .ui-br-ext-menu-container .ui-bt-ext-video-timer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #d7d7d7;
+  height: 10px;
+  border-radius: 6px;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown {
   cursor: default;
@@ -293,6 +304,7 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-form-container .ui-br-ext-search-results ul li .ui-br-ext-module-icons {
   display: flex;
+  width: 30px;
   cursor: pointer;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-form-container .ui-br-ext-search-results ul li .ui-br-ext-module-icons span {

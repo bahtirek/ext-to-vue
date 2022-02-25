@@ -1,7 +1,7 @@
 
 let mediaRecorder;
 
-const startRecord = function(){
+const startRecord = async function(){
     const mimeType = 'video/webm';            
     const displayStream = await navigator.mediaDevices.getDisplayMedia({video: true, audio: true});
     const voiceStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
