@@ -3,14 +3,14 @@
         <div class="ui-br-ext-menu-container ui-br-ext-container ui-br-ext-alwaysOn">
             <template v-if="!videoMode">
                 <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted"  @toggle-extension="$emit('toggle-extension')" />
-                <VideoBtn @toggle-button="toggleButton" @start-record="startRecord" :toggleCompleted="toggleCompleted" />
+                <VideoBtn @toggle-button="toggleButton; videoMode=true" :toggleCompleted="toggleCompleted" />
                 <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <ReviewBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <CloseBtn @toggle-button="toggleButton" />  
             </template>
             <template v-if="videoMode">
-                <VideoRecord @stop-record="stopRecord" />
+                <VideoRecord @toggle-video-drop="toggleVideoDrop" />
             </template>
             
         </div>
@@ -28,6 +28,7 @@
     import VideoRecord from './VideoRecord';
     import operators from '../common/operators';
     import select from '../common/select';
+    import eventBus from '../eventBus';
 
     export default {
         name: 'MainMenu',
@@ -46,6 +47,13 @@
             this.activateOperator = operators.activateOperator;
             this.onDeselect = select.onDeselect;
             this.removeClickFromBodyOnReport = operators.removeClickFromBodyOnReport;
+        },
+
+        mounted() {
+            eventBus.$on('toggle-video-drop', () => {
+                this.toggleVideoDrop(false)
+                this.videoMode = false
+            })
         },
 
         data() {
@@ -141,12 +149,8 @@
                 }
             },
 
-            stopRecord() {
-                this.videoMode = false;
-            },
-
-            startRecord() {
-                this.videoMode = true;
+            toggleVideoDrop(val){
+                this.$emit('toggle-drop', {id: 'video', state: val})
             }
         }
     }

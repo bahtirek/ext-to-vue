@@ -2,7 +2,7 @@
     <div class="ui-br-ext-video-recorder">
         <StopBtn @stop-record="stopRecord"/> 
         <div class="ui-bt-ext-video-timer">
-            <div></div>
+            <div :style="{width: width+'%'}"></div >
         </div >
     </div>
 </template>
@@ -28,19 +28,16 @@
         mounted (){
             this.start = Date.now();
             console.log(this.start);
-            /* this.timer = setInterval(() => {
-                var delta = Date.now() - this.start; // milliseconds elapsed since start
-                console.log(this.start);
-                console.log(Math.floor(delta / 1000)); // in seconds
-                // alternatively just show wall clock time:
-                console.log(new Date().toUTCString());
-            }, 1000); */
+            this.timer = setInterval(() => {
+                this.width++
+            }, 600);
         },
 
         data() {
             return {
-                time: '00:00:00',
-                start: undefined
+                timer: undefined,
+                start: undefined,
+                width: 1
             }
         },
 
@@ -49,20 +46,29 @@
             stopRecord(){
                 console.log(this.start);
                 clearInterval(this.timer)
-                this.$emit('stop-record')
+                this.$emit('toggle-video-drop', true);
             },
 
-
+            startRecord(){
+                this.$emit('toggle-video-drop', false)
+            }
 
         }
     }
 
 </script>
 
-<style lang="scss">
+<style>
 .ui-br-ext-video-recorder {
     display: flex;
     width: 100%;
     align-items: center;
+}
+
+.ui-bt-ext-video-timer div {
+    background: #e04414;
+    height: 100%;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
 }
 </style >

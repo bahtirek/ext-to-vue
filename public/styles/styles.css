@@ -83,9 +83,6 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   top: 2px;
   left: 2px;
 }
-.ui-br-ext-extension .ui-br-ext-menu-container span svg.ui-bt-ext-stop-button {
-  color: #e04414;
-}
 .ui-br-ext-extension .ui-br-ext-menu-container span:last-child {
   /* margin-right: 2px;
                 margin-left: 8px; */
