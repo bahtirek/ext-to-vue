@@ -69,6 +69,7 @@
             
             preview(){
                 console.log('preview'); 
+                eventBus.$emit('preview')
             },
 
             cancelRecord(){
