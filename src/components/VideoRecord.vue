@@ -1,6 +1,6 @@
 <template>
     <div class="ui-br-ext-video-recorder">
-        <StopBtn @stop-record="stopRecord"/> 
+        <StopBtn @stop-record="stopRecord" @start-record="startRecord" /> 
         <div class="ui-bt-ext-video-timer">
             <div :style="{width: width+'%'}"></div >
         </div >

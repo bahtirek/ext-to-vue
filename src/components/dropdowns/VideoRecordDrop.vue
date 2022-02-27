@@ -72,8 +72,9 @@
             },
 
             cancelRecord(){
-                eventBus.$emit('toggle-video-drop')
-            }
+                eventBus.$emit('toggle-video-drop', {drop: false, videoMode: false})
+            },
+
             
         }
     }

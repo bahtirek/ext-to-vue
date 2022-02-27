@@ -50,9 +50,9 @@
         },
 
         mounted() {
-            eventBus.$on('toggle-video-drop', () => {
-                this.toggleVideoDrop(false)
-                this.videoMode = false
+            eventBus.$on('toggle-video-drop', (data) => {
+                this.toggleVideoDrop(data.drop)
+                this.videoMode = data.videoMode
             })
         },
 
