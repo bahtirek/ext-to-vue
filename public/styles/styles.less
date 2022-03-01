@@ -147,7 +147,7 @@ body {
             }
         }
 
-        .ui-bt-ext-video-timer {
+        .ui-br-ext-video-timer {
             display: flex;
             align-items: center;
             width: 100%;
@@ -230,6 +230,10 @@ body {
                         cursor: pointer;
                         margin: 0;
                         padding: 0;
+                    }
+
+                    &:disabled {
+                        cursor: not-allowed;
                     }
 
                     .ui-br-ext-disclaimer {
@@ -693,6 +697,82 @@ body {
         pointer-events: none;
         cursor: not-allowed;
     }
+
+    /* Video Recorder Styles START */
+
+    .ui-br-ext-menu-container {
+        .ui-br-ext-video-recorder {
+            display: flex;
+            width: 100%;
+            align-items: center;
+
+            .ui-br-ext-operator {
+                display: flex;
+                align-items: center;
+            }
+
+            .ui-br-ext-video-timer {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                border: 1px solid #d7d7d7;
+                height: 10px;
+                border-radius: 6px;
+                margin: 0 10px;  
+
+                div {
+                    background: #e04414;
+                    height: 100%;
+                    border-radius: 6px;
+                }
+            }
+
+            .ui-br-ext-preview {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: #00000090;
+                z-index: 2147483647;
+                z-index: 2147483647;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+    
+                .ui-br-ext-video-box {
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+    
+                    .ui-br-ext-close {
+                        position: absolute;
+                        top: -30px;
+                        right: 50%;
+                        transform: translateY(-50%);
+                        width: 30px;
+                        height: 30px;
+                        background: #00000080;
+                        border-radius: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
+                    }
+                
+                    video {
+                        width: 90%;
+                        height: auto;
+                    }
+                }
+            }
+        }
+    }
+      
+    /* Video Recorder Styles START */
+
+
 }
 
 @-webkit-keyframes spin {

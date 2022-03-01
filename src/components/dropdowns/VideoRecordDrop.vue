@@ -4,7 +4,7 @@
         <div class="ui-br-ext-drop-title">Screen Capture</div>
 
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-            <input type="checkbox" name="jira" v-model="upload" id="ui-br-ext-upload-video">
+            <input type="checkbox" name="jira" v-model="upload" disabled="canUpload" id="ui-br-ext-upload-video">
             <label for="ui-br-ext-upload-video">Upload</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
@@ -31,6 +31,7 @@
 <script>
     import video from '../../common/videorecorder';   
     import eventBus from '../../eventBus';
+    import { globalStore } from './../../main';
 
     export default {
         name: 'VideoRecordDrop',
@@ -38,22 +39,30 @@
         components: {
         },
         
-        created() { 
+        computed: {
             
         },
 
-        mounted() {
-            
+        mounted: function () {
+            this.account = globalStore.store.account;
+            this.module = globalStore.store.currentModule;
+            this.project = globalStore.store.project;
+            this.canUpload = this.isUploadable();
         },
 
         data() {
             return {
                 upload: false,
-                download: false
+                download: false,
+                canUpload: false
             }
         },
 
         methods: {
+
+            isUploadable() {
+                if(this.project && this.project.id && this.module && this.module.id) return true;
+            },
 
             startVideo(){
                 console.log('start')
@@ -63,8 +72,9 @@
                 console.log('stop')
             },
 
-            saveVideo(){
-               console.log('save'); 
+            saveVideo(){ 
+               if(this.upload) eventBus.$emit('upload')
+               if(this.download) eventBus.$emit('download')
             },
             
             preview(){
@@ -74,32 +84,7 @@
 
             cancelRecord(){
                 eventBus.$emit('toggle-video-drop', {drop: false, videoMode: false})
-            },
-
-            
+            },           
         }
     }
 </script>
-
-<style>
-
-    .ui-br-ext-operator {
-        display: flex;
-        align-items: center;
-    }
-    .ui-br-ext-video-recorder {
-        display: flex;
-        width: 100%;
-        align-items: center;
-    }
-
-    .ui-bt-ext-video-timer {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        border: 1px solid #d7d7d7;
-        height: 10px;
-        border-radius: 6px;
-        margin: 0 10px;  
-    }
-</style >
