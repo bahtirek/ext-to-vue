@@ -11,15 +11,15 @@
 
 <script>
 
-    //import operators from '../../common/operators';
+    import evenBus from '../../eventBus';
 
     export default {
         name: 'StopBtn',
         
         props: ['toggleCompleted'],
         
-        created() { 
-            //this.onSelect = operators.onSelect;
+        mounted() { 
+            evenBus.$on('permission-denied', this.stopRecord)
         },
 
         data() {

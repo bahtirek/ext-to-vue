@@ -59,12 +59,19 @@
         methods: {
 
             async startRecord(){  
-                this.recordedChunks = [];         
-                const displayStream = await navigator.mediaDevices.getDisplayMedia({video: true, audio: true});
-                const voiceStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                let tracks = [...displayStream.getTracks(), ...voiceStream.getAudioTracks()]
-                const stream = new MediaStream(tracks);
-                this.mediaRecorder = this.createRecorder(stream);
+                this.recordedChunks = [];   
+                try {
+                    const displayStream = await navigator.mediaDevices.getDisplayMedia({video: true, audio: true});
+                    const voiceStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    let tracks = [...displayStream.getTracks(), ...voiceStream.getAudioTracks()]
+                    const stream = new MediaStream(tracks);
+                    this.mediaRecorder = this.createRecorder(stream);
+                } catch (error) {
+                    console.log(error);
+                    eventBus.$emit('permission-denied');
+                    this.time = 0;
+                    this.width = 0;
+                }      
             },
 
             stopRecord(){
@@ -108,7 +115,7 @@
             onStopRecord(){
                 clearInterval(this.timer)
                 this.$emit('toggle-video-drop', true);
-                this.mediaRecorder.stop();
+                if(this.mediaRecorder) this.mediaRecorder.stop();
             },
 
             onStartRecord(){
