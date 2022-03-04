@@ -21,6 +21,7 @@
         created() { 
             this.onSelect = operators.onSelect;
             this.onGetScreenshot = screenshot.getScreenshot;
+            this.getQueryWidth = screenshot.getQueryWidth;
         },
 
         mounted: function () {
