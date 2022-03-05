@@ -3,7 +3,7 @@
     <div>
         <div class="ui-br-ext-form-title">{{action}}</div >
 
-        <form novalidate name="ui-br-ext-new-project">
+        <form novalidate name="ui-br-ext-new-project" onsubmit="return false">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-project-label">Project key</label>
                 <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" maxlength="10" minlength="2"/>
