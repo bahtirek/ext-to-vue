@@ -6,7 +6,7 @@
         </div >
         <div class="ui-br-ext-preview" v-show="onPreview">
             <div class="ui-br-ext-video-box">
-                <div class="ui-br-ext-close" @click="onPreview = false">
+                <div class="ui-br-ext-close" @click="stopPreview">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f7f7f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </div>
                 <video ref="playVideoCapture" :src="video" controls>
@@ -148,7 +148,9 @@
                 const newObjectUrl = URL.createObjectURL( blob );
 
                 // URLs created by `URL.createObjectURL` always use the `blob:` URI scheme: https://w3c.github.io/FileAPI/#dfn-createObjectURL
-                const oldObjectUrl = videoEl.currentSrc;
+                let oldObjectUrl;
+                if (videoEl && videoEl.currentSrc) oldObjectUrl = videoEl.currentSrc;
+                
                 if( oldObjectUrl && oldObjectUrl.startsWith('blob:') ) {
                     // It is very important to revoke the previous ObjectURL to prevent memory leaks. Un-set the `src` first.
                     // See https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
@@ -159,6 +161,12 @@
 
                 videoEl.src = newObjectUrl;
             },
+
+            stopPreview(){
+                let videoEl = this.$refs.playVideoCapture;
+                videoEl.pause();
+                this.onPreview = false;
+            }
         }
     }
 

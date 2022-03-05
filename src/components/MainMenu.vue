@@ -3,7 +3,7 @@
         <div class="ui-br-ext-menu-container ui-br-ext-container ui-br-ext-alwaysOn">
             <template v-if="!videoMode">
                 <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted"  @toggle-extension="$emit('toggle-extension')" />
-                <VideoBtn @toggle-button="toggleButton; videoMode=true" :toggleCompleted="toggleCompleted" />
+                <VideoBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <ReviewBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
@@ -85,7 +85,9 @@
             
             toggleDrops(id, state){
                 id = id.replace('ui-br-ext-', "").replace(/-/g, "").replace('button', '');
+                if(id == 'video') state = false;// don't expand video drop on video btn click
                 this.$emit('toggle-drop', {id: id, state: state});
+                if (id == 'video') this.videoMode = true;
             },
 
             onMouseDown: function (event) {
