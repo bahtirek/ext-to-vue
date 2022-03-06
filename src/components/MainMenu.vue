@@ -3,9 +3,9 @@
         <div class="ui-br-ext-menu-container ui-br-ext-container ui-br-ext-alwaysOn">
             <template v-if="!videoMode">
                 <SelectBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted"  @toggle-extension="$emit('toggle-extension')" />
-                <VideoBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <ReportBugBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <ReviewBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
+                <VideoBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <SettingsBtn @toggle-button="toggleButton" :toggleCompleted="toggleCompleted" />
                 <CloseBtn @toggle-button="toggleButton" />  
             </template>
