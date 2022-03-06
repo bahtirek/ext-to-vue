@@ -90,10 +90,14 @@
 
                 this.errorMessage.projectKey = '';
                 this.errorMessage.jiraId = '';
-                
+                this.newProject.projectKey = this.newProject.projectKey.trim();
                 if(this.newProject.projectKey != ''){
 
                     // Request jira id if Jira
+
+                    if(this.newProject.saveToJira && this.newProject.jiraId) {
+                        this.newProject.jiraId = this.newProject.jiraId.trim()
+                    }
                     if(this.newProject.saveToJira && this.newProject.jiraId == '') {
                         this.errorMessage.jiraId = 'Enter jira id ';
                         return false;
