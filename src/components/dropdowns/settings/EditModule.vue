@@ -6,12 +6,12 @@
         <form novalidate name="ui-br-ext-new-module" onsubmit="return false">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-module-label">Module name</label>
-                <input type="text" name="ui-br-ext-new-module-label" v-model="newModule.moduleName" maxlength="10" minlength="2"/>
-                <span class="ui-br-ext-message">{{errorMessage.moduleName}}</span>
+                <input type="text" name="ui-br-ext-new-module-label" v-model="newModule.name" maxlength="10" minlength="2"/>
+                <span class="ui-br-ext-message">{{errorMessage.name}}</span>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-module-label">Module description</label>
-                <textarea type="text" name="ui-br-ext-new-module-label" v-model="newModule.moduleDescr"></textarea>
+                <textarea type="text" name="ui-br-ext-new-module-label" v-model="newModule.description"></textarea>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="newModule.id && !newModule.allowDelete">
                 <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newModule.inactivate">
@@ -50,7 +50,8 @@
         props: [
             'module',
             'account',
-            'user'
+            'user',
+            'project'
         ],
 
         mounted() {
@@ -66,11 +67,11 @@
         data() {
             return {
                 newModule: {
-                    moduleName: '',
-                    moduleDescr: '', 
+                    name: '',
+                    description: '', 
                     inactivate: false
                 },
-                errorMessage: {moduleName: ''},
+                errorMessage: {name: ''},
                 action: 'Create new module',
                 moduleStatusEnum: {
                     active: 1,
@@ -82,36 +83,36 @@
         methods: {
             async saveModule(){
 
-                this.errorMessage.moduleName = '';
-                this.newModule.moduleName = this.newModule.moduleName.trim();
-                this.newModule.moduleDescr = this.newModule.moduleDescr.trim();
-                if(this.newModule.moduleName && this.newModule.moduleName != ''){
+                this.errorMessage.name = '';
+                this.newModule.name = this.newModule.name.trim();
+                this.newModule.description = this.newModule.description.trim();
+                if(this.newModule.name && this.newModule.name != ''){
 
                     try {
-                        let moduleId = undefined;
+                        let module = undefined;
 
                         if (this.newModule.id) {
-                            moduleId = await this.patch({...this.newModule, ...this.account});
+                            module = await this.patch({...this.newModule, ...this.account, projectId: this.project.id});
                         } else {
-                            moduleId = await this.post({...this.newModule, ...this.account});
+                            module = await this.post({...this.newModule, ...this.account, projectId: this.project.id});
                         }
                         
-                        console.log(moduleId);
-                        if(moduleId){ 
-                            this.$emit('saveModule', this.newModule)
+                        console.log(module);
+                        if(module){ 
+                            this.$emit('saveModule', module.result)
                         }                    
                     } catch(error) {
                         console.log(error.error);
-                        this.errorMessage.moduleName = error.error
+                        this.errorMessage.name = error.error
                     }                                      
                 } else {
-                    this.errorMessage.moduleName = 'Enter module key'
+                    this.errorMessage.name = 'Enter module key'
                 }
             },
 
             resetModule() {
-                this.newModule.moduleName = '';
-                this.newModule.moduleDescr = '';
+                this.newModule.name = '';
+                this.newModule.description = '';
                 this.newModule.saveToJira = undefined;
                 this.action = 'Create new module';
                 delete this.newModule.id;
@@ -121,7 +122,7 @@
             async deleteModule(module) {
                 if (confirm('Are you suuure?')) {
                     try {
-                        const result = await this.delete(this.module.id, this.account);
+                        const result = await this.delete(this.module.id, this.account, this.project.id);
                         console.log(result.status == 'success');
 
                         if(result){ 
@@ -145,6 +146,7 @@
                 if(this.module && this.module.id) {
                     this.action = 'Edit module';
                     this.newModule = {...this.module};
+                    console.log(this.newModule);
                     this.newModule.inactivate = this.newModule.lkModuleStatusId == this.moduleStatusEnum.active ? false : true;
                 }
             }

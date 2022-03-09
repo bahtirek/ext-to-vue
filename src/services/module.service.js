@@ -7,12 +7,12 @@ const postModule = (data) => {
     console.log(data);
     console.log(saveToJira);
     return new Promise((resolve, reject) => {
-        axios.post(`${data.repositoryServer}module`, {
+        axios.post(`${data.repositoryServer}/module`, {
             registrationKey: data.registrationKey, 
             token: data.token,
-            saveToJira: saveToJira,
-            moduleKey: data.moduleKey,
-            jiraId: data.jiraId
+            name: data.name,
+            description: data.description,
+            projectId: data.projectId
         }).then(function (response) {
             console.log(response);
             resolve(response.data)
@@ -34,17 +34,13 @@ const postModule = (data) => {
 }
 
 const patchModule = (data) => {
-    let saveToJira = 0;
-    if (data.saveToJira) saveToJira = 1;
-    console.log(saveToJira);
-
     return new Promise((resolve, reject) => {
-        axios.patch(`${data.repositoryServer}module`, {
+        axios.patch(`${data.repositoryServer}/module`, {
             registrationKey: data.registrationKey, 
             token: data.token,
-            saveToJira: saveToJira,
-            moduleKey: data.moduleKey,
-            jiraId: data.jiraId,
+            name: data.name,
+            description: data.description,
+            projectId: data.projectId,
             lkModuleStatusId: data.lkModuleStatusId,
             id: data.id
         }).then(function (response) {
@@ -72,8 +68,9 @@ const patchModule = (data) => {
 const getModules = (account, query, projectId) => {
     console.log(account.registrationKey);
     console.log(account.token);
+    console.log(projectId);
     return new Promise((resolve, reject) => {       
-        axios.get(`${account.repositoryServer}module`, {
+        axios.get(`${account.repositoryServer}/module`, {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
@@ -82,7 +79,7 @@ const getModules = (account, query, projectId) => {
                 //includeInactive: account.isAdmin
             }
         }).then(function (response) {
-            console.log(response.data.result);
+            console.log(response);
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
@@ -101,11 +98,11 @@ const getModules = (account, query, projectId) => {
     })
 }
 
-const deleteModule = (id, account) => {
+const deleteModule = (id, account, projectId) => {
     console.log(id);
     console.log(account.token);
     return new Promise((resolve, reject) => {       
-        axios.delete(`${account.repositoryServer}module`, {
+        axios.delete(`${account.repositoryServer}/module`, {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,

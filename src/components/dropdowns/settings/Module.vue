@@ -115,15 +115,10 @@
 
             onResultClick(module) {
                 this.searchQuery = '';
+                this.searchResults = [];
                 this.currentModule = module;
                 globalStore.store.currentModule = module;
                 eventBus.$emit('account-loaded')
-            },
-
-            onModuleEdit2(module) {
-                console.log(module);
-                this.showAddModule = true;
-                this.module = module
             },
 
             onModuleEdit(module) {
