@@ -7,7 +7,7 @@ const postProject = (data) => {
     console.log(data);
     console.log(saveToJira);
     return new Promise((resolve, reject) => {
-        axios.post(`${data.repositoryServer}project`, {
+        axios.post(`${data.repositoryServer}/project`, {
             registrationKey: data.registrationKey, 
             token: data.token,
             saveToJira: saveToJira,
@@ -33,13 +33,43 @@ const postProject = (data) => {
     });
 }
 
+const statusPatchProject = (data) => {
+    console.log(data);
+
+    return new Promise((resolve, reject) => {
+        axios.patch(`${data.repositoryServer}/project-status`, {
+            registrationKey: data.registrationKey, 
+            token: data.token,
+            lkProjectStatusId: data.lkProjectStatusId,
+            id: data.id
+        }).then(function (response) {
+            console.log(response.data);
+            resolve(response.data)
+        }).catch(function (error) {
+            
+            console.log(error.response);
+            if (error.response) {
+                if(error.response.status == 401){
+                    alert("Unauthorized");
+                    return false
+                }
+                reject(error.response.data);
+            } else if (error.request) {
+                alert('Please check connection');
+            } else {
+                alert('Sorry, something went wrong please try again later');
+            }
+        });
+    });
+}
+
 const patchProject = (data) => {
     let saveToJira = 0;
     if (data.saveToJira) saveToJira = 1;
-    console.log(saveToJira);
+    console.log(data);
 
     return new Promise((resolve, reject) => {
-        axios.patch(`${data.repositoryServer}project`, {
+        axios.patch(`${data.repositoryServer}/project`, {
             registrationKey: data.registrationKey, 
             token: data.token,
             saveToJira: saveToJira,
@@ -70,10 +100,8 @@ const patchProject = (data) => {
 
 
 const getProjects = (account, query) => {
-    console.log(account.registrationKey);
-    console.log(account.token);
     return new Promise((resolve, reject) => {       
-        axios.get(`${account.repositoryServer}project`, {
+        axios.get(`${account.repositoryServer}/project`, {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
@@ -81,7 +109,7 @@ const getProjects = (account, query) => {
                 includeInactive: account.isAdmin
             }
         }).then(function (response) {
-            console.log(response.data.result);
+            console.log(response);
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
@@ -104,7 +132,7 @@ const deleteProject = (id, account) => {
     console.log(id);
     console.log(account.token);
     return new Promise((resolve, reject) => {       
-        axios.delete(`${account.repositoryServer}project`, {
+        axios.delete(`${account.repositoryServer}/project`, {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
@@ -134,5 +162,6 @@ export default {
     postProject,
     patchProject,
     getProjects,
-    deleteProject
+    deleteProject,
+    statusPatchProject
 }

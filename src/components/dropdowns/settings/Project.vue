@@ -16,7 +16,7 @@
                 <div class="ui-br-ext-search-results" v-if="searchResults && searchResults.length > 0">
                     <ul>
                         <li v-for="project in searchResults.slice(0, 10)" :key="project.jiraId">
-                            <span class="ui-br-ext-module-label" @click="onResultClick(project)" :class="{'ui-br-ext-disabled' : project.lkProjectStatusId}" >{{project.projectKey}}</span>
+                            <span class="ui-br-ext-module-label" @click="onResultClick(project)" :class="{'ui-br-ext-disabled' : project.lkProjectStatusId==2}" >{{project.projectKey}}</span>
                             <div class="ui-br-ext-module-icons" v-if="account.isAdmin == 1">
                                 <span @click="onProjectEdit(project)">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -78,6 +78,7 @@
         methods: {
 
             async onResultClick(project) {
+                console.log(project);
                 this.searchQuery = '';
                 this.searchResults = [];
                 this.project = project;

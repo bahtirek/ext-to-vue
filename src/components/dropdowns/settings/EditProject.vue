@@ -6,7 +6,7 @@
         <form novalidate name="ui-br-ext-new-project" onsubmit="return false">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-project-label">Project key</label>
-                <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" maxlength="10" minlength="2"/>
+                <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" maxlength="10" minlength="2" :disabled="newProject.id && newProject.lkProjectStatusId == 2" />
                 <span class="ui-br-ext-message">{{errorMessage.projectKey}}</span>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea" v-if="newProject.saveToJira">
@@ -14,25 +14,25 @@
                 <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.jiraId" maxlength="10" minlength="2" />
                 <span class="ui-br-ext-message">{{errorMessage.jiraId}}</span>
             </div>
-            <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
+            <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey && newProject.lkProjectStatusId == 1">
                 <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.saveToJira">
                 <label for="ui-br-ext-save-to-jira">Jira project</label>
             </div>
-            <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="newProject.id && !newProject.allowDelete">
-                <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.inactivate">
-                <label for="ui-br-ext-save-to-jira">Inactivate</label>
-            </div>
         </form>
         <div class="ui-br-ext-btn-group">
-            <button class="ui-br-ext-btn" @click="activateProject" data-listener="off" v-if="newProject.id && false">
+            <button class="ui-br-ext-btn" @click="projectStatus(1)" data-listener="off" v-if="newProject.id && newProject.lkProjectStatusId == 2">
                 <span class="ui-br-ext-spinner"></span>
                 <span>Activate</span> 
+            </button>
+            <button class="ui-br-ext-btn" @click="projectStatus(2)" data-listener="off" v-if="newProject.id && !newProject.allowDelete && newProject.lkProjectStatusId == 1">
+                <span class="ui-br-ext-spinner"></span>
+                <span>Inactivate</span> 
             </button>
             <button class="ui-br-ext-btn" @click="deleteProject" data-listener="off" v-if="newProject.id && newProject.allowDelete">
                 <span class="ui-br-ext-spinner"></span>
                 <span>Delete</span> 
             </button>
-            <button class="ui-br-ext-btn" @click="saveProject" data-listener="off">
+            <button class="ui-br-ext-btn" @click="saveProject" data-listener="off" >
                 <span class="ui-br-ext-spinner"></span>
                 <span>Save</span> 
             </button>
@@ -65,6 +65,7 @@
         created() {
             this.post = projectService.postProject;
             this.patch = projectService.patchProject;
+            this.statusPatch = projectService.statusPatchProject;
             this.delete = projectService.deleteProject;
         },
 
@@ -96,7 +97,7 @@
                     // Request jira id if Jira
 
                     if(this.newProject.saveToJira && this.newProject.jiraId) {
-                        this.newProject.jiraId = this.newProject.jiraId.trim()
+                        this.newProject.jiraId = this.newProject.jiraId.toString().trim()
                     }
                     if(this.newProject.saveToJira && this.newProject.jiraId == '') {
                         this.errorMessage.jiraId = 'Enter jira id ';
@@ -104,17 +105,19 @@
                     }
 
                     try {
-                        let projectId = undefined;
+                        let project = undefined;
 
                         if (this.newProject.id) {
-                            projectId = await this.patch({...this.newProject, ...this.account});
+                            if(this.newProject.inactivate) this.newProject.lkProjectStatusId = 2;
+                            project = await this.patch({...this.newProject, ...this.account});
                         } else {
-                            projectId = await this.post({...this.newProject, ...this.account});
+                            project = await this.post({...this.newProject, ...this.account});
                         }
                         
-                        console.log(projectId);
-                        if(projectId){ 
-                            this.$emit('saveProject', this.newProject)
+                        console.log(project);
+                        if(project.result){
+                            if(project.result.lkProjectStatusId == 2) project = {} 
+                            this.$emit('saveProject', project.result)
                         }                    
                     } catch(error) {
                         console.log(error.error);
@@ -138,7 +141,6 @@
                 if (confirm('Are you suuure?')) {
                     try {
                         const result = await this.delete(this.project.id, this.account);
-                        console.log(result.status == 'success');
 
                         if(result){ 
                             this.$emit('deleteProject')
@@ -153,8 +155,18 @@
                 }
             },
 
-            activateProject(project) {
-                console.log(project);
+            async projectStatus(value) {
+                try {
+                    this.newProject.lkProjectStatusId = value;
+                    const project = await this.statusPatch({...this.newProject, ...this.account});
+                    console.log(project);
+                    if(project.result){ 
+                        this.$emit('saveProject', project.result)
+                    }                    
+                } catch(error) {
+                    console.log(error.error);
+                    this.errorMessage.projectKey = error.error
+                } 
             },
 
             isEditing() {
@@ -166,4 +178,5 @@
             }
         }
     }
+
 </script>
