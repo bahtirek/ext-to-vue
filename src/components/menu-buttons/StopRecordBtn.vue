@@ -11,7 +11,7 @@
 
 <script>
 
-    import evenBus from '../../eventBus';
+    import eventBus from '../../eventBus';
 
     export default {
         name: 'StopBtn',
@@ -19,7 +19,8 @@
         props: ['toggleCompleted'],
         
         mounted() { 
-            evenBus.$on('permission-denied', this.stopRecord)
+            eventBus.$on('permission-denied', this.stopRecord)
+            eventBus.$on('click-stop', this.stopRecord)
         },
 
         data() {

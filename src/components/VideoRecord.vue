@@ -138,7 +138,9 @@
             timerBody(){
                 this.width++;
                 this.time++;
-                if (this.time == 100) clearInterval(this.timer)
+                if (this.time == 100) {
+                    eventBus.$emit('click-stop')
+                }
             },
 
             preview(){
