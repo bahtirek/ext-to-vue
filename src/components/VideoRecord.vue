@@ -4,6 +4,7 @@
         <div class="ui-br-ext-video-timer">
             <div :style="{width: width+'%'}"></div >
         </div >
+        <span class="ui-br-ext-message">{{error}}</span>
         <div class="ui-br-ext-preview" v-show="onPreview">
             <div class="ui-br-ext-video-box">
                 <div class="ui-br-ext-close" @click="stopPreview">
@@ -52,7 +53,8 @@
                 mediaRecorder: undefined,
                 recordedChunks: [],
                 mimeType:'video/webm',
-                video: ''
+                video: '',
+                error: ''
             }
         },
 
@@ -67,7 +69,8 @@
                     const stream = new MediaStream(tracks);
                     this.mediaRecorder = this.createRecorder(stream);
                 } catch (error) {
-                    console.log(error);
+                    console.log(error.message);
+                    this.error = error.message;
                     eventBus.$emit('permission-denied');
                     this.time = 0;
                     this.width = 0;
@@ -119,6 +122,7 @@
             },
 
             onStartRecord(){
+                this.error = '';
                 this.time = 0;
                 this.width = 0;
                 this.$emit('toggle-video-drop', false);

@@ -285,17 +285,6 @@ body {
                     }
                 }
 
-                .ui-br-ext-message {
-                    font-size: 10px;
-                    display: none;
-                    max-width: 250px;
-                    position: absolute;
-                    bottom: -13px;
-                    left: 10px;
-                    display: block;
-                    color: red;
-                }
-
                 .ui-br-ext-search-icon {
                     position: absolute;
                     right: 6px;
@@ -646,6 +635,17 @@ body {
 
     }
 
+    .ui-br-ext-message {
+        font-size: 10px;
+        display: none;
+        max-width: 250px;
+        position: absolute;
+        bottom: -13px;
+        left: 10px;
+        display: block;
+        color: red;
+    }
+
     .show {
         display: flex !important;
     }
@@ -728,6 +728,12 @@ body {
                     height: 100%;
                     border-radius: 6px;
                 }
+            }
+
+            .ui-br-ext-message {
+                position: absolute!important;
+                bottom: -9px;
+                left: 41px;
             }
 
             .ui-br-ext-preview {
