@@ -10,6 +10,7 @@ const postModule = (data) => {
         axios.post(`${data.repositoryServer}/module`, {
             registrationKey: data.registrationKey, 
             token: data.token,
+            uuid: data.uuid,
             name: data.name,
             description: data.description,
             projectId: data.projectId
@@ -38,6 +39,7 @@ const patchModule = (data) => {
         axios.patch(`${data.repositoryServer}/module`, {
             registrationKey: data.registrationKey, 
             token: data.token,
+            uuid: data.uuid,
             name: data.name,
             description: data.description,
             projectId: data.projectId,
@@ -74,6 +76,7 @@ const getModules = (account, query, projectId) => {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
+                uuid: account.uuid,
                 query: query,
                 projectId: projectId,
                 //includeInactive: account.isAdmin
@@ -106,6 +109,7 @@ const deleteModule = (id, account, projectId) => {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
+                uuid: account.uuid,
                 id: id
             }
         }).then(function (response) {

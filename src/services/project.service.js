@@ -10,6 +10,7 @@ const postProject = (data) => {
         axios.post(`${data.repositoryServer}/project`, {
             registrationKey: data.registrationKey, 
             token: data.token,
+            uuid: data.uuid,
             saveToJira: saveToJira,
             projectKey: data.projectKey,
             jiraId: data.jiraId
@@ -40,6 +41,7 @@ const statusPatchProject = (data) => {
         axios.patch(`${data.repositoryServer}/project-status`, {
             registrationKey: data.registrationKey, 
             token: data.token,
+            uuid: data.uuid,
             lkProjectStatusId: data.lkProjectStatusId,
             id: data.id
         }).then(function (response) {
@@ -73,6 +75,7 @@ const patchProject = (data) => {
             registrationKey: data.registrationKey, 
             token: data.token,
             saveToJira: saveToJira,
+            uuid: data.uuid,
             projectKey: data.projectKey,
             jiraId: data.jiraId,
             lkProjectStatusId: data.lkProjectStatusId,
@@ -105,6 +108,7 @@ const getProjects = (account, query) => {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
+                uuid: account.uuid,
                 query: query,
                 includeInactive: account.isAdmin
             }
@@ -136,6 +140,7 @@ const deleteProject = (id, account) => {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
+                uuid: account.uuid,
                 id: id
             }
         }).then(function (response) {
