@@ -35,7 +35,7 @@
 
                 <EditModule v-if="showAddModule" @saveModule="saveModule" @cancelEditing="cancelEditing" @deleteModule="deleteModule" :project="project" :module="moduleToEdit" :account="account" :user="user" />
             </div>
-            <div v-if="!project" class="ui-br-ext-warning-text" >
+            <div v-if="!project.id" class="ui-br-ext-warning-text" >
                 Choose project first
             </div>
         </div>
