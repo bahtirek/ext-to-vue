@@ -61,6 +61,9 @@
             this.project = globalStore.store.project;
             this.user = globalStore.store.user;
             this.get = projectService.getProjects;
+            eventBus.$on('regkey-updated', () => {
+                this.onResultClick({})
+            })
         },
 
         data() {

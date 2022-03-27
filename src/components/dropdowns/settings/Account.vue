@@ -17,7 +17,7 @@
                 <input type="text" name="regKey" v-model="reg.key"/>
                 <span class="ui-br-ext-message">{{reg.error}}</span>
             </div>
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
+            <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off" :disabled="reg.spinner" :class="{ disabled: reg.spinner }">
                 <span class="ui-br-ext-spinner" :class="{ active: reg.spinner }"></span>
                 <span @click="onRegKeySave">Save</span > 
             </button>
@@ -79,7 +79,7 @@
                         });
                     if(this.account) {
                         globalStore.store.account = this.account;
-                        eventBus.$emit('account-loaded');
+                        eventBus.$emit('regkey-updated');
                         try {
                             await this.localStorage.set('regKey', this.reg.key);
                         } catch(error) {
