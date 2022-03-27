@@ -30,10 +30,10 @@
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
             <input type="checkbox" name="screenshot" id="ui-br-ext-save-to-screenshot" v-model="report.saveScreenshot">
-            <label for="ui-br-ext-save-to-screenshot">Attach screenshot</label>
+            <label for="ui-br-ext-save-to-screenshot">Download screenshot</label>
             <span class="ui-br-ext-disclaimer">Make sure to remove personal identity information</span>
         </div>
-        <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveReport" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
+        <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="formValidation" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
             <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
             <span>Save</span> 
         </button>
@@ -131,24 +131,28 @@
 
         methods: {
 
+            async  formValidation(){
+                console.log(await this.$refs.reportForm.formValidation());
+                if(await this.$refs.reportForm.formValidation()) {
+                    Object.assign(this.report, this.$refs.reportForm.form);
+                    this.saveReport();
+                }
+            },
+
             async saveReport(){
                 this.submitInPorgress = true;
-                Object.assign(this.report, this.$refs.reportForm.form);
 
                 this.filename = this.getFileName(this.currentModule.name);
 
-                if(this.report.saveScreenshot) {
-                    if(!globalStore.store.dynamicDomFlow) {
+                if(!globalStore.store.dynamicDomFlow) {
                         await this.getScreenshot();
-                    } else {
-                        this.report.screenshot = globalStore.store.screenshot;
-                        this.report.queryWidth = globalStore.store.queryWidth;
-                    }
+                } else {
+                    this.report.screenshot = globalStore.store.screenshot;
+                    this.report.queryWidth = globalStore.store.queryWidth;
+                }
 
-                    if(!this.report.savePdf){
-                        if(!this.report.sendEmail)
-                            this.screenshotLink(this.report.screenshot, this.filename);
-                    }
+                if(this.report.saveScreenshot) {
+                    this.screenshotLink(this.report.screenshot, this.filename);
                 }
 
                 if(this.report.savePdf){
@@ -238,7 +242,8 @@
                 }
             },
 
-            onFileUploadComplete(){
+            onFileUploadComplete() { 
+                alert('Bug report successfully created.')
                 this.resetReportData();
             }
         }

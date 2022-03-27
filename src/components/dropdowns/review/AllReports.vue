@@ -5,9 +5,9 @@
             
             <UserDetails :user="report.user" />
 
-            <div class="ui-br-ext-review-box ui-br-ext-ellipsis" v-if="report.content.description" @click="showDetails(index)">
+            <div class="ui-br-ext-review-box ui-br-ext-ellipsis" v-if="report.description" @click="showDetails(index)">
                 <div class="ui-br-ext-review-title">Description:</div>
-                <div class="ui-br-ext-review-text">{{report.content.description}}</div>
+                <div class="ui-br-ext-review-text">{{report.description}}</div>
             </div>
             <span class="ui-br-ext-btn-lnk" v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</span>
         </div>

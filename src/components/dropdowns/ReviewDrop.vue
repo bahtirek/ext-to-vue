@@ -49,14 +49,6 @@
             this.project = globalStore.store.project;
             this.showElements();
 
-            eventBus.$on('account-loaded', (val) => {
-                this.currentModule = globalStore.store.currentModule;
-            });
-
-            eventBus.$on('report-loaded', (val) => {
-                this.reports = globalStore.store.reports;
-            });
-
             eventBus.$on('show-details', (index) => {
                 this.showDetails(index)
             });
@@ -84,7 +76,7 @@
         methods: {
 
             showElements(){
-                
+                console.log(this.reports);
                 for (let index = 0; index < this.reports.length; index++) {
                     this.selectElement(index); 
                     if(index == this.reports.length - 1) {
@@ -109,6 +101,7 @@
                     // move report to the bottom of reports array
                     this.reports.splice(index, 1);
                     this.reports.push(report);
+                    console.log(this.reports);
                     eventBus.$on('report-loaded');
                 }
             },
