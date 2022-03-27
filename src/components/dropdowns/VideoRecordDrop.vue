@@ -4,7 +4,7 @@
         <div class="ui-br-ext-drop-title">Screen Capture</div>
 
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-            <input type="checkbox" name="jira" v-model="upload" disabled="canUpload" id="ui-br-ext-upload-video">
+            <input type="checkbox" name="jira" v-model="upload" :disabled="canUpload" id="ui-br-ext-upload-video">
             <label for="ui-br-ext-upload-video">Upload</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
