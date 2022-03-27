@@ -54,6 +54,9 @@
                 this.toggleVideoDrop(data.drop)
                 this.videoMode = data.videoMode
             })
+            eventBus.$on('toggle-bug-drop', (data) => {
+                this.$emit('toggle-drop', {id: 'report-bug', state: data})
+            })
         },
 
         data() {

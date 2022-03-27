@@ -214,6 +214,7 @@
                 globalStore.store.selectedElementRect = '';
                 this.$refs.reportForm.resetReportData();
                 this.submitInPorgress = false;
+                eventBus.$emit('toggle-bug-drop', false);
             },
 
             setTempReports(){
