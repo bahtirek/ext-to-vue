@@ -53,18 +53,21 @@
                 const ext = /(\.jpg|\.jpeg|\.bmp|\.gif|\.png|\.webm|\.avi|\.mpeg|\.mkv|\.doc|\.docx|\.xls|\.xlsx|\.pdf)$/i;
                 console.log(this.$refs.file.files);
                 const file = this.$refs.file.files[0];
+                const name = file.name;
                 
-                if(file.size < 50000000) {
-                    const name = file.name;
-                    if (!ext.exec(name)) {
-                        alert("File extension not supported!");
-                    } else {
-                        this.files.push(name);
-                        this.formData.append('attachments[' + name + ']', name);
-                    }
-                } else {
-                    alert('File size cannot exceed 50mb')
+                if(file.size > 50000000) {
+                    alert('File size cannot exceed 50mb');
+                    return false;
                 }
+
+                if (!ext.exec(name)) {
+                    alert("File extension not supported!");
+                    return false;
+                } 
+
+                this.files.push(name);
+                this.formData.append('attachments[' + name + ']', name);
+                
             },
 
             async uploadFiles(bugId){
