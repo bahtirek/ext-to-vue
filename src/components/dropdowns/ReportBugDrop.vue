@@ -13,6 +13,8 @@
             
             <ReportForm ref="reportForm" />
 
+            <FileUpload :account="account" ref="fileUploadForm" @onFileUploadComplete="onFileUploadComplete"/>
+
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
             <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveJira">
@@ -31,7 +33,8 @@
             <label for="ui-br-ext-save-to-screenshot">Attach screenshot</label>
             <span class="ui-br-ext-disclaimer">Make sure to remove personal identity information</span>
         </div>
-        <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveReport" data-listener="off">
+        <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveReport" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
+            <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
             <span>Save</span> 
         </button>
 
@@ -53,7 +56,9 @@
     import ProjectDetails from '../shared/ProjectDetails';
     import Resize from '../shared/Resize';
     import ReportForm from '../shared/ReportForm';
+    import FileUpload from '../shared/FileUpload';
     import email from '../../common/email';
+    import reportService from '../../services/save-report.service'
             
     export default {
         name: 'ReportBugDrop',
@@ -63,7 +68,8 @@
             UserDetails,
             Resize,
             ReportForm,
-            ProjectDetails
+            ProjectDetails,
+            FileUpload
         },
         
         created() { 
@@ -73,13 +79,15 @@
             this.savePdf = exportPdf.savePdf;
             this.getElementXpath = select.getElementXpath;
             this.sendEmail = email.sendEmail;
+            this.postBlob = reportService.postBlob;
+            this.postReport = reportService.postReport;
         },
 
         mounted: function () {
             this.account = globalStore?.store?.account;
             this.currentModule = globalStore?.store.currentModule;
             this.user = globalStore?.store.user;
-            this.project = globalStore.store.project;
+            this.project = globalStore?.store.project;
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
@@ -116,13 +124,15 @@
                 },
                 filename: '',
                 name: 'test',
-                elementId: 'ui-br-ext-report-bug'
+                elementId: 'ui-br-ext-report-bug',
+                submitInPorgress: false
             }
         },
 
         methods: {
 
             async saveReport(){
+                this.submitInPorgress = true;
                 Object.assign(this.report, this.$refs.reportForm.form);
 
                 this.filename = this.getFileName(this.currentModule.name);
@@ -152,15 +162,15 @@
                 if(this.report.sendEmail){
                     await this.sendEmail(this.report)
                 }
-
+                
                 this.report.xPath = this.getElementXpath(globalStore.store.selectedElement);
 
                 this.report.url = window.location;
 
                 this.report.user = this.user;
                 
-                this.setTempReports();
-                this.resetReportData();             
+                this.setTempReports(); 
+                this.submitReport();           
             },
 
             async getScreenshot(){
@@ -199,12 +209,37 @@
                 globalStore.store.currentElementInlineStyle = '';
                 globalStore.store.selectedElementRect = '';
                 this.$refs.reportForm.resetReportData();
+                this.submitInPorgress = false;
             },
 
             setTempReports(){
                 globalStore.store.reports.push(this.report);
                 console.log(globalStore.store.reports);
                 eventBus.$emit('report-loaded');
+            },
+
+            async submitReport(){
+                console.log('currentModule', this.currentModule);
+                
+                try {
+                    const report = await this.postReport(this.account, this.currentModule.id, this.report);
+
+                    console.log(report);
+                    if(report.result.bugId){
+                        this.$refs.fileUploadForm.uploadFiles(report.result.bugId);
+                    } else {
+                        alert(`Sorry something went wrong. Please try later`);
+                        this.submitInPorgress = false;
+                    }                  
+                } catch(error) {
+                    console.log(error);
+                    alert(`Sorry something went wrong. Please try later`);
+                    this.submitInPorgress = false;
+                }
+            },
+
+            onFileUploadComplete(){
+                this.resetReportData();
             }
         }
     }
