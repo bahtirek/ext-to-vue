@@ -53,6 +53,10 @@
                 this.account = globalStore.store.account;
                 this.currentModule = globalStore.store.currentModule;
             })
+            eventBus.$on('regkey-updated', (val) => {
+                this.account = globalStore.store.account;
+                this.currentModule = globalStore.store.currentModule;
+            })
         },
 
         data() {
