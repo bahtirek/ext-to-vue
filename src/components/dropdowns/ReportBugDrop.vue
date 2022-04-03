@@ -13,7 +13,7 @@
             
             <ReportForm ref="reportForm" />
 
-            <FileUpload :account="account" ref="fileUploadForm" @onFileUploadComplete="onFileUploadComplete"/>
+            <FileUpload :account="account" ref="fileUploadForm" />
 
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
@@ -172,6 +172,9 @@
                 this.report.url = window.location;
 
                 this.report.user = this.user;
+
+                this.report.attachments = this.$refs.fileUploadForm.getFiles();
+                console.log(this.report);
                 
                 this.setTempReports(); 
                 this.submitReport();           
@@ -205,7 +208,8 @@
                     screenshot: '',
                     xPath: '',
                     url: '',
-                    queryWidth: 550
+                    queryWidth: 550,
+                    attachments: []
                 };
                 globalStore.store.screenshot = '';
                 globalStore.store.dynamicDomFlow = false;
@@ -231,7 +235,8 @@
 
                     console.log(report);
                     if(report.result.bugId){
-                        this.$refs.fileUploadForm.uploadFiles(report.result.bugId);
+                        alert('Bug report successfully created.')
+                        this.resetReportData();
                     } else {
                         alert(`Sorry something went wrong. Please try later`);
                         this.submitInPorgress = false;
@@ -241,11 +246,6 @@
                     alert(`Sorry something went wrong. Please try later`);
                     this.submitInPorgress = false;
                 }
-            },
-
-            onFileUploadComplete() { 
-                alert('Bug report successfully created.')
-                this.resetReportData();
             }
         }
     }

@@ -616,7 +616,7 @@ body {
             &::before {
                 content: "";
                 background-image: url("chrome-extension://@{extensionId}/assets/spinner.svg");
-                background-image: url("../assets/spinner.svg");
+                //background-image: url("../assets/spinner.svg");
                 position: absolute;
                 top: -5px;
                 left: 0;
@@ -675,11 +675,14 @@ body {
                     font-size: 15px;
                     margin-bottom: 10px;
                     color: #707070;
-                    li{
+                    li {
                         display: flex;
+                        align-items: center;
                         span {
                             padding-right: 3px;
                             line-height: 20px;
+                            display: flex;
+                            align-items: center;
                             &:first-child:hover {
                                 cursor: pointer;
                             }

@@ -667,7 +667,6 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-spinner::before {
   content: "";
   background-image: url("chrome-extension://__MSG_@@extension_id__/assets/spinner.svg");
-  background-image: url("../assets/spinner.svg");
   position: absolute;
   top: -5px;
   left: 0;
@@ -721,10 +720,13 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-file-upload-comp .ui-br-ext-file-upload ul li {
   display: flex;
+  align-items: center;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-file-upload-comp .ui-br-ext-file-upload ul li span {
   padding-right: 3px;
   line-height: 20px;
+  display: flex;
+  align-items: center;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-file-upload-comp .ui-br-ext-file-upload ul li span:first-child:hover {
   cursor: pointer;
