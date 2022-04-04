@@ -37,6 +37,7 @@
         
         created() { 
             this.postFiles = reportService.postFiles;
+            this.deleteFile = reportService.deleteFile;
         },
 
         mounted: function () {
@@ -83,12 +84,21 @@
                 }
             },
 
-            removeFile(index){
-                if (index || index >= 0) this.files.splice(index)
+            async removeFile(index){
+                const id = this.files[index]['id'];
+                try {
+                    const result = await this.deleteFile(this.account, id);
+
+                    if(result){
+                        this.files.splice(index)
+                    }                    
+                } catch {
+                    alert(`Sorry something went wrong, we couldn't delete the file(s).`);
+                }
             },
 
             getFiles(){
-                return this.files.map((file)=> file.id )
+                return this.files.map((file)=> file.id)
             }
         }
     }

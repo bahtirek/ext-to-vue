@@ -121,18 +121,13 @@ const postFiles = (account, formData) => {
         });
     })
 }
-const postFiles2 = (account, formData, bugId) => {
+const deleteFile = (account, id) => {
     return new Promise((resolve, reject) => {
-        axios.post(`${account.repositoryServer}/attachment`,  formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
-            params: {
-                registrationKey: account.registrationKey, 
-                token: account.token,
-                uuid: account.uuid,
-                bugId: bugId
-            }
+        axios.delete(`${account.repositoryServer}/temp_attachment`, {
+            registrationKey: account.registrationKey, 
+            token: account.token,
+            uuid: account.uuid,
+            id: id
         }).then(function (response) {
             console.log(response);
             resolve(response.data)
@@ -159,5 +154,6 @@ export default {
     postReport,
     getReports,
     postVideo,
-    postFiles
+    postFiles,
+    deleteFile
 }
