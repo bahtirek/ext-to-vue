@@ -2,23 +2,49 @@
 
     <form class="ui-br-ext-report-form">
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
+            <label for="ui-br-ext-title">Title</label>
+            <textarea name="ui-br-ext-title" v-model="form.title" rows="1" data-gramm="false" maxlength="100"></textarea>
+            <span class="ui-br-ext-message" v-if="count>0 && form.title==''">Field is required</span>
+        </div>
+        
+        <div class="ui-br-ext-form-container ui-br-ext-textarea">
+            <label for="ui-br-ext-modules">Environment</label>
+            <input type="text" v-model="searchQuery" @input="onSearch">
+            <span class="ui-br-ext-message" v-if="searchQuery!=='' && searchResults && searchResults.length == 0">No environments found</span>
+            <span class="ui-br-ext-search-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ad55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </span >
+            <div class="ui-br-ext-search-results" v-if="searchResults && searchResults.length > 0">
+                <ul>
+                    <li v-for="environment in environments.slice(0, 10)" :key="environment.environmentId">
+                        <span class="ui-br-ext-module-label" @click="onResultClick(environment)">{{environment.name}}</span>
+                        <!-- <div class="ui-br-ext-module-icons" v-if="account.isAdmin == 1">
+                            <span @click="onEnvironmentDelete(environment)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                            </span>
+                        </div> -->
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-description">Description</label>
-            <textarea name="ui-br-ext-description" v-model="form.description" rows="2" data-gramm="false"></textarea>
+            <textarea name="ui-br-ext-description" v-model="form.description" rows="2" data-gramm="false" maxlength="1000"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.description==''">Field is required</span>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-act-results">Actual results</label>
-            <textarea name="ui-br-ext-act-results" v-model="form.actualResults" rows="3" data-gramm="false"></textarea>
+            <textarea name="ui-br-ext-act-results" v-model="form.actualResults" rows="3" data-gramm="false" maxlength="1000"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.actualResults==''">Field is required</span>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-exp-results">Expected results</label>
-            <textarea name="ui-br-ext-exp-results" v-model="form.expectedResults" rows="3" data-gramm="false"></textarea>
+            <textarea name="ui-br-ext-exp-results" v-model="form.expectedResults" rows="3" data-gramm="false" maxlength="1000"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.expectedResults==''">Field is required</span>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-rep-steps">Steps to reproduce</label>
-            <textarea name="ui-br-ext-rep-steps" v-model="form.stepsToReproduce" rows="3" data-gramm="false"></textarea>
+            <textarea name="ui-br-ext-rep-steps" v-model="form.stepsToReproduce" rows="3" data-gramm="false" maxlength="1000"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.stepsToReproduce==''">Field is required</span>
         </div>
     </form >
@@ -27,28 +53,34 @@
 
 <script>
 
-    
+    import environmentService from '../../services/environment.service';
 
     export default {
         name: 'ReportForm',
 
         props: [
-            'report'
+            'report',
+            'account'
         ],
 
         mounted() {
-            this.setFormValue()
+            this.setFormValue();
+            this.get = environmentService.getEnvironments;
         },
 
         data() {
             return {
                 form: {
                     description: '',
+                    title: '',
                     actualResults: '',
                     expectedResults: '',
-                    stepsToReproduce: ''
+                    stepsToReproduce: '',
+                    environment: ''
                 },
                 count: 0,
+                searchQuery: '',
+                searchResults: []
             }
         },
 
@@ -57,18 +89,22 @@
             setFormValue(){
                 if(this.report) {
                     this.form.description= this.report.description || "",
+                    this.form.title= this.report.title || "",
                     this.form.actualResults= this.report.actualResults || "",
                     this.form.expectedResults= this.report.expectedResults || "",
-                    this.form.stepsToReproduce= this.report.stepsToReproduce || ""
+                    this.form.stepsToReproduce= this.report.stepsToReproduce || "",
+                    this.form.environment= this.report.environment || ""
                 }
             },
 
             resetReportData(){
                 this.form = {
                     description: '',
+                    title: '',
                     actualResults: '',
                     expectedResults: '',
-                    stepsToReproduce: ''
+                    stepsToReproduce: '',
+                    environment: ''
                 }
             },
 
@@ -87,6 +123,36 @@
                     resolve(false)
 
                 })
+            },
+
+            onSearch() {
+                if (this.timeout) clearTimeout(this.timeout)
+                this.timeout = setTimeout(() => {
+                    this.searchQuery = this.searchQuery.trim();
+                    this.getEnvironments()
+                }, 300);
+            },
+
+            async getEnvironments() {
+                if (this.searchQuery.length != '') {
+                    try {
+                        this.searchResults = await this.get(this.account, this.searchQuery)
+                    } catch(error) {
+                        console.log(error);
+                    }                   
+                } else {
+                    this.searchResults = []
+                }
+            },
+
+            async onResultClick(environment) {
+                this.searchQuery = environment;
+                this.searchResults = [];
+                this.currentenvironment = environment;
+            },
+
+            onEnvironmentDelete(environment) {
+                console.log(environment);
             }
         }
     }
