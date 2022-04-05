@@ -113,12 +113,22 @@
                 }
             },
 
-            onResultClick(module) {
+            async onResultClick(module) {
                 this.searchQuery = '';
                 this.searchResults = [];
                 this.currentModule = module;
                 globalStore.store.currentModule = module;
                 eventBus.$emit('account-loaded')
+                await this.saveToLocal();
+            },
+
+            async saveToLocal(){
+                const moduleString = JSON.stringify(this.currentModule)
+                try{
+                    await this.localStorage.set('module', moduleString)
+                } catch(error) {
+                    console.log(error);
+                }
             },
 
             onModuleEdit(module) {
