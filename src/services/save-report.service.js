@@ -124,10 +124,12 @@ const postFiles = (account, formData) => {
 const deleteFile = (account, id) => {
     return new Promise((resolve, reject) => {
         axios.delete(`${account.repositoryServer}/temp_attachment`, {
-            registrationKey: account.registrationKey, 
-            token: account.token,
-            uuid: account.uuid,
-            id: id
+            params: {
+                registrationKey: account.registrationKey, 
+                token: account.token,
+                uuid: account.uuid,
+                attachment_uuid: id
+            }
         }).then(function (response) {
             console.log(response);
             resolve(response.data)

@@ -74,7 +74,6 @@
 
                 try {
                     const result = await this.postFiles(this.account, formData);
-
                     if(result){
                         this.files[index]['id'] = result.result;
                     }                    
@@ -88,8 +87,7 @@
                 const id = this.files[index]['id'];
                 try {
                     const result = await this.deleteFile(this.account, id);
-
-                    if(result){
+                    if(result.result == "success"){
                         this.files.splice(index)
                     }                    
                 } catch {
