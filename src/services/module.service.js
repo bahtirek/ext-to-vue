@@ -44,7 +44,7 @@ const patchModule = (data) => {
             description: data.description,
             projectId: data.projectId,
             lkModuleStatusId: data.lkModuleStatusId,
-            id: data.id
+            moduleId: data.moduleId
         }).then(function (response) {
             console.log(response.data);
             resolve(response.data)
@@ -101,8 +101,8 @@ const getModules = (account, query, projectId) => {
     })
 }
 
-const deleteModule = (id, account, projectId) => {
-    console.log(id);
+const deleteModule = (moduleId, account, projectId) => {
+    console.log(moduleId);
     console.log(account.token);
     return new Promise((resolve, reject) => {       
         axios.delete(`${account.repositoryServer}/module`, {
@@ -110,7 +110,7 @@ const deleteModule = (id, account, projectId) => {
                 registrationKey: account.registrationKey, 
                 token: account.token,
                 uuid: account.uuid,
-                id: id
+                moduleId: moduleId
             }
         }).then(function (response) {
             console.log(response.data);

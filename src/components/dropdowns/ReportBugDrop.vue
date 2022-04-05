@@ -11,7 +11,7 @@
 
             <div class="ui-br-ext-spacer-3"></div>
             
-            <ReportForm ref="reportForm" />
+            <ReportForm ref="reportForm" :account="account" />
 
             <FileUpload :account="account" ref="fileUploadForm" />
 
@@ -231,7 +231,7 @@
                 console.log('currentModule', this.currentModule);
                 
                 try {
-                    const report = await this.postReport(this.account, this.currentModule.id, this.report);
+                    const report = await this.postReport(this.account, this.currentModule.moduleId, this.report);
 
                     console.log(report);
                     if(report.result.bugId){
