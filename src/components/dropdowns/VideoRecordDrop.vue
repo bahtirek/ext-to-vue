@@ -61,7 +61,7 @@
         methods: {
 
             isUploadable() {
-                if(this.project && this.project.id && this.module && this.module.id) return true;
+                if(this.project && this.project.id && this.module && this.module.moduleId) return true;
             },
 
             startVideo(){
