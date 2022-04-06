@@ -1,0 +1,133 @@
+<template>
+    
+    <div>
+        <div class="ui-br-ext-form-title">{{action}}</div >
+
+        <form novalidate name="ui-br-ext-new-module" onsubmit="return false">
+            <div class="ui-br-ext-form-container ui-br-ext-textarea">
+                <label for="ui-br-ext-new-module-label">Environment name</label>
+                <input type="text" name="ui-br-ext-new-module-label" v-model="newEnvironment.name" maxlength="50" minlength="2"/>
+                <span class="ui-br-ext-message">{{errorMessage.name}}</span>
+            </div>
+        </form>
+        <div class="ui-br-ext-btn-group">
+            <button class="ui-br-ext-btn" @click="deleteEnvironment" data-listener="off" v-if="newEnvironment.environmentId && newEnvironment.allowDelete">
+                <span class="ui-br-ext-spinner"></span>
+                <span>Delete</span> 
+            </button>
+            <button class="ui-br-ext-btn" @click="saveEnvironment" data-listener="off">
+                <span class="ui-br-ext-spinner"></span>
+                <span>Save</span> 
+            </button>
+            <button class="ui-br-ext-btn-danger" @click="resetEnvironment()" data-listener="off">
+                <span class="ui-br-ext-spinner"></span>
+                <span>Cancel</span> 
+            </button>
+        </div>
+    </div>
+        
+</template>
+
+
+<script>
+    import environmentService from '../../../services/environment.service'
+
+    export default {
+        name: 'EditEnvironment',
+
+        props: [
+            'environment',
+            'account',
+            'user',
+            'project'
+        ],
+
+        mounted() {
+            this.isEditing()
+        },
+
+        created() {
+            this.post = environmentService.postEnvironment;
+            this.patch = environmentService.patchEnvironment;
+            this.delete = environmentService.deleteEnvironment;
+        },
+
+        data() {
+            return {
+                newEnvironment: {
+                    name: '',
+                },
+                errorMessage: {name: ''},
+                action: 'Add environment',
+            }
+        },
+
+        methods: {
+            async saveEnvironment(){
+
+                this.errorMessage.name = '';
+                this.newEnvironment.name = this.newEnvironment.name.trim();
+                if(this.newEnvironment.name && this.newEnvironment.name != ''){
+
+                    try {
+                        let environment = undefined;
+
+                        if (this.newEnvironment.environmentId) {
+                            environment = await this.patch({...this.newEnvironment, ...this.account});
+                        } else {
+                            environment = await this.post({...this.newEnvironment, ...this.account});
+                        }
+                        
+                        console.log(environment.result);
+                        if(environment){ 
+                            this.$emit('saveEnvironment', environment.result)
+                        }                    
+                    } catch(error) {
+                        console.log(error.error);
+                        this.errorMessage.name = error.error
+                    }                                      
+                } else {
+                    this.errorMessage.name = 'Enter environment key'
+                }
+            },
+
+            resetEnvironment() {
+                this.newEnvironment.name = '';
+                this.action = 'Create new environment';
+                delete this.newEnvironment;
+                this.$emit('cancelEditing');
+            },
+
+            async deleteEnvironment(environment) {
+                if (confirm('Are you suuure?')) {
+                    try {
+                        const result = await this.delete(this.environment.environmentId, this.account);
+                        console.log(result.status == 'success');
+
+                        if(result){ 
+                            this.$emit('deleteEnvironment')
+                        } else {
+                            alert('Sorry. Something went wrong. Please try later.')
+                        }
+
+                    } catch(error) {
+                        console.log(error);
+                        alert('Sorry. Something went wrong. Please try later.')
+                    }
+                }
+            },
+
+            activateEnvironment(environment) {
+                console.log(environment);
+            },
+
+            isEditing() {
+                if(this.environment && this.environment.environmentId) {
+                    this.action = 'Edit environment';
+                    this.newEnvironment = {...this.environment};
+                    console.log(this.newEnvironment);
+                }
+            }
+        }
+    }
+</script>

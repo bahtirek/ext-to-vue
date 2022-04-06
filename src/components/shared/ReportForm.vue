@@ -16,13 +16,8 @@
             </span >
             <div class="ui-br-ext-search-results" v-if="searchResults && searchResults.length > 0">
                 <ul>
-                    <li v-for="environment in environments.slice(0, 10)" :key="environment.environmentId">
+                    <li v-for="environment in searchResults.slice(0, 10)" :key="environment.environmentId">
                         <span class="ui-br-ext-module-label" @click="onResultClick(environment)">{{environment.name}}</span>
-                        <!-- <div class="ui-br-ext-module-icons" v-if="account.isAdmin == 1">
-                            <span @click="onEnvironmentDelete(environment)">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                            </span>
-                        </div> -->
                     </li>
                 </ul>
             </div>
@@ -80,7 +75,8 @@
                 },
                 count: 0,
                 searchQuery: '',
-                searchResults: []
+                searchResults: [],
+                environment: {}
             }
         },
 
@@ -129,7 +125,7 @@
                 if (this.timeout) clearTimeout(this.timeout)
                 this.timeout = setTimeout(() => {
                     this.searchQuery = this.searchQuery.trim();
-                    this.getEnvironments()
+                    if(this.searchQuery.length > 2) this.getEnvironments()
                 }, 300);
             },
 
@@ -146,9 +142,9 @@
             },
 
             async onResultClick(environment) {
-                this.searchQuery = environment;
+                this.searchQuery = environment.name;
                 this.searchResults = [];
-                this.currentenvironment = environment;
+                this.environment = environment;
             },
 
             onEnvironmentDelete(environment) {
