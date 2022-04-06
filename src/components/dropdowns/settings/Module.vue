@@ -100,7 +100,7 @@
                 if (this.timeout) clearTimeout(this.timeout)
                 this.timeout = setTimeout(() => {
                     this.searchQuery = this.searchQuery.trim();
-                    this.getModules()
+                    if(this.searchQuery.length > 2) this.getModules()
                 }, 300);
             },
 

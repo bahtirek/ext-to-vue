@@ -95,7 +95,7 @@
                 if (this.timeout) clearTimeout(this.timeout)
                 this.timeout = setTimeout(() => {
                     this.searchQuery = this.searchQuery.trim();
-                    this.getProjects()
+                    if(this.searchQuery.length > 2) this.getProjects()
                 }, 300);
             },
 
