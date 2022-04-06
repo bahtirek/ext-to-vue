@@ -10,7 +10,8 @@
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-modules">Environment</label>
             <input type="text" v-model="searchQuery" @input="onSearch">
-            <span class="ui-br-ext-message" v-if="searchQuery!=='' && searchResults && searchResults.length == 0">No environments found</span>
+            <span class="ui-br-ext-message" v-if="count==0 && searchQuery!=='' && searchResults && searchResults.length == 0 && !form.environment.environmentId">No environments found</span>
+            <span class="ui-br-ext-message" v-if="count>0 && !form.environment.environmentId">Field is required</span>
             <span class="ui-br-ext-search-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ad55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </span >
@@ -71,7 +72,7 @@
                     actualResults: '',
                     expectedResults: '',
                     stepsToReproduce: '',
-                    environment: ''
+                    environment: {}
                 },
                 count: 0,
                 searchQuery: '',
@@ -89,7 +90,7 @@
                     this.form.actualResults= this.report.actualResults || "",
                     this.form.expectedResults= this.report.expectedResults || "",
                     this.form.stepsToReproduce= this.report.stepsToReproduce || "",
-                    this.form.environment= this.report.environment || ""
+                    this.form.environment= this.report.environment || {}
                 }
             },
 
@@ -100,21 +101,25 @@
                     actualResults: '',
                     expectedResults: '',
                     stepsToReproduce: '',
-                    environment: ''
+                    environment: {}
                 }
             },
 
             formValidation(){
                 this.count = 0;
+                this.searchResults = [];
                 return new Promise((resolve, reject) => {  
                     Object.entries(this.form).forEach(([key, val]) => {
-                        val = val.trim();
-                        this.form[key] = val;
-                        console.log(val);
-                        if (val == '') {
-                            this.count++
+                        if(key != "environment") {
+                            val = val.trim();
+                            this.form[key] = val;
+                            console.log(val);
+                            if (val == '') {
+                                this.count++
+                            }
                         }
                     });
+                    if(!this.form.environment.environmentId) this.count++;
                     if(this.count == 0) resolve(true)
                     resolve(false)
 
@@ -125,7 +130,12 @@
                 if (this.timeout) clearTimeout(this.timeout)
                 this.timeout = setTimeout(() => {
                     this.searchQuery = this.searchQuery.trim();
-                    if(this.searchQuery.length > 2) this.getEnvironments()
+                    if(this.searchQuery.length >= 2) {
+                        this.getEnvironments()
+                    } else {
+                        this.searchResults = []
+                    }
+                    this.form.environment = {};
                 }, 300);
             },
 
@@ -136,15 +146,13 @@
                     } catch(error) {
                         console.log(error);
                     }                   
-                } else {
-                    this.searchResults = []
                 }
             },
 
             async onResultClick(environment) {
                 this.searchQuery = environment.name;
                 this.searchResults = [];
-                this.environment = environment;
+                this.form.environment = environment;
             },
 
             onEnvironmentDelete(environment) {

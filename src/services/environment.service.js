@@ -36,10 +36,7 @@ const patchEnvironment = (data) => {
             token: data.token,
             uuid: data.uuid,
             name: data.name,
-            description: data.description,
-            projectId: data.projectId,
-            lkEnvironmentStatusId: data.lkEnvironmentStatusId,
-            EnvironmentId: data.EnvironmentId
+            environmentId: data.environmentId
         }).then(function (response) {
             console.log(response.data);
             resolve(response.data)

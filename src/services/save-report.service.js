@@ -17,7 +17,9 @@ const postReport = (account, moduleId, report) => {
             expectedResult: report.expectedResults,
             xpath: report.xPath,
             screenshot: report.screenshot,
-            attachments: report.attachments
+            attachments: report.attachments,
+            title: report.title,
+            environmentId: report.environment.environmentId
         }).then(function (response) {
             console.log(response);
             resolve(response.data)
