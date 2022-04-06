@@ -16,7 +16,7 @@
                     </span >
                     <div class="ui-br-ext-search-results" v-if="searchResults && searchResults.length > 0">
                         <ul>
-                            <li v-for="module in searchResults.slice(0, 10)" :key="module.id">
+                            <li v-for="module in searchResults.slice(0, 10)" :key="module.moduleId">
                                 <span class="ui-br-ext-module-label" @click="onResultClick(module)" :class="{'ui-br-ext-disabled' : module.lkProjectStatusId}" >{{module.name}}</span>
                                 <div class="ui-br-ext-module-icons" v-if="account.isAdmin == 1">
                                     <span @click="onModuleEdit({...module})">
@@ -72,6 +72,9 @@
             this.user = globalStore.store.user;
             this.project = globalStore.store.project;
             this.get = moduleService.getModules;
+            eventBus.$on('regkey-updated', () => {
+                this.onResultClick({})
+            })
         },
 
         data() {
@@ -118,7 +121,6 @@
                 this.searchResults = [];
                 this.currentModule = module;
                 globalStore.store.currentModule = module;
-                eventBus.$emit('account-loaded')
                 await this.saveToLocal();
             },
 
