@@ -28,15 +28,16 @@
             <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="report.sendEmail">
             <label for="ui-br-ext-send-email">Send email</label>
         </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-            <input type="checkbox" name="screenshot" id="ui-br-ext-save-to-screenshot" v-model="report.saveScreenshot">
-            <label for="ui-br-ext-save-to-screenshot">Download screenshot</label>
-            <span class="ui-br-ext-disclaimer">Make sure to remove personal identity information</span>
+        <div class="ui-br-ext-btn-group">
+            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="downloadScreenshot" data-listener="off" >
+                <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
+                <span>Download screenshot</span> 
+            </button>
+            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="formValidation" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
+                <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
+                <span>Save report</span> 
+            </button>
         </div>
-        <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="formValidation" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
-            <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
-            <span>Save</span> 
-        </button>
 
         <Resize :elementId="elementId" />
 
@@ -144,12 +145,13 @@
 
                 this.filename = this.getFileName(this.currentModule.name);
 
-                /* if(!globalStore.store.dynamicDomFlow) {
+                if(!globalStore.store.dynamicDomFlow) {
                         await this.getScreenshot();
+                        console.log(this.report.screenshot);
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                } */
+                }
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
@@ -194,6 +196,18 @@
                 dlLink.href = dataUrl;
                 dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
                 dlLink.click();
+            },
+
+            async downloadScreenshot() {
+                const filename = this.getFileName(this.currentModule.name);
+                let dataUrl = globalStore.store.screenshot;
+
+                if(!globalStore.store.dynamicDomFlow) {
+                    await this.getScreenshot();
+                    dataUrl = this.report.screenshot;
+                } 
+
+                this.screenshotLink(dataUrl, filename);
             },
 
             resetReportData(){
