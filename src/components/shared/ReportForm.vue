@@ -50,18 +50,19 @@
 <script>
 
     import environmentService from '../../services/environment.service';
+    import { globalStore } from './../../main';
 
     export default {
         name: 'ReportForm',
 
         props: [
-            'report',
-            'account'
+            'report'
         ],
 
         mounted() {
             this.setFormValue();
             this.get = environmentService.getEnvironments;
+            this.account = globalStore?.store?.account;
         },
 
         data() {
@@ -77,7 +78,8 @@
                 count: 0,
                 searchQuery: '',
                 searchResults: [],
-                environment: {}
+                environment: {},
+                account: {}
             }
         },
 

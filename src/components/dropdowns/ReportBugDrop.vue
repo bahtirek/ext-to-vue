@@ -11,7 +11,7 @@
 
             <div class="ui-br-ext-spacer-3"></div>
             
-            <ReportForm ref="reportForm" :account="account" />
+            <ReportForm ref="reportForm" />
 
             <FileUpload :account="account" ref="fileUploadForm" />
 
@@ -144,12 +144,12 @@
 
                 this.filename = this.getFileName(this.currentModule.name);
 
-                if(!globalStore.store.dynamicDomFlow) {
+                /* if(!globalStore.store.dynamicDomFlow) {
                         await this.getScreenshot();
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                }
+                } */
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);

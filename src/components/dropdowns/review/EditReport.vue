@@ -1,11 +1,11 @@
 <template>
     <div > 
 
-        <ReportForm ref="reportForm" :report="report" />
+        <ReportForm ref="reportForm" :report="report"/>
 
         
         <div class="ui-br-ext-btn-group">
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveReport" data-listener="off">
+            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="formValidation" data-listener="off">
                 <span>Save</span> 
             </button>
             <button class="ui-br-ext-btn-danger" @click="cancel" data-listener="off">
@@ -40,6 +40,12 @@
         },
 
         methods: {
+            async  formValidation(){
+                if(await this.$refs.reportForm.formValidation()) {
+                    Object.assign(this.report, this.$refs.reportForm.form);
+                    this.saveReport();
+                }
+            },
 
             async saveReport(){
                 Object.assign(this.report, this.$refs.reportForm.form);
@@ -48,6 +54,27 @@
 
             cancel(){
                 this.$emit('cancel-edit-report')            
+            },
+
+            async submitReport(){
+                console.log('currentModule', this.currentModule);
+                
+                try {
+                    const report = await this.postReport(this.account, this.currentModule.moduleId, this.report);
+
+                    console.log(report);
+                    if(report.result.bugId){
+                        alert('Bug report successfully created.')
+                        this.resetReportData();
+                    } else {
+                        alert(`Sorry something went wrong. Please try later`);
+                        this.submitInPorgress = false;
+                    }                  
+                } catch(error) {
+                    console.log(error);
+                    alert(`Sorry something went wrong. Please try later`);
+                    this.submitInPorgress = false;
+                }
             }
         }
     }
