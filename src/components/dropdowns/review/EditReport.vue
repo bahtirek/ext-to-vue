@@ -3,6 +3,9 @@
 
         <ReportForm ref="reportForm" :report="report"/>
 
+        <ReplaceScreenshot :account="account" ref="replaceScreenshotForm"  />
+        <FileUpload :account="account" ref="fileUploadForm"  />
+
         
         <div class="ui-br-ext-btn-group">
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="formValidation" data-listener="off">
@@ -22,12 +25,22 @@
 
     
     import ReportForm from '../../shared/ReportForm';
+    import { globalStore } from './../../../main';
+    import FileUpload from '../../shared/FileUpload';
+    import ReplaceScreenshot from '../../shared/ReplaceScreenshot';
 
     export default {
         name: 'ReviewDrop',
 
         components: {
-            ReportForm
+            ReportForm,
+            FileUpload,
+            ReplaceScreenshot
+        },
+
+        mounted() {
+            this.account = globalStore?.store?.account;
+            console.log(this.report);
         },
 
         props: [
@@ -36,6 +49,7 @@
 
         data() {
             return {
+                account:{}
             }
         },
 
@@ -43,6 +57,7 @@
             async  formValidation(){
                 if(await this.$refs.reportForm.formValidation()) {
                     Object.assign(this.report, this.$refs.reportForm.form);
+                    this.report.attachments = this.$refs.fileUploadForm.getFiles();
                     this.saveReport();
                 }
             },
