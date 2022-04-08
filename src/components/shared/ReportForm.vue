@@ -63,6 +63,7 @@
             this.setFormValue();
             this.get = environmentService.getEnvironments;
             this.account = globalStore?.store?.account;
+            this.searchQuery = this.report?.environment?.name ?? '';
         },
 
         data() {
