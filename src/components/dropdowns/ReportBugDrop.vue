@@ -30,7 +30,6 @@
         </div>
         <div class="ui-br-ext-btn-group">
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="downloadScreenshot" data-listener="off" >
-                <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
                 <span>Download screenshot</span> 
             </button>
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="formValidation" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
