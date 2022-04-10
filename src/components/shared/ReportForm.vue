@@ -2,6 +2,7 @@
 
     <form class="ui-br-ext-report-form">
         <EnvironmentSearch :account="account" :validation="'on'" ref="environmentForm"/>
+        <ModuleSearch :account="account" :projectId="project.id" :validation="'on'" ref="moduleForm"/>
 
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-title">Title</label>
@@ -34,8 +35,8 @@
 
 <script>
 
-    import environmentService from '../../services/environment.service';
     import EnvironmentSearch from '../shared/EnvironmentSearch';
+    import ModuleSearch from '../shared/ModuleSearch';
     import { globalStore } from './../../main';
 
     export default {
@@ -46,13 +47,14 @@
         ],
 
         components: {
-            EnvironmentSearch
+            EnvironmentSearch,
+            ModuleSearch
         },
 
         mounted() {
             this.setFormValue();
-            this.get = environmentService.getEnvironments;
             this.account = globalStore?.store?.account;
+            this.project = globalStore?.store?.project;
             this.searchQuery = this.report?.environment?.name ?? '';
         },
 
@@ -70,7 +72,8 @@
                 searchQuery: '',
                 searchResults: [],
                 environment: {},
-                account: {}
+                account: {},
+                project: {}
             }
         },
 
@@ -114,6 +117,7 @@
                     });
 
                     if(!this.$refs.environmentForm.formValidation()) this.count++;                  
+                    if(!this.$refs.moduleForm.formValidation()) this.count++;                  
                     
                     if(this.count == 0) resolve(true)
                     resolve(false)
@@ -122,12 +126,9 @@
 
             getReportForm(){
                 this.form.environment = this.$refs.environmentForm.environment;
+                this.form.module = this.$refs.moduleForm.module;
                 return this.form;
             },
-
-            getEnvironment(){
-                this.form.environment = this.$refs.environmentForm.environment;
-            }
 
         }
     }
