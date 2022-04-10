@@ -59,7 +59,7 @@ const patchEnvironment = (data) => {
 }
 
 
-const getEnvironments = (account, query, projectId) => {
+const getEnvironments = (account, query) => {
     return new Promise((resolve, reject) => {       
         axios.get(`${account.repositoryServer}/environment`, {
             params: {

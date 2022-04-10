@@ -29,10 +29,7 @@
                     </div>
                 </div>
 
-                <EditEnvironment v-if="showAddEnvironment" @saveEnvironment="saveEnvironment" @cancelEditing="cancelEditing" @deleteEnvironment="deleteEnvironment" :project="project" :environment="environmentToEdit" :account="account" :user="user" />
-            </div>
-            <div v-if="!project.id" class="ui-br-ext-warning-text" >
-                Choose project first
+                <EditEnvironment v-if="showAddEnvironment" @saveEnvironment="saveEnvironment" @cancelEditing="cancelEditing" @deleteEnvironment="deleteEnvironment" :environment="environmentToEdit" :account="account" />
             </div>
         </div>
    
@@ -60,19 +57,12 @@
 
         mounted() { 
             this.account = globalStore.store.account;
-            this.currentEnvironment = globalStore.store.currentEnvironment;
-            this.user = globalStore.store.user;
-            this.project = globalStore.store.project;
             this.get = environmentService.getEnvironments;
-            eventBus.$on('regkey-updated', () => {
-                this.onResultClick({})
-            })
         },
 
         data() {
             return {
                 showAddEnvironment: false,
-                project: {},
                 environmentToEdit: undefined,
                 environment: {
                     name: '',
@@ -80,7 +70,6 @@
                 },
                 searchQuery: '',
                 environmentMessage: '',
-                currentEnvironment: {},
                 account: {},
                 searchResults: [],
             }
@@ -99,7 +88,7 @@
             async getEnvironments() {
                 if (this.searchQuery.length != '') {
                     try {
-                        this.searchResults = await this.get(this.account, this.searchQuery, this.project.id)
+                        this.searchResults = await this.get(this.account, this.searchQuery)
                     } catch(error) {
                         console.log(error);
                     }                   
@@ -112,18 +101,8 @@
                 this.searchQuery = '';
                 this.searchResults = [];
                 this.currentEnvironment = environment;
-                globalStore.store.currentEnvironment = environment;
-                await this.saveToLocal();
             },
 
-            async saveToLocal(){
-                const environmentString = JSON.stringify(this.currentEnvironment)
-                try{
-                    await this.localStorage.set('environment', environmentString)
-                } catch(error) {
-                    console.log(error);
-                }
-            },
 
             onEnvironmentEdit(environment) {
                 this.searchQuery = '';

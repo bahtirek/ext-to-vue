@@ -37,9 +37,7 @@
 
         props: [
             'environment',
-            'account',
-            'user',
-            'project'
+            'account'
         ],
 
         mounted() {
