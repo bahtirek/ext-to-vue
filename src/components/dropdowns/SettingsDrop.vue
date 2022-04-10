@@ -3,7 +3,7 @@
                 <div class="ui-br-ext-drop-title">Settings</div>
                 <div class="ui-br-ext-drop-body">
                     
-                    <div class="ui-br-ext-settings-container" v-if="account && account.registrationKey">
+                    <div class="ui-br-ext-settings-container" v-if="account.isAdmin == 1">
                         <div class="ui-br-ext-setting-title" @click="ifModule = !ifModule; ifProject = false; ifAccount = false; ifUser = false; ifEnvironment = false">Module</div>
                         <Module v-if="ifModule" />
                     </div>

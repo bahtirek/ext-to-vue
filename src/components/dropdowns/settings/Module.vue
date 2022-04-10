@@ -17,7 +17,7 @@
                     <div class="ui-br-ext-search-results" v-if="searchResults && searchResults.length > 0">
                         <ul>
                             <li v-for="module in searchResults.slice(0, 10)" :key="module.moduleId">
-                                <span class="ui-br-ext-module-label" @click="onResultClick(module)" :class="{'ui-br-ext-disabled' : module.lkProjectStatusId}" >{{module.name}}</span>
+                                <span class="ui-br-ext-module-label" :class="{'ui-br-ext-disabled' : module.lkProjectStatusId}" >{{module.name}}</span>
                                 <div class="ui-br-ext-module-icons" v-if="account.isAdmin == 1">
                                     <span @click="onModuleEdit({...module})">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -31,7 +31,7 @@
 
                 <ProjectDetails :project="project" v-if="!showAddModule"  />
 
-                <ModuleDetails :module="currentModule" v-if="!showAddModule" />
+                <!-- <ModuleDetails :module="currentModule" v-if="!showAddModule" /> -->
 
                 <EditModule v-if="showAddModule" @saveModule="saveModule" @cancelEditing="cancelEditing" @deleteModule="deleteModule" :project="project" :module="moduleToEdit" :account="account" :user="user" />
             </div>
@@ -46,7 +46,7 @@
 <script>
     import { globalStore } from './../../../main';
     import eventBus from './../../../eventBus';
-    import ModuleDetails from '../../shared/ModuleDetails';
+    /* import ModuleDetails from '../../shared/ModuleDetails'; */
     import ProjectDetails from '../../shared/ProjectDetails';
     import storage from './../../../common/storage';
     import EditModule from './EditModule';
@@ -57,7 +57,6 @@
         name: 'Module',
 
         components: {
-            ModuleDetails,
             ProjectDetails,
             EditModule
         },
