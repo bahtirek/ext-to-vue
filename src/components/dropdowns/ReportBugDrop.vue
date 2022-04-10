@@ -134,7 +134,7 @@
             async  formValidation(){
                 console.log(await this.$refs.reportForm.formValidation());
                 if(await this.$refs.reportForm.formValidation()) {
-                    Object.assign(this.report, this.$refs.reportForm.form);
+                    Object.assign(this.report, this.$refs.reportForm.getReportForm());
                     this.saveReport();
                 }
             },

@@ -1,27 +1,12 @@
 <template>
 
     <form class="ui-br-ext-report-form">
+        <EnvironmentSearch :account="account" :validation="'on'" ref="environmentForm"/>
+
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-title">Title</label>
             <textarea name="ui-br-ext-title" v-model="form.title" rows="1" data-gramm="false" maxlength="100"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.title==''">Field is required</span>
-        </div>
-        
-        <div class="ui-br-ext-form-container ui-br-ext-textarea">
-            <label for="ui-br-ext-modules">Environment</label>
-            <input type="text" v-model="searchQuery" @input="onSearch">
-            <span class="ui-br-ext-message" v-if="count==0 && searchQuery!=='' && searchResults && searchResults.length == 0 && !form.environment.environmentId">No environments found</span>
-            <span class="ui-br-ext-message" v-if="count>0 && !form.environment.environmentId">Field is required</span>
-            <span class="ui-br-ext-search-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ad55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            </span >
-            <div class="ui-br-ext-search-results" v-if="searchResults && searchResults.length > 0">
-                <ul>
-                    <li v-for="environment in searchResults.slice(0, 10)" :key="environment.environmentId">
-                        <span class="ui-br-ext-module-label" @click="onResultClick(environment)">{{environment.name}}</span>
-                    </li>
-                </ul>
-            </div>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-description">Description</label>
@@ -50,6 +35,7 @@
 <script>
 
     import environmentService from '../../services/environment.service';
+    import EnvironmentSearch from '../shared/EnvironmentSearch';
     import { globalStore } from './../../main';
 
     export default {
@@ -58,6 +44,10 @@
         props: [
             'report'
         ],
+
+        components: {
+            EnvironmentSearch
+        },
 
         mounted() {
             this.setFormValue();
@@ -122,45 +112,23 @@
                             }
                         }
                     });
-                    if(!this.form.environment.environmentId) this.count++;
+
+                    if(!this.$refs.environmentForm.formValidation()) this.count++;                  
+                    
                     if(this.count == 0) resolve(true)
                     resolve(false)
-
                 })
             },
 
-            onSearch() {
-                if (this.timeout) clearTimeout(this.timeout)
-                this.timeout = setTimeout(() => {
-                    this.searchQuery = this.searchQuery.trim();
-                    if(this.searchQuery.length >= 2) {
-                        this.getEnvironments()
-                    } else {
-                        this.searchResults = []
-                    }
-                    this.form.environment = {};
-                }, 300);
+            getReportForm(){
+                this.form.environment = this.$refs.environmentForm.environment;
+                return this.form;
             },
 
-            async getEnvironments() {
-                if (this.searchQuery.length != '') {
-                    try {
-                        this.searchResults = await this.get(this.account, this.searchQuery)
-                    } catch(error) {
-                        console.log(error);
-                    }                   
-                }
-            },
-
-            async onResultClick(environment) {
-                this.searchQuery = environment.name;
-                this.searchResults = [];
-                this.form.environment = environment;
-            },
-
-            onEnvironmentDelete(environment) {
-                console.log(environment);
+            getEnvironment(){
+                this.form.environment = this.$refs.environmentForm.environment;
             }
+
         }
     }
 </script>
