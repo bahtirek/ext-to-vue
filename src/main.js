@@ -17,6 +17,9 @@ window.destroyeUibrextInstance = function() {
 export const globalStore = new Vue({
   data: {
     store: {
+      globalSettings: {
+        saveToDb: false
+      },
       selectedElement: '',
       currentElementInlineStyle: '',
       selectedElementRect: '',
