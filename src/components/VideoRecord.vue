@@ -82,7 +82,7 @@
             },
 
             createRecorder(stream) {
-                const options = {mimeType: 'video/webm;codecs=vp9'};
+                const options = {mimeType: 'video/webm;codecs=h264'};
                 const mediaRecorder = new MediaRecorder(stream, options);
 
                 mediaRecorder.ondataavailable = (e) => {
