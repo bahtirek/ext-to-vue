@@ -32,7 +32,7 @@
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="downloadScreenshot" data-listener="off" >
                 <span>Download screenshot</span> 
             </button>
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="formValidation" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
+            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="getForm" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
                 <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
                 <span>Save report</span> 
             </button>
@@ -88,6 +88,7 @@
             this.currentModule = globalStore?.store.currentModule;
             this.user = globalStore?.store.user;
             this.project = globalStore?.store.project;
+            this.globalSettings = globalStore?.store.globalSettings
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
@@ -105,6 +106,7 @@
                 next: false,
                 currentModule: {},
                 account: {},
+                globalSettings: {},
                 user: {},
                 project: {},
                 report: {
@@ -131,12 +133,16 @@
 
         methods: {
 
-            async  formValidation(){
-                console.log(await this.$refs.reportForm.formValidation());
-                if(await this.$refs.reportForm.formValidation()) {
-                    Object.assign(this.report, this.$refs.reportForm.getReportForm());
-                    this.saveReport();
+            async getForm(){
+
+                if(this.globalSettings.saveToDb) {
+                    const isValid = await this.$refs.reportForm.formValidation();
+                    if(!isValid) return false;   
                 }
+
+                Object.assign(this.report, this.$refs.reportForm.getReportForm());
+                
+                this.saveReport();
             },
 
             async saveReport(){
@@ -144,13 +150,13 @@
 
                 this.filename = this.getFileName(this.currentModule.name);
 
-                if(!globalStore.store.dynamicDomFlow) {
+                /* if(!globalStore.store.dynamicDomFlow) {
                         await this.getScreenshot();
                         console.log(this.report.screenshot);
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                }
+                } */
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
@@ -178,7 +184,10 @@
                 console.log(this.report);
                 
                 this.setTempReports(); 
-                this.submitReport();           
+                if(this.globalSettings.saveToDb) {
+                    this.submitReport();
+                } 
+                this.submitInPorgress = false;         
             },
 
             async getScreenshot(){
