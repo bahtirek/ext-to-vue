@@ -106,10 +106,9 @@
                 this.searchResults = [];
                 return new Promise((resolve, reject) => {  
                     Object.entries(this.form).forEach(([key, val]) => {
-                        if(key != "environment") {
+                        if(typeof val === 'string' || val instanceof String) {
                             val = val.trim();
                             this.form[key] = val;
-                            console.log(val);
                             if (val == '') {
                                 this.count++
                             }
