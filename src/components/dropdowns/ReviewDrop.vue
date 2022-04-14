@@ -3,7 +3,7 @@
         <div class="ui-br-ext-drop-title">Reports</div>
         <div class="ui-br-ext-drop-body">
 
-            <AllReports v-if="toggle.allReports" @show-details="showDetails" :reports="reports" :module="currentModule"/>
+            <AllReports v-if="toggle.allReports" @show-details="showDetails"  :projectId="project.id" :account="account" />
 
             <ReportDetails v-if="toggle.details" @close-details="closeDetails" @delete-report="deleteReport" @edit-report="editReport" :project="project" :report="report" :module="currentModule" />
 
@@ -47,6 +47,7 @@
             this.reports = globalStore.store.reports;
             this.currentModule = globalStore?.store.currentModule;
             this.project = globalStore.store.project;
+            this.account = globalStore.store.account;
             this.showElements();
 
             eventBus.$on('show-details', (index) => {
@@ -123,30 +124,6 @@
                     let w = window.open("");
                     w.document.write(image.outerHTML);
                 }
-            },
-
-            deleteReport(report) {
-                const index = this.reports.findIndex(item => item.xPath == report.xPath);// will change to id
-                this.closeDetails();
-                this.reports.splice(index, 1);
-                this.removeClickBlocker();
-                report.element.classList.remove('ui-br-ext-outlined-element');
-                report.element.style.cssText = report.element.style.cssText.replace('outline: red dashed 3px !important;', '');
-                report.element.removeAttribute('data-ext-index');
-                this.showElements();
-            },
-
-            editReport(reportToEdit){
-                this.report = reportToEdit;
-                this.toggleChildren('edit');
-                console.log(reportToEdit);
-            },
-
-            saveEditedReport(report) {
-                const index = this.reports.findIndex(item => item.xPath == report.xPath);// will change to id
-                this.reports[index] = report;
-                console.log(report);
-                this.showDetails(index);
             },
 
             cancelEditReport() {
