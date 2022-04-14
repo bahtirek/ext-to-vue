@@ -59,7 +59,7 @@ const createPdfContent = async function (report) {
         }                   
     }
 
-    if(report.saveScreenshot && report.screenshot) { 
+    if(report.screenshot) { 
         const screenshotContent = {
             image: report.screenshot,
             width: report.queryWidth || 550,

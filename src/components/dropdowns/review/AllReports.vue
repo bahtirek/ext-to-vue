@@ -115,7 +115,7 @@
             validateDate(){
                 const from = new Date(this.from);
                 const to = new Date(this.to);
-                this.dateValid = (from.getTime() < to.getTime());
+                this.dateValid = (from.getTime() <= to.getTime());
                 return this.dateValid;
             },
 

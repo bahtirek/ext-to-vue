@@ -27,7 +27,7 @@ const createEmailContent = function (report) {
         }                   
     }
 
-    if(report.saveScreenshot && report.screenshot) { 
+    if(report.screenshot) { 
         content += '<img src="cid:screenshot">';       
     }
     
@@ -46,7 +46,7 @@ const createEmailContent = function (report) {
     </body>
     </html>\n`;
 
-    if(report.saveScreenshot && report.screenshot) { 
+    if(report.screenshot) { 
         let image = report.screenshot.replace("data:image/png;base64,", "");
         const cid = `\n--multipart_related_boundary\nContent-Type: image/png; name="screenshot.png"\nContent-Transfer-Encoding: base64\nContent-ID: <screenshot>\nContent-Disposition: inline; filename="screenshot.png"\n\n${image}`
         emailBody += cid;       

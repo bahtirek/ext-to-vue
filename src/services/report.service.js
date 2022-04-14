@@ -44,6 +44,9 @@ const postReport = (account, moduleId, report) => {
 
 
 const getReports = (account, environmentId, moduleId, from, to) => {
+    from = new Date(from).toLocaleDateString('en-US');
+    to = new Date(to).toLocaleDateString('en-US');
+    console.log(from, to);
     return new Promise((resolve, reject) => {       
         axios.get(`${account.repositoryServer}/bug`, {
             params: {
@@ -52,8 +55,8 @@ const getReports = (account, environmentId, moduleId, from, to) => {
                 uuid: account.uuid,
                 environmentId: environmentId,
                 moduleId: moduleId,
-                from: from,
-                to: to
+                fromDate: from,
+                toDate: to
             }
         }).then(function (response) {
             console.log(response);
