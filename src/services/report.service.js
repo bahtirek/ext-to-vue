@@ -43,18 +43,17 @@ const postReport = (account, moduleId, report) => {
 
 
 
-const getReports = (account, query, projectId) => {
-    console.log(account.registrationKey);
-    console.log(account.token);
-    console.log(projectId);
+const getReports = (account, environmentId, moduleId, from, to) => {
     return new Promise((resolve, reject) => {       
         axios.get(`${account.repositoryServer}/bug`, {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
-                query: query,
-                projectId: projectId,
-                //includeInactive: account.isAdmin
+                uuid: account.uuid,
+                environmentId: environmentId,
+                moduleId: moduleId,
+                from: from,
+                to: to
             }
         }).then(function (response) {
             console.log(response);

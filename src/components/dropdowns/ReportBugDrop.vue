@@ -58,7 +58,7 @@
     import ReportForm from '../shared/ReportForm';
     import FileUpload from '../shared/FileUpload';
     import email from '../../common/email';
-    import reportService from '../../services/save-report.service'
+    import reportService from '../../services/report.service'
             
     export default {
         name: 'ReportBugDrop',
