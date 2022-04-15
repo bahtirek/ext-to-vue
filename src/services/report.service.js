@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const postReport = (account, moduleId, report) => {
-    console.log(account, moduleId, report);
+const postReport = (account, report) => {
+    console.log(account, report);
     if(!report.screenshot){
         report.screenshot = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAooAAAFnCAYAAAAhRmhNAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAFoOSURBVHhe7d0HvBTV2fjxZ+nNWEHaRbpGfd/wioWiRo0iIia+VhQR7MYS/ScaKyAXe0k0ltiigqIg4JtEuCAxYKNagu+rsdC5IFdUQKUIAvs/z8yZmTO7s+VeOvy+fPbD3dmdmTNnZneeec6ZPQIAAAAAu4xFTZuesrhZsy+/aNZsweImTbrZyQAAoBKq2f+BnUpK5C7zaGT+bJGqVm2gPxUAAFQGgSJ2SiZI3GD/lHQ6vd7+CQAAKoFAETslExxenxaZb/`
     }
@@ -10,7 +10,7 @@ const postReport = (account, moduleId, report) => {
             registrationKey: account.registrationKey, 
             token: account.token,
             uuid: account.uuid,
-            moduleId: moduleId,
+            moduleId: report.module.moduleId,
             actualResult: report.actualResults,
             description: report.description,
             stepsToReproduce: report.stepsToReproduce,
@@ -46,7 +46,7 @@ const postReport = (account, moduleId, report) => {
 const getReports = (account, environmentId, moduleId, from, to) => {
     from = new Date(from).toLocaleDateString('en-US');
     to = new Date(to).toLocaleDateString('en-US');
-    console.log(from, to);
+    console.log(account, environmentId, moduleId, from, to);
     return new Promise((resolve, reject) => {       
         axios.get(`${account.repositoryServer}/bug`, {
             params: {
