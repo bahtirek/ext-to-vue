@@ -5,8 +5,6 @@
 
             <ProjectDetails :project="project" />
 
-            <ModuleDetails :module="currentModule" />
-
             <UserDetails :user="user" />
 
             <div class="ui-br-ext-spacer-3"></div>
@@ -51,7 +49,6 @@
     import select from '../../common/select';
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus';
-    import ModuleDetails from '../shared/ModuleDetails';
     import UserDetails from '../shared/UserDetails';
     import ProjectDetails from '../shared/ProjectDetails';
     import Resize from '../shared/Resize';
@@ -64,7 +61,6 @@
         name: 'ReportBugDrop',
 
         components: {
-            ModuleDetails,
             UserDetails,
             Resize,
             ReportForm,
@@ -150,13 +146,13 @@
 
                 this.filename = this.getFileName(this.currentModule.name);
 
-                /* if(!globalStore.store.dynamicDomFlow) {
+                if(!globalStore.store.dynamicDomFlow) {
                         await this.getScreenshot();
                         console.log(this.report.screenshot);
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                } */
+                }
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
@@ -253,7 +249,7 @@
                 console.log('currentModule', this.currentModule);
                 
                 try {
-                    const report = await this.postReport(this.account, this.currentModule.moduleId, this.report);
+                    const report = await this.postReport(this.account, this.report);
 
                     console.log(report);
                     if(report.result.bugId){
