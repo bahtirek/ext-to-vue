@@ -46,6 +46,7 @@
     import ModuleSearch from '../../shared/ModuleSearch';
     import reportService from '../../../services/report.service';
     import eventBus from '../../../eventBus';
+    import clickBlocker from '../../../common/click-blocker';
 
     export default {
         name: 'AllReports',
@@ -63,6 +64,9 @@
 
         created() { 
             this.get = reportService.getReports;
+            this.addClickBlocker = clickBlocker.addClickBlocker;         
+            this.removeSingleClickBlocker = clickBlocker.removeSingleClickBlocker;               
+            this.removeClickBlocker = clickBlocker.removeClickBlocker;               
         },
 
         mounted() {
@@ -89,6 +93,7 @@
                 console.log(this.environment, this.module, this.from, this.to);
                 try {
                     this.reports = await this.get(this.account, this.environment.environmentId, this.module.moduleId, this.from, this.to)
+                    this.showElements()
                 } catch(error) {
                     console.log(error);
                 }                   
@@ -146,7 +151,7 @@
 
             selectElement(index){
                 let report = this.reports[index];
-                let element = document.evaluate(report.xPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                let element = document.evaluate(report.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
                 if(element){
                     report.element = element;
                     element.classList.add('ui-br-ext-outlined-element');
