@@ -2,8 +2,10 @@
     <div>
         <div>
             <EnvironmentSearch :account="account" :validation="true" :oldEnvironment="environment" ref="environmentForm"/>
-            
-            <ModuleSearch :account="account" :validation="true" :projectId="project.id" :oldModule="module" ref="moduleForm"/>
+
+            <ProjectSearch :account="account" :validation="true"  :oldProject="project" ref="projectForm"/>
+
+            <ModuleSearch :account="account" :validation="true" :project="project" :oldModule="module" ref="moduleForm"/>
 
             <div class="ui-br-ext-dates">
                 <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
@@ -44,6 +46,7 @@
     import ModuleDetails from '../../shared/ModuleDetails';
     import EnvironmentSearch from '../../shared/EnvironmentSearch';
     import ModuleSearch from '../../shared/ModuleSearch';
+    import ProjectSearch from '../../shared/ProjectSearch';
     import reportService from '../../../services/report.service';
     import eventBus from '../../../eventBus';
     import clickBlocker from '../../../common/click-blocker';    
@@ -55,7 +58,8 @@
         components: {
             UserDetails,
             EnvironmentSearch,
-            ModuleSearch
+            ModuleSearch,
+            ProjectSearch,
         },
 
         created() { 
@@ -64,14 +68,17 @@
             this.removeSingleClickBlocker = clickBlocker.removeSingleClickBlocker;               
             this.removeClickBlocker = clickBlocker.removeClickBlocker;  
             this.environment = globalStore.store.reviewBug.environment;
-            this.module = globalStore.store.reviewBug.module;             
+            this.module = globalStore.store.reviewBug.module; 
+            this.project = globalStore.store.reviewBug.project || globalStore.store.project;
+            this.account = globalStore.store.account;             
         },
 
         mounted() {
-            this.project = globalStore.store.project;
-            this.account = globalStore.store.account;
-            console.log(this.environment);
-            console.log(this.module);
+            eventBus.$on('projectChanged', (project) => { 
+                this.module = {};  
+                globalStore.store.reviewBug.module = {};
+                this.project = project;
+            });
         },
 
         data() {
@@ -117,8 +124,10 @@
 
                 this.environment = this.$refs.environmentForm.environment;
                 this.module = this.$refs.moduleForm.module;
+                this.project = this.$refs.projectForm.project;
                 globalStore.store.reviewBug.environment = this.environment
                 globalStore.store.reviewBug.module = this.module
+                globalStore.store.reviewBug.project = this.project
                 return true;
             },
 

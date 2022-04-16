@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import eventBus from '../../eventBus';
 
     import moduleService from '../../services/module.service';
 
@@ -32,12 +33,17 @@
             'oldModule',
             'validation',
             'account',
-            'projectId'
+            'project'
         ],
 
         mounted() {
             this.setFormValue();
             this.get = moduleService.getModules;
+            eventBus.$on('projectChanged', (project) => {
+                this.module = {};
+                this.searchQuery = '';
+                this.project.id = project.id;
+            });
         },
 
         data() {
@@ -88,7 +94,7 @@
             async getmodules() {
                 if (this.searchQuery.length != '') {
                     try {
-                        this.searchResults = await this.get(this.account, this.searchQuery, this.projectId)
+                        this.searchResults = await this.get(this.account, this.searchQuery, this.project.id)
                     } catch(error) {
                         console.log(error);
                     }                   
