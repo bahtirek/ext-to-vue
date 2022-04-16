@@ -62,14 +62,14 @@
             this.get = reportService.getReports;
             this.addClickBlocker = clickBlocker.addClickBlocker;         
             this.removeSingleClickBlocker = clickBlocker.removeSingleClickBlocker;               
-            this.removeClickBlocker = clickBlocker.removeClickBlocker;               
+            this.removeClickBlocker = clickBlocker.removeClickBlocker;  
+            this.environment = globalStore.store.reviewBug.environment;
+            this.module = globalStore.store.reviewBug.module;             
         },
 
         mounted() {
             this.project = globalStore.store.project;
             this.account = globalStore.store.account;
-            this.environment = globalStore.store.reviewBug.environment;
-            this.module = globalStore.store.reviewBug.module;
             console.log(this.environment);
             console.log(this.module);
         },
