@@ -1,9 +1,9 @@
 <template>
     <div>
         <div>
-            <EnvironmentSearch :account="account" :validation="true" ref="environmentForm"/>
+            <EnvironmentSearch :account="account" :validation="true" :oldEnvironment="environment" ref="environmentForm"/>
             
-            <ModuleSearch :account="account" :validation="true" :projectId="projectId" ref="moduleForm"/>
+            <ModuleSearch :account="account" :validation="true" :projectId="project.id" :oldModule="module" ref="moduleForm"/>
 
             <div class="ui-br-ext-dates">
                 <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
@@ -46,7 +46,8 @@
     import ModuleSearch from '../../shared/ModuleSearch';
     import reportService from '../../../services/report.service';
     import eventBus from '../../../eventBus';
-    import clickBlocker from '../../../common/click-blocker';
+    import clickBlocker from '../../../common/click-blocker';    
+    import { globalStore } from './../../../main';
 
     export default {
         name: 'AllReports',
@@ -56,11 +57,6 @@
             EnvironmentSearch,
             ModuleSearch
         },
-        
-        props: [
-            'account',
-            'projectId'
-        ],
 
         created() { 
             this.get = reportService.getReports;
@@ -70,7 +66,12 @@
         },
 
         mounted() {
-            //this.reportsToDisplay = this.reports.filter(report => !report.element);
+            this.project = globalStore.store.project;
+            this.account = globalStore.store.account;
+            this.environment = globalStore.store.reviewBug.environment;
+            this.module = globalStore.store.reviewBug.module;
+            console.log(this.environment);
+            console.log(this.module);
         },
 
         data() {
@@ -83,6 +84,8 @@
                 environment: {},
                 module: {},
                 dateValid: false,
+                account: {},
+                project: {}
             }
         },
 
@@ -114,6 +117,8 @@
 
                 this.environment = this.$refs.environmentForm.environment;
                 this.module = this.$refs.moduleForm.module;
+                globalStore.store.reviewBug.environment = this.environment
+                globalStore.store.reviewBug.module = this.module
                 return true;
             },
 
