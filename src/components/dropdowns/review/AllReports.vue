@@ -116,6 +116,7 @@
 
                 if(!this.$refs.environmentForm.formValidation()) this.count++;                  
                 if(!this.$refs.moduleForm.formValidation()) this.count++;
+                if(!this.$refs.projectForm.formValidation()) this.count++;
                 if(!this.from) this.count++;              
                 if(!this.to) this.count++;           
                 if(!this.validateDate()) this.count++;
