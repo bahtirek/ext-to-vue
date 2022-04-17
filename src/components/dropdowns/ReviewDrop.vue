@@ -3,9 +3,9 @@
         <div class="ui-br-ext-drop-title">Reports</div>
         <div class="ui-br-ext-drop-body">
 
-            <AllReports v-if="toggle.allReports" @show-details="showDetails"  :projectId="project.id" :account="account" />
+            <AllReports v-if="toggle.allReports" :sharedReports="reports" @show-details="showDetails" @setReports="setReports"/>
 
-            <ReportDetails v-if="toggle.details" @close-details="closeDetails" :project="project" :report="report" :module="currentModule" />
+            <ReportDetails v-if="toggle.details" @close-details="closeDetails" :project="project" :bugId="bugId" :module="currentModule" />
 
             <EditReport v-if="toggle.edit" :report="report" @save-edited-report="saveEditedReport" @cancel-edit-report="cancelEditReport" />
 
@@ -44,11 +44,9 @@
         },
 
         mounted: function () {
-            this.reports = globalStore.store.reports;
             this.currentModule = globalStore?.store.currentModule;
             this.project = globalStore.store.project;
             this.account = globalStore.store.account;
-            this.showElements();
 
             eventBus.$on('show-details', (index) => {
                 this.showDetails(index)
@@ -70,60 +68,20 @@
                     details: false,
                     edit: false
                 },
-                elementId: 'ui-br-ext-review'
+                elementId: 'ui-br-ext-review',
+                bugId: undefined
             }
         },
 
         methods: {
 
-            showElements(){
-                console.log(this.reports);
-                for (let index = 0; index < this.reports.length; index++) {
-                    this.selectElement(index); 
-                    if(index == this.reports.length - 1) {
-                        const els = document.querySelectorAll('.ui-br-ext-outlined-element');
-                        this.addClickBlocker(els);
-                    }                  
-                }
-
-            },
-
-            selectElement(index){
-                let report = this.reports[index];
-                let element = document.evaluate(report.xPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-                if(element){
-                    report.element = element;
-                    element.classList.add('ui-br-ext-outlined-element');
-                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";
-                    element.setAttribute('data-ext-index', index);                 
-                    //element.addEventListener('mousedown', this.showDetailsOnClick, true);                   
-                } else {
-                    report.element = false;
-                    // move report to the bottom of reports array
-                    this.reports.splice(index, 1);
-                    this.reports.push(report);
-                    console.log(this.reports);
-                    eventBus.$on('report-loaded');
-                }
-            },
-
             closeDetails() {
                 this.toggleChildren('allReports')
             },
 
-            showDetails(index) {
-                this.report = this.reports[index];
+            showDetails(bugId) {
+                this.bugId = bugId;
                 this.toggleChildren('details');
-            },
-
-            showImage(screenshot) {
-                if(screenshot) {
-                    let image = new Image();
-                    image.src = screenshot;
-
-                    let w = window.open("");
-                    w.document.write(image.outerHTML);
-                }
             },
 
             cancelEditReport() {
@@ -138,6 +96,11 @@
                         this.toggle[key] = false
                     }
                 })
+            },
+
+            setReports(reports) {
+                this.reports = reports;
+                console.log(this.reports);
             }
         }
     }

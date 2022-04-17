@@ -1,41 +1,123 @@
 <template>
     <div>
         <div>
-            <EnvironmentSearch :account="account" :validation="true" :oldEnvironment="environment" ref="environmentForm"/>
-
-            <ProjectSearch :account="account" :validation="true"  :oldProject="project" ref="projectForm"/>
-
-            <ModuleSearch :account="account" :validation="true" :project="project" :oldModule="module" ref="moduleForm"/>
-
-            <div class="ui-br-ext-dates">
-                <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
-                    <label for="ui-br-ext-from">From</label>
-                    <input type="date" name="ui-br-ext-from" id="ui-br-ext-from" v-model="from">
-                    <span class="ui-br-ext-message" v-if="count>0 && from==''" >Field is required</span>
-                    <span class="ui-br-ext-message" v-if="count>0 && from!='' && to!='' && !dateValid" >From date cannot be</span>
+            <div class="ui-br-ext-tabs-container">
+                <div class="ui-br-ext-tabs">
+                    <div class="ui-br-ext-tab" @click="ifFilter = !ifFilter; ifGlobal = false; setReports([])" :class="{active: ifFilter}">Search filters</div>
+                    <div class="ui-br-ext-tab" @click="ifGlobal = !ifGlobal; ifFilter = false; setReports([])" :class="{active: ifGlobal}">Global search</div>
                 </div>
-                <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
-                    <label for="ui-br-ext-to">To</label>
-                    <input type="date" name="ui-br-ext-to" id="ui-br-ext-to" v-model="to">
-                    <span class="ui-br-ext-message" v-if="count>0 && to==''" >Field is required</span>
+                <div class="ui-br-ext-tab-item" v-if="ifFilter">
+                    <ProjectSearch :account="account" :validation="true"  :oldProject="project" ref="projectForm"/>
+
+                    <ModuleSearch :account="account" :validation="true" :project="project" :oldModule="module" ref="moduleForm"/>
+
+                    <EnvironmentSearch :account="account" :validation="true" :oldEnvironment="environment" ref="environmentForm"/>
+
+                    <div class="ui-br-ext-dates">
+                        <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
+                            <label for="ui-br-ext-from">From</label>
+                            <input type="date" name="ui-br-ext-from" id="ui-br-ext-from" v-model="from">
+                            <span class="ui-br-ext-message" v-if="count>0 && from==''" >Field is required</span>
+                            <span class="ui-br-ext-message" v-if="count>0 && from!='' && to!='' && !dateValid" >From date cannot be</span>
+                        </div>
+                        <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
+                            <label for="ui-br-ext-to">To</label>
+                            <input type="date" name="ui-br-ext-to" id="ui-br-ext-to" v-model="to">
+                            <span class="ui-br-ext-message" v-if="count>0 && to==''" >Field is required</span>
+                        </div>
+                    </div>
+                    <div v-if="reports.length == 0" class="ui-br-ext-warning-text" >
+                        No Bug report found
+                    </div>
+                    <div class="ui-br-ext-btn-group">
+                        <button class="ui-br-ext-btn" @click="getReports" data-listener="off">
+                            <span class="ui-br-ext-spinner"></span>
+                            <span>Search</span> 
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ui-br-ext-tab-item" v-if="ifGlobal">
+                    <BugSearch :account="account" ref="environmentForm"/>
+                    <div class="ui-br-ext-btn-group">
+                        <button class="ui-br-ext-btn" @click="globalSearch" data-listener="off">
+                            <span class="ui-br-ext-spinner"></span>
+                            <span>Search</span> 
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="ui-br-ext-btn-group">
-                <button class="ui-br-ext-btn" @click="getReports" data-listener="off">
-                    <span class="ui-br-ext-spinner"></span>
-                    <span>Submit</span> 
-                </button>
-            </div>
-        </div>
-        <div class="ui-br-ext-review-card" v-for="(report, index) in reportsToDisplay" :key="index">
             
-            <UserDetails :user="report.user" />
+            <!-- <div class="ui-br-ext-settings-container">
+                <div class="ui-br-ext-setting-title" @click="ifFilter = !ifFilter; ifGlobal = false; setReports([])">Search by filter</div>
+                 <div v-if="ifFilter" class="ui-br-ext-accordion-body"> 
 
-            <div class="ui-br-ext-review-box ui-br-ext-ellipsis" v-if="report.description" @click="showDetails(index)">
-                <div class="ui-br-ext-review-title">Description:</div>
-                <div class="ui-br-ext-review-text">{{report.description}}</div>
+                    <ProjectSearch :account="account" :validation="true"  :oldProject="project" ref="projectForm"/>
+
+                    <ModuleSearch :account="account" :validation="true" :project="project" :oldModule="module" ref="moduleForm"/>
+
+                    <EnvironmentSearch :account="account" :validation="true" :oldEnvironment="environment" ref="environmentForm"/>
+
+                    <div class="ui-br-ext-dates">
+                        <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
+                            <label for="ui-br-ext-from">From</label>
+                            <input type="date" name="ui-br-ext-from" id="ui-br-ext-from" v-model="from">
+                            <span class="ui-br-ext-message" v-if="count>0 && from==''" >Field is required</span>
+                            <span class="ui-br-ext-message" v-if="count>0 && from!='' && to!='' && !dateValid" >From date cannot be</span>
+                        </div>
+                        <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
+                            <label for="ui-br-ext-to">To</label>
+                            <input type="date" name="ui-br-ext-to" id="ui-br-ext-to" v-model="to">
+                            <span class="ui-br-ext-message" v-if="count>0 && to==''" >Field is required</span>
+                        </div>
+                    </div>
+                    <div v-if="reports.length == 0" class="ui-br-ext-warning-text" >
+                        No Bug report found
+                    </div>
+                    <div class="ui-br-ext-btn-group">
+                        <button class="ui-br-ext-btn" @click="getReports" data-listener="off">
+                            <span class="ui-br-ext-spinner"></span>
+                            <span>Search</span> 
+                        </button>
+                    </div>
+                 </div>
             </div>
-            <span class="ui-br-ext-btn-lnk" v-if="report.screenshot" @click="showImage(report.screenshot)">Screenshot</span>
+
+            <div class="ui-br-ext-settings-container">
+                <div class="ui-br-ext-setting-title" @click="ifGlobal = !ifGlobal; ifFilter = false; setReports([])">Global search</div>
+                <div v-if="ifGlobal" class="ui-br-ext-accordion-body"> 
+                    <BugSearch :account="account" ref="environmentForm"/>
+                    <div class="ui-br-ext-btn-group">
+                        <button class="ui-br-ext-btn" @click="globalSearch" data-listener="off">
+                            <span class="ui-br-ext-spinner"></span>
+                            <span>Search</span> 
+                        </button>
+                    </div>
+                </div>
+            </div> -->
+            
+        </div>
+        <div v-if="reports.length > 0" style="margin-top: 10px;">
+            <div class="ui-br-ext-warning-text" >
+                {{reports.length}} Bug report found
+            </div>
+            <div v-for="(report, index) in reportsToDisplay" :key="index">
+                <div class="ui-br-ext-review-card" v-if="!report.element" >
+                    <div class="ui-br-ext-review-box">
+                        <span class="ui-br-ext-review-title">Bug id:</span>
+                        <span class="ui-br-ext-review-text">{{report.bugIndex}}</span>
+                    </div>
+                    <div class="ui-br-ext-review-box">
+                        <span class="ui-br-ext-review-title">Bug title:</span>
+                        <span class="ui-br-ext-review-text">{{report.title}}</span>
+                    </div>
+                    <div class="ui-br-ext-review-box">
+                        <span class="ui-br-ext-btn-lnk"  @click="showDetails(report.bugId)">Details</span>
+                        <a class="ui-br-ext-btn-lnk" v-if="report.screenshotPath"  :href="report.screenshotPath" target="_blank">Screenshot</a>
+                    </div>
+                    
+                </div >
+            </div>
         </div>
     </div>
 </template>
@@ -47,6 +129,7 @@
     import EnvironmentSearch from '../../shared/EnvironmentSearch';
     import ModuleSearch from '../../shared/ModuleSearch';
     import ProjectSearch from '../../shared/ProjectSearch';
+    import BugSearch from '../../shared/BugSearch';
     import reportService from '../../../services/report.service';
     import eventBus from '../../../eventBus';
     import clickBlocker from '../../../common/click-blocker';    
@@ -55,11 +138,15 @@
     export default {
         name: 'AllReports',
 
+        props: [
+            'sharedReports'
+        ],
+
         components: {
-            UserDetails,
             EnvironmentSearch,
             ModuleSearch,
             ProjectSearch,
+            BugSearch,
         },
 
         created() { 
@@ -70,7 +157,10 @@
             this.environment = globalStore.store.reviewBug.environment;
             this.module = globalStore.store.reviewBug.module; 
             this.project = globalStore.store.reviewBug.project || globalStore.store.project;
-            this.account = globalStore.store.account;             
+            this.account = globalStore.store.account;
+            this.from = globalStore.store.reviewBug.from;
+            this.to = globalStore.store.reviewBug.to;   
+            this.reports = this.sharedReports;         
         },
 
         mounted() {
@@ -79,6 +169,7 @@
                 globalStore.store.reviewBug.module = {};
                 this.project = project;
             });
+            this.showElements();
         },
 
         data() {
@@ -92,7 +183,10 @@
                 module: {},
                 dateValid: false,
                 account: {},
-                project: {}
+                project: {},
+                ifFilter: false,
+                ifGlobal:false,
+                searchQuery: ''
             }
         },
 
@@ -102,8 +196,14 @@
                 if(!this.validateForm()) return false;
                 console.log(this.environment, this.module, this.from, this.to);
                 try {
-                    this.reports = await this.get(this.account, this.environment.environmentId, this.module.moduleId, this.from, this.to)
-                    this.showElements()
+                    const reports = await this.get(this.account, this.environment.environmentId, this.module.moduleId, this.from, this.to);
+                    if(reports.length > 0) {
+                        this.setReports(reports)
+                        this.showElements();
+                        this.ifFilter = false;
+                        this.ifGlobal = false;
+                    }
+                    
                 } catch(error) {
                     console.log(error);
                 }                   
@@ -129,6 +229,8 @@
                 globalStore.store.reviewBug.environment = this.environment
                 globalStore.store.reviewBug.module = this.module
                 globalStore.store.reviewBug.project = this.project
+                globalStore.store.reviewBug.from = this.from
+                globalStore.store.reviewBug.to = this.to
                 return true;
             },
 
@@ -149,8 +251,8 @@
                 }
             },
 
-            showDetails(index) {
-                this.$emit('show-details', index);
+            showDetails(bugId) {
+                this.$emit('show-details', bugId);
             },
 
             showElements(){
@@ -158,8 +260,10 @@
                 for (let index = 0; index < this.reports.length; index++) {
                     this.selectElement(index); 
                     if(index == this.reports.length - 1) {
+                        console.log(index);
                         const els = document.querySelectorAll('.ui-br-ext-outlined-element');
                         this.addClickBlocker(els);
+                        this.reportsToDisplay = this.reports.filter(report => !report.element);
                     }                  
                 }
             },
@@ -178,10 +282,18 @@
                     // move report to the bottom of reports array
                     this.reports.splice(index, 1);
                     this.reports.push(report);
-                    console.log(this.reports);
                     eventBus.$on('report-loaded');
                 }
             },
+
+            globalSearch(){
+                console.log(this.searchQuery);
+            },
+
+            setReports(reports){
+                this.reports = reports;
+                this.$emit('setReports', reports);
+            }
         }
     }
 </script>
