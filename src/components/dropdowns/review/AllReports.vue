@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="ui-br-ext-tab-item" v-if="ifGlobal">
-                    <BugSearch :account="account" ref="environmentForm"/>
+                    <BugSearch :account="account" ref="bugSearchForm"/>
                     <div class="ui-br-ext-btn-group">
                         <button class="ui-br-ext-btn" @click="globalSearch" data-listener="off">
                             <span class="ui-br-ext-spinner"></span>
@@ -46,56 +46,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
-            
-            <!-- <div class="ui-br-ext-settings-container">
-                <div class="ui-br-ext-setting-title" @click="ifFilter = !ifFilter; ifGlobal = false; setReports([])">Search by filter</div>
-                 <div v-if="ifFilter" class="ui-br-ext-accordion-body"> 
-
-                    <ProjectSearch :account="account" :validation="true"  :oldProject="project" ref="projectForm"/>
-
-                    <ModuleSearch :account="account" :validation="true" :project="project" :oldModule="module" ref="moduleForm"/>
-
-                    <EnvironmentSearch :account="account" :validation="true" :oldEnvironment="environment" ref="environmentForm"/>
-
-                    <div class="ui-br-ext-dates">
-                        <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
-                            <label for="ui-br-ext-from">From</label>
-                            <input type="date" name="ui-br-ext-from" id="ui-br-ext-from" v-model="from">
-                            <span class="ui-br-ext-message" v-if="count>0 && from==''" >Field is required</span>
-                            <span class="ui-br-ext-message" v-if="count>0 && from!='' && to!='' && !dateValid" >From date cannot be</span>
-                        </div>
-                        <div class="ui-br-ext-fromto ui-br-ext-form-container ui-br-ext-text">
-                            <label for="ui-br-ext-to">To</label>
-                            <input type="date" name="ui-br-ext-to" id="ui-br-ext-to" v-model="to">
-                            <span class="ui-br-ext-message" v-if="count>0 && to==''" >Field is required</span>
-                        </div>
-                    </div>
-                    <div v-if="reports.length == 0" class="ui-br-ext-warning-text" >
-                        No Bug report found
-                    </div>
-                    <div class="ui-br-ext-btn-group">
-                        <button class="ui-br-ext-btn" @click="getReports" data-listener="off">
-                            <span class="ui-br-ext-spinner"></span>
-                            <span>Search</span> 
-                        </button>
-                    </div>
-                 </div>
-            </div>
-
-            <div class="ui-br-ext-settings-container">
-                <div class="ui-br-ext-setting-title" @click="ifGlobal = !ifGlobal; ifFilter = false; setReports([])">Global search</div>
-                <div v-if="ifGlobal" class="ui-br-ext-accordion-body"> 
-                    <BugSearch :account="account" ref="environmentForm"/>
-                    <div class="ui-br-ext-btn-group">
-                        <button class="ui-br-ext-btn" @click="globalSearch" data-listener="off">
-                            <span class="ui-br-ext-spinner"></span>
-                            <span>Search</span> 
-                        </button>
-                    </div>
-                </div>
-            </div> -->
-            
+            </div>            
         </div>
         <div v-if="reports.length > 0" style="margin-top: 10px;">
             <div class="ui-br-ext-warning-text" >
@@ -287,7 +238,10 @@
             },
 
             globalSearch(){
-                console.log(this.searchQuery);
+                if (!this.$refs.bugSearchForm.formValidation()) return false;
+                const globalQuery = this.$refs.bugSearchForm.searchQuery;
+                console.log(globalQuery);
+                
             },
 
             setReports(reports){
