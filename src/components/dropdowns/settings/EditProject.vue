@@ -9,6 +9,10 @@
                 <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" maxlength="10" minlength="2" :disabled="newProject.id && newProject.lkProjectStatusId == 2" />
                 <span class="ui-br-ext-message">{{errorMessage.projectKey}}</span>
             </div>
+            <div class="ui-br-ext-form-container ui-br-ext-textarea">
+                <label for="ui-br-ext-new-project-label">Project description</label>
+                <textarea type="text" name="ui-br-ext-new-project-label" v-model="newProject.description" maxlength="255" ></textarea>
+            </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea" v-if="newProject.saveToJira">
                 <label for="ui-br-ext-new-project-label">Jira id</label>
                 <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.jiraId" maxlength="10" minlength="2" />
@@ -73,6 +77,7 @@
             return {
                 newProject: {
                     projectKey: '',
+                    description: '', 
                     jiraId: '', 
                     saveToJira: false,
                     inactivate: false
@@ -92,6 +97,7 @@
                 this.errorMessage.projectKey = '';
                 this.errorMessage.jiraId = '';
                 this.newProject.projectKey = this.newProject.projectKey.trim();
+                this.newProject.description = this.newProject.description.trim();
                 if(this.newProject.projectKey != ''){
 
                     // Request jira id if Jira
@@ -130,6 +136,7 @@
 
             resetProject() {
                 this.newProject.projectKey = '';
+                this.newProject.description = '';
                 this.newProject.jiraId = '';
                 this.newProject.saveToJira = undefined;
                 this.action = 'Create new project';

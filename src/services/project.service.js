@@ -13,7 +13,8 @@ const postProject = (data) => {
             uuid: data.uuid,
             saveToJira: saveToJira,
             projectKey: data.projectKey,
-            jiraId: data.jiraId
+            jiraId: data.jiraId,
+            description: data.description,
         }).then(function (response) {
             console.log(response);
             resolve(response.data)
@@ -77,6 +78,7 @@ const patchProject = (data) => {
             saveToJira: saveToJira,
             uuid: data.uuid,
             projectKey: data.projectKey,
+            description: data.description,
             jiraId: data.jiraId,
             lkProjectStatusId: data.lkProjectStatusId,
             id: data.id
