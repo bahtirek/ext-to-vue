@@ -48,7 +48,19 @@ export const globalStore = new Vue({
         url:'',
         queryWidth: 550,
         user: undefined
-      }
+      },
+      reportBug: {
+        module: {},
+        environment: {},
+        project: {}
+      },
+      reviewBug: {
+        module: {},
+        environment: {},
+        project: {},
+        from: '',
+        to: ''
+      },
     }
   }
 })
