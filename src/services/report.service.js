@@ -19,7 +19,8 @@ const postReport = (account, report) => {
             screenshot: report.screenshot,
             attachments: report.attachments,
             title: report.title,
-            environmentId: report.environment.environmentId
+            environmentId: report.environment.environmentId,
+            url: window.location.href
         }).then(function (response) {
             console.log(response);
             resolve(response.data)
