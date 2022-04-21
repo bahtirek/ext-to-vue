@@ -79,6 +79,35 @@ const getReports = (account, environmentId, moduleId, from, to) => {
     })
 }
 
+const getReportDetails = (account, bugId) => {
+    return new Promise((resolve, reject) => {       
+        axios.get(`${account.repositoryServer}/bug-details`, {
+            params: {
+                registrationKey: account.registrationKey, 
+                token: account.token,
+                uuid: account.uuid,
+                bugId: bugId
+            }
+        }).then(function (response) {
+            console.log(response);
+            resolve(response.data.result)
+        }).catch(function (error) {
+            console.log(error.reponse);
+            if (error.response) {
+                if(error.response.status == 401){
+                    alert("Unauthorized");
+                    return false
+                }
+                reject(error.response.data);
+            } else if (error.request) {
+                alert('Please check connection');
+            } else {
+                alert('Sorry, something went wrong please try again later');
+            }
+        });     
+    })
+}
+
 
 const postVideo = (blob)=>{
     console.log(blob);
@@ -162,5 +191,6 @@ export default {
     getReports,
     postVideo,
     postFiles,
-    deleteFile
+    deleteFile,
+    getReportDetails
 }

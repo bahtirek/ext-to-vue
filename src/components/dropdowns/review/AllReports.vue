@@ -26,7 +26,7 @@
                             <span class="ui-br-ext-message" v-if="count>0 && to==''" >Field is required</span>
                         </div>
                     </div>
-                    <div v-if="reports.length == 0" class="ui-br-ext-warning-text" >
+                    <div v-if="reportNotFound" class="ui-br-ext-warning-text" >
                         No Bug report found
                     </div>
                     <div class="ui-br-ext-btn-group">
@@ -48,8 +48,8 @@
                 </div>
             </div>            
         </div>
-        <div v-if="reports.length > 0" style="margin-top: 10px;">
-            <div class="ui-br-ext-warning-text" >
+        <div v-if="reports.length > 0">
+            <div class="ui-br-ext-warning-text"  style="margin-bottom: 10px;">
                 {{reports.length}} Bug report found
             </div>
             <div v-for="(report, index) in reportsToDisplay" :key="index">
@@ -137,7 +137,8 @@
                 project: {},
                 ifFilter: false,
                 ifGlobal:false,
-                searchQuery: ''
+                searchQuery: '',
+                reportNotFound: false
             }
         },
 
@@ -153,6 +154,9 @@
                         this.showElements();
                         this.ifFilter = false;
                         this.ifGlobal = false;
+                        this.reportNotFound = false;
+                    } else {
+                        this.reportNotFound = true;
                     }
                     
                 } catch(error) {
@@ -190,16 +194,6 @@
                 const to = new Date(this.to);
                 this.dateValid = (from.getTime() <= to.getTime());
                 return this.dateValid;
-            },
-
-            showImage(screenshot) {
-                if(screenshot) {
-                    let image = new Image();
-                    image.src = screenshot;
-
-                    let w = window.open("");
-                    w.document.write(image.outerHTML);
-                }
             },
 
             showDetails(bugId) {

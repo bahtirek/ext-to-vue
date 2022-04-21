@@ -27,10 +27,11 @@ export default {
   created() { 
     this.localStorage = storage;
     this.auth = regKeyAuthentication.auth;
-    this.fakeGetkey();
+    //this.fakeGetkey();
     this.getRegKey();
-    /* this.getUserFromLocal();
-    this.getProjectFromLocal(); */
+    this.getUserFromLocal();
+    this.getProjectFromLocal();
+    this.getModuleFromLocal();
   },
 
   watch: {
@@ -39,8 +40,7 @@ export default {
 
   methods: {
     async getRegKey(){
-      //const regKey = await this.localStorage.get('regKey');
-      const regKey = 'sup_61b589b5f03c42.30439098';
+      const regKey = await this.localStorage.get('regKey');
       if(regKey) {
         globalStore.store.account = await this.auth(regKey);
         console.log(globalStore.store.account);
@@ -69,8 +69,13 @@ export default {
         }
     },
 
-    fakeGetkey(){
+    async fakeGetkey(){
+      const regKey = 'sup_623baf370cca56.01630938';
+      globalStore.store.account = await this.auth(regKey);
+      console.log(globalStore.store.account);
+
       setTimeout(()=>{
+        
     
         globalStore.store.user = {
           firstname: 'John',
@@ -79,44 +84,23 @@ export default {
         };
         
         globalStore.store.project = {
-          projectKey: 'EXTBR',
-          jiraId: '1212',
-          saveToJira: true
+          allowDelete: 0,
+          clientId: 2,
+          created_at: "2022-03-24T00:24:37.000000Z",
+          id: 2,
+          jiraId: null,
+          lkProjectStatusId: 1,
+          projectKey: "bugtest",
+          saveToJira: 0,
+          updated_at: "2022-03-24T00:24:37.000000Z",
         };
 
         globalStore.store.currentModule = {
-          id: 3,
-          name: 'emas',
-          description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
+          moduleId: 2,
+          name: "bugtest edited",
+          allowDelete: 0,
+          description: "bugtest edited"
         };
-
-        globalStore.store.modules = [
-          {
-            id: 1,
-            name: 'bu senlarga',
-            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-          },
-          {
-            id: 2,
-            name: 'tralivali',
-            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-          },
-          {
-            id: 3,
-            name: 'emas',
-            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-          },
-          {
-            id: 4,
-            name: 'tilitili',
-            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-          },
-          {
-            id: 5,
-            name: 'bubblegum',
-            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit.'
-          },
-        ]
         eventBus.$emit('account-loaded')
       }, 2000)
     }

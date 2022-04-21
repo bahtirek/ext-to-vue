@@ -2,28 +2,52 @@
     <div >  
         <div class="ui-br-ext-close-details" @click="close">Close</div>  
         <div  class="ui-br-ext-review-card" v-if="report">
-            <ProjectDetails :project="project" />
-            <ModuleDetails :module="module" />
-            <UserDetails :user="report.user" />
-            <div class="ui-br-ext-spacer-3"></div>
-            <div class="ui-br-ext-review-box" v-if="report.description">
+            <ProjectDetails :project="reviewBug.project" />
+            <ModuleDetails :module="reviewBug.module" />
+           <!--  <UserDetails :user="report.user" /> -->
+            <div class="ui-br-ext-spacer-1"></div>
+
+            <div class="ui-br-ext-review-box" v-if="report.bugIndex">
+                <div class="ui-br-ext-review-title">Bug ID:</div>
+                <div class="ui-br-ext-review-text">{{report.bugId}}</div>
+            </div>
+            <div class="ui-br-ext-review-box" v-if="report.title">
+                <div class="ui-br-ext-review-title">Title:</div>
+                <div class="ui-br-ext-review-text">{{report.title}}</div>
+            </div>
+            <div class="ui-br-ext-review-box ui-br-ext-pre" v-if="report.description">
                 <div class="ui-br-ext-review-title">Description:</div>
-                <div class="ui-br-ext-review-text">{{report.description}}</div>
+                <pre class="ui-br-ext-review-text">{{report.description}}</pre>
             </div>
-            <div class="ui-br-ext-review-box" v-if="report.stepsToReproduce">
+            <div class="ui-br-ext-review-box ui-br-ext-pre" v-if="report.stepsToReproduce">
                 <div class="ui-br-ext-review-title">Steps to reproduce:</div>
-                <div class="ui-br-ext-review-text">{{report.stepsToReproduce}}</div>
+                <pre class="ui-br-ext-review-text">{{report.stepsToReproduce}}</pre>
             </div>
-            <div class="ui-br-ext-review-box" v-if="report.actualResults">
+            <div class="ui-br-ext-review-box ui-br-ext-pre" v-if="report.actualResult">
                 <div class="ui-br-ext-review-title">Actual results:</div>
-                <div class="ui-br-ext-review-text">{{report.actualResults}}</div>
+                <pre class="ui-br-ext-review-text">{{report.actualResult}}</pre>
             </div>
-            <div class="ui-br-ext-review-box" v-if="report.expectedResults">
+            <div class="ui-br-ext-review-box ui-br-ext-pre" v-if="report.expectedResult">
                 <div class="ui-br-ext-review-title">Expected results:</div>
-                <div class="ui-br-ext-review-text">{{report.expectedResults}}</div>
+                <pre class="ui-br-ext-review-text">{{report.expectedResult}}</pre>
+            </div>
+            <div class="ui-br-ext-review-box" v-if="report.screenshots">
+                <div class="ui-br-ext-review-title">Screenshots:</div>
+                <div class="ui-br-ext-review-text">
+                    <a v-for="(screenshot, index) in report.screenshots" :key="index" target="_blank" :href="screenshot">
+                        Image-{{index+1}}
+                    </a> &nbsp;&nbsp;
+                </div>
+            </div>
+            <div class="ui-br-ext-review-box" v-if="report.attachments">
+                <div class="ui-br-ext-review-title">Attachments:</div>
+                <div class="ui-br-ext-review-text">
+                    <a v-for="(attachment, index) in report.attachments" :key="index" target="_blank" :href="attachment">
+                        Attch-{{index+1}}
+                    </a> &nbsp;&nbsp;
+                </div>
             </div>
             <div>
-                <span class="ui-br-ext-btn-lnk" v-bind:class="{'disabled': !report.screenshot}" @click="showImage(report.screenshot)">View screenshot</span>
                 <span class="ui-br-ext-btn-lnk" @click="pdf">Export PDF</span>
                 <span class="ui-br-ext-btn-lnk" @click="addJira">Add JIRA ticket</span>
                 <span class="ui-br-ext-btn-lnk" @click="createJira">Create JIRA issue</span>
@@ -40,42 +64,60 @@
     import UserDetails from '../../shared/UserDetails';
     import ProjectDetails from '../../shared/ProjectDetails';
     import exportPdf from '../../../common/export-pdf';
+    import reportService from '../../../services/report.service';
+    import { globalStore } from './../../../main';
 
     export default {
         name: 'ReportDetails',
 
         components: {
             ModuleDetails,
-            UserDetails,
+            /* UserDetails, */
             ProjectDetails
         },
 
         props: [
-            'report', 
-            'module',
-            'project'
+            'bugId',
+            'account',
         ],
 
         created() { 
             this.getFileName = exportPdf.getFileName;
             this.savePdf = exportPdf.savePdf;
+            this.get = reportService.getReportDetails;
+            this.reviewBug = globalStore.store.reviewBug;
         },
+
+        mounted() { 
+            this.getDetails()
+        },
+
 
         data() {
             return {
                 filename: '',
+                report: {
+                    screenshots: []
+                }
             }
         },
 
         methods: {
 
-            showImage(screenshot) {
-                if(screenshot) {
-                    let image = new Image();
-                    image.src = screenshot;
-
-                    let w = window.open("");
-                    w.document.write(image.outerHTML);
+            async getDetails(){
+                try {
+                    const report = await this.get(this.account, this.bugId);
+                    console.log(report);
+                    this.report = report;
+                    /* if(reports.length > 0) {
+                        this.setReports(reports)
+                        this.showElements();
+                        this.ifFilter = false;
+                        this.ifGlobal = false;
+                    } */
+                    
+                } catch(error) {
+                    console.log(error);
                 }
             },
 
@@ -88,7 +130,7 @@
             },
 
             async pdf() {
-                this.filename = this.getFileName(this.module.name);
+                this.filename = this.getFileName('bug');
                 console.log(this.report);
                 await this.savePdf(this.report)
             },

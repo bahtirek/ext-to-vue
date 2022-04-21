@@ -18,7 +18,7 @@ export const globalStore = new Vue({
   data: {
     store: {
       globalSettings: {
-        saveToDb: false
+        saveToDb: true
       },
       selectedElement: '',
       currentElementInlineStyle: '',

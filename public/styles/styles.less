@@ -423,9 +423,13 @@ body {
                 }
 
                 .ui-br-ext-review-box {
-                    margin-bottom: 5px;
+                    margin: 7px 0px;
                     display: flex;
                     align-items: center;
+
+                   &.ui-br-ext-pre {
+                       display: block;
+                   } 
 
                     .ui-br-ext-review-title {
                         color: #404040;
@@ -434,10 +438,22 @@ body {
                         margin-right: 10px;
                     }
 
-                    .ui-br-ext-review-text {
-                        padding: 2px 0 0px;
+                    .ui-br-ext-review-text, pre {
                         font-size: 15px;
                         color: #666666;
+                        margin-top: 0;
+                        font-family: arial;
+                        padding-left: 10px;
+                        white-space: pre-wrap;       
+                        white-space: -moz-pre-wrap;  
+                        white-space: -pre-wrap;      
+                        white-space: -o-pre-wrap;    
+                        word-wrap: break-word;   
+
+                        a {
+                            text-decoration: none;
+                            color: @primary-color;
+                        }
                     }
 
                     &.ui-br-ext-ellipsis {
@@ -459,10 +475,8 @@ body {
                 }
 
                 .ui-br-ext-review-card {
-                    padding: 15px 10px 0;
+                    padding: 0px 10px 5px;
                     margin-bottom: 5px;
-                    border-top: 1px solid #e5e5e5;
-        
                     .ui-br-ext-btn-lnk {
                         color: #00ad55;
                         cursor: pointer;
@@ -485,8 +499,8 @@ body {
                         }
                     }
                     .ui-br-ext-review-box {
-                        .ui-br-ext-btn-lnk:first-child {
-                            margin-top: 10px;
+                        .ui-br-ext-btn-lnk {
+                            margin-top: 3px;
                         }
                     }
 

@@ -1,8 +1,8 @@
 <template>
 
     <form class="ui-br-ext-report-form">
+        <ModuleSearch :account="account" :project="project" :validation="globalSettings.saveToDb" ref="moduleForm"/>
         <EnvironmentSearch :account="account" :validation="globalSettings.saveToDb" ref="environmentForm"/>
-        <ModuleSearch :account="account" :projectId="project.id" :validation="globalSettings.saveToDb" ref="moduleForm"/>
 
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-title">Title</label>
@@ -51,11 +51,14 @@
             ModuleSearch
         },
 
-        mounted() {
-            this.setFormValue();
+        created() {
             this.account = globalStore?.store?.account;
             this.project = globalStore?.store?.project;
             this.globalSettings = globalStore?.store.globalSettings;
+        },
+
+        mounted() {
+            this.setFormValue();
             this.searchQuery = this.report?.environment?.name ?? '';
         },
 
