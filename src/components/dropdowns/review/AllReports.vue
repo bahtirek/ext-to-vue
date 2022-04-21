@@ -215,7 +215,12 @@
 
             selectElement(index){
                 let report = this.reports[index];
-                let element = document.evaluate(report.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                let element = false;
+                try {
+                    element = document.evaluate(report.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                } catch(e) {
+                    console.log(e)
+                }
                 if(element){
                     report.element = element;
                     element.classList.add('ui-br-ext-outlined-element');
