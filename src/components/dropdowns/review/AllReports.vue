@@ -202,38 +202,27 @@
 
             showElements(){
                 console.log(this.reports);
-                for (let index = 0; index < this.reports.length; index++) {
-                    this.selectElement(index); 
-                    if(index == this.reports.length - 1) {
-                        console.log(index);
-                        const els = document.querySelectorAll('.ui-br-ext-outlined-element');
-                        this.addClickBlocker(els);
-                        this.reportsToDisplay = this.reports.filter(report => !report.element);
-                    }                  
-                }
+                this.reports.forEach((report) => {
+                    report.element = this.selectElement(report.xpath, report.bugId);
+                })
+                const els = document.querySelectorAll('.ui-br-ext-outlined-element');
+                this.addClickBlocker(els);
+                this.reportsToDisplay = this.reports.filter(report => !report.element);
             },
 
-            selectElement(index){
-                let report = this.reports[index];
+            selectElement(xpath, bugId){
                 let element = false;
                 try {
-                    element = document.evaluate(report.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                    element = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
                 } catch(e) {
                     console.log(e)
                 }
                 if(element){
-                    report.element = element;
                     element.classList.add('ui-br-ext-outlined-element');
                     element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";
-                    element.setAttribute('data-ext-index', index);                 
-                    //element.addEventListener('mousedown', this.showDetailsOnClick, true);                   
-                } else {
-                    report.element = false;
-                    // move report to the bottom of reports array
-                    this.reports.splice(index, 1);
-                    this.reports.push(report);
-                    eventBus.$on('report-loaded');
+                    element.setAttribute('data-ext-index', bugId);                                   
                 }
+                return element
             },
 
             globalSearch(){
