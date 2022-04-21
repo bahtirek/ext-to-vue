@@ -23,10 +23,10 @@
                         <Account v-if="ifAccount" />
                     </div>
 
-                    <div class="ui-br-ext-settings-container" v-if="account && account.registrationKey">
+                    <!-- <div class="ui-br-ext-settings-container" v-if="account && account.registrationKey">
                         <div class="ui-br-ext-setting-title" @click="ifGlobal = !ifGlobal; ifProject = false; ifModule = false; ifAccount = false; ifUser = false">Global</div>
                         <Global v-if="ifGlobal" />
-                    </div>
+                    </div> -->
 
                     <div class="ui-br-ext-settings-container">
                         <div class="ui-br-ext-setting-title" @click="ifUser = !ifUser; ifGlobal = false; ifProject = false; ifModule = false; ifAccount = false; ifEnvironment = false">User</div>
@@ -43,7 +43,6 @@
     import Module from './settings/Module';
     import Account from './settings/Account';
     import Project from './settings/Project';
-    import Global from './settings/Global';
     import Environment from './settings/Environment';
     import User from './settings/User';
     import { globalStore } from './../../main';
@@ -56,8 +55,7 @@
             Account,
             User,
             Project,
-            Environment,
-            Global
+            Environment
         },
 
         mounted: function () {

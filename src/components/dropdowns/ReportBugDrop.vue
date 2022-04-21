@@ -15,6 +15,10 @@
 
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
+            <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="saveToDb">
+            <label for="ui-br-ext-save-to-jira">Save to DB</label>
+        </div>
+        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
             <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveJira">
             <label for="ui-br-ext-save-to-jira">Create Jira ticket on save</label>
         </div>
@@ -84,7 +88,6 @@
             this.currentModule = globalStore?.store.currentModule;
             this.user = globalStore?.store.user;
             this.project = globalStore?.store.project;
-            this.globalSettings = globalStore?.store.globalSettings
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
@@ -102,7 +105,6 @@
                 next: false,
                 currentModule: {},
                 account: {},
-                globalSettings: {},
                 user: {},
                 project: {},
                 report: {
@@ -120,6 +122,7 @@
                     url: '',
                     user: {}
                 },
+                saveToDb: true,
                 filename: '',
                 name: 'test',
                 elementId: 'ui-br-ext-report-bug',
@@ -131,7 +134,7 @@
 
             async getForm(){
 
-                if(this.globalSettings.saveToDb) {
+                if(this.saveToDb) {
                     const isValid = await this.$refs.reportForm.formValidation();
                     if(!isValid) return false;   
                 }
@@ -147,8 +150,8 @@
                 this.filename = this.getFileName(this.currentModule.name);
 
                 if(!globalStore.store.dynamicDomFlow) {
-                        await this.getScreenshot();
-                        console.log(this.report.screenshot);
+                    await this.getScreenshot();
+                    console.log(this.report.screenshot);
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
@@ -179,8 +182,7 @@
                 this.report.attachments = this.$refs.fileUploadForm.getFiles();
                 console.log(this.report);
                 
-                this.setTempReports(); 
-                if(this.globalSettings.saveToDb) {
+                if(this.saveToDb) {
                     this.submitReport();
                 } 
                 this.submitInPorgress = false;         
@@ -237,12 +239,6 @@
                 this.$refs.reportForm.resetReportData();
                 this.submitInPorgress = false;
                 eventBus.$emit('toggle-bug-drop', false);
-            },
-
-            setTempReports(){
-                globalStore.store.reports.push(this.report);
-                console.log(globalStore.store.reports);
-                eventBus.$emit('report-loaded');
             },
 
             async submitReport(){
