@@ -22,7 +22,7 @@
 
 <script>
 
-    import reportService from '../../services/report.service'
+    import fileService from '../../services/file.service'
             
     export default {
         name: 'FileUpload',
@@ -36,8 +36,8 @@
         },
         
         created() { 
-            this.postFiles = reportService.postFiles;
-            this.deleteFile = reportService.deleteFile;
+            this.postFiles = fileService.postFiles;
+            this.deleteFile = fileService.deleteFile;
         },
 
         mounted: function () {
