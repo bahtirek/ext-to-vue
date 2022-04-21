@@ -41,12 +41,15 @@ const postReport = (account, report) => {
     });
 }
 
-
+const formatDate = (date) => {
+    const arr = date.split("-")
+    return `${arr[1]}/${arr[2]}/${arr[0]}`
+}
 
 
 const getReports = (account, environmentId, moduleId, from, to) => {
-    from = new Date(from).toLocaleDateString('en-US');
-    to = new Date(to).toLocaleDateString('en-US');
+    from = formatDate(from);
+    to = formatDate(to);
     console.log(account, environmentId, moduleId, from, to);
     return new Promise((resolve, reject) => {       
         axios.get(`${account.repositoryServer}/bug`, {
@@ -106,23 +109,6 @@ const getReportDetails = (account, bugId) => {
             }
         });     
     })
-}
-
-
-const postVideo = (blob)=>{
-    console.log(blob);
-    axios.post(`https://extension-service.evendor.app/api/blob`, {
-        
-            registrationKey: "sup_61b589b5f03c42.30439098.1",
-            token: "$5$rounds=5000mzcHt$J7H3Jh573tRrLtfPDDfbKxo8KhkmIRxeAdH7BHREUq7",
-            uuid: "70ca7b25-24b4-40a5-8320-a9e105f65fb3",
-            blob: blob
-        
-    }).then(function (response) {
-        console.log(response);
-    }).catch(function (error) {
-        console.log(error.reponse);
-    });
 }
 
 const postFiles = (account, formData) => {
@@ -189,7 +175,6 @@ const deleteFile = (account, id) => {
 export default {
     postReport,
     getReports,
-    postVideo,
     postFiles,
     deleteFile,
     getReportDetails
