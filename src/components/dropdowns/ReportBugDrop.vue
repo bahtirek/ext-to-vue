@@ -9,7 +9,7 @@
 
             <div class="ui-br-ext-spacer-3"></div>
             
-            <ReportForm ref="reportForm" />
+            <ReportForm ref="reportForm" :validation="saveToDb" />
 
             <FileUpload :account="account" ref="fileUploadForm" />
 
@@ -185,7 +185,9 @@
                 if(this.saveToDb) {
                     this.submitReport();
                 } 
-                this.submitInPorgress = false;         
+                this.submitInPorgress = false;  
+                globalStore.store.reportBug.environment = this.report.environment
+                globalStore.store.reportBug.module = this.report.module       
             },
 
             async getScreenshot(){
