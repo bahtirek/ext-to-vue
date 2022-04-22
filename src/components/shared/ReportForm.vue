@@ -1,8 +1,8 @@
 <template>
 
     <form class="ui-br-ext-report-form">
-        <ModuleSearch :account="account" :project="project" :validation="globalSettings.saveToDb" ref="moduleForm"/>
-        <EnvironmentSearch :account="account" :validation="globalSettings.saveToDb" ref="environmentForm"/>
+        <ModuleSearch :account="account" :project="project" :validation="validation" :oldModule="module" ref="moduleForm"/>
+        <EnvironmentSearch :account="account" :validation="validation" :oldEnvironment="environment" ref="environmentForm"/>
 
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-title">Title</label>
@@ -43,7 +43,8 @@
         name: 'ReportForm',
 
         props: [
-            'report'
+            'report',
+            'validation'
         ],
 
         components: {
@@ -53,13 +54,14 @@
 
         created() {
             this.account = globalStore?.store?.account;
-            this.project = globalStore?.store?.project;
-            this.globalSettings = globalStore?.store.globalSettings;
+            this.project = globalStore?.store?.project;  
+            this.environment = globalStore.store.reportBug.environment;
+            this.module = globalStore.store.reportBug.module; 
         },
 
         mounted() {
             this.setFormValue();
-            this.searchQuery = this.report?.environment?.name ?? '';
+            //this.searchQuery = this.report?.environment?.name ?? '';
         },
 
         data() {
@@ -75,10 +77,10 @@
                 count: 0,
                 searchQuery: '',
                 searchResults: [],
-                environment: {},
                 account: {},
                 project: {},
-                globalSettings: {}
+                environment: {},
+                module: {}
             }
         },
 
@@ -92,6 +94,7 @@
                     this.form.expectedResults= this.report.expectedResults || "",
                     this.form.stepsToReproduce= this.report.stepsToReproduce || "",
                     this.form.environment= this.report.environment || {}
+                    this.form.module= this.report.module || {}
                 }
             },
 
