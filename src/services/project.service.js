@@ -4,8 +4,6 @@ import axios from 'axios';
 const postProject = (data) => {
     let saveToJira = 0;
     if (data.saveToJira) saveToJira = 1;
-    console.log(data);
-    console.log(saveToJira);
     return new Promise((resolve, reject) => {
         axios.post(`${data.repositoryServer}/project`, {
             registrationKey: data.registrationKey, 
@@ -16,7 +14,6 @@ const postProject = (data) => {
             jiraId: data.jiraId,
             description: data.description,
         }).then(function (response) {
-            console.log(response);
             resolve(response.data)
         }).catch(function (error) {
             if (error.response) {
@@ -36,7 +33,6 @@ const postProject = (data) => {
 }
 
 const statusPatchProject = (data) => {
-    console.log(data);
 
     return new Promise((resolve, reject) => {
         axios.patch(`${data.repositoryServer}/project-status`, {
@@ -46,7 +42,6 @@ const statusPatchProject = (data) => {
             lkProjectStatusId: data.lkProjectStatusId,
             id: data.id
         }).then(function (response) {
-            console.log(response.data);
             resolve(response.data)
         }).catch(function (error) {
             
@@ -69,7 +64,6 @@ const statusPatchProject = (data) => {
 const patchProject = (data) => {
     let saveToJira = 0;
     if (data.saveToJira) saveToJira = 1;
-    console.log(data);
 
     return new Promise((resolve, reject) => {
         axios.patch(`${data.repositoryServer}/project`, {
@@ -83,7 +77,6 @@ const patchProject = (data) => {
             lkProjectStatusId: data.lkProjectStatusId,
             id: data.id
         }).then(function (response) {
-            console.log(response.data);
             resolve(response.data)
         }).catch(function (error) {
             
@@ -115,7 +108,6 @@ const getProjects = (account, query) => {
                 includeInactive: account.isAdmin
             }
         }).then(function (response) {
-            console.log(response);
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
@@ -135,8 +127,6 @@ const getProjects = (account, query) => {
 }
 
 const deleteProject = (id, account) => {
-    console.log(id);
-    console.log(account.token);
     return new Promise((resolve, reject) => {       
         axios.delete(`${account.repositoryServer}/project`, {
             params: {
@@ -146,7 +136,6 @@ const deleteProject = (id, account) => {
                 id: id
             }
         }).then(function (response) {
-            console.log(response.data);
             resolve(response.data)
         }).catch(function (error) {
             console.log(error.reponse);

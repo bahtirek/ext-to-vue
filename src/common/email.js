@@ -1,8 +1,6 @@
 const sendEmail = async function(report, user) {  
     const emailBody = await createEmailContent(report, user);
     const email = makeTextFile(emailBody);
-    console.log(email);
-    console.log(emailBody);
     let link = document.getElementById('ui-br-ext-download-email');
     link.href = makeTextFile(emailBody);   
 	link.click();

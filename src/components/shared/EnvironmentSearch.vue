@@ -54,7 +54,6 @@
         methods: {
 
             setFormValue(){
-                console.log(this.oldEnvironment);
                 if(this.oldEnvironment) {
                     this.searchQuery = this.oldEnvironment?.name ?? '';
                     this.environment = this.oldEnvironment;

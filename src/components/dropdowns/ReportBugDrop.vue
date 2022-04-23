@@ -68,7 +68,6 @@
             UserDetails,
             Resize,
             ReportForm,
-            //ProjectDetails,
             FileUpload
         },
         
@@ -85,14 +84,10 @@
 
         mounted: function () {
             this.account = globalStore?.store?.account;
-            this.currentModule = globalStore?.store.currentModule;
             this.user = globalStore?.store.user;
-            //this.project = globalStore?.store.project;
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
-                this.currentModule = globalStore.store.currentModule;
-                //this.project = globalStore.store.project;
             })
                         
             eventBus.$on('user-loaded', () => {
@@ -104,7 +99,6 @@
         data() {
             return {
                 next: false,
-                currentModule: {},
                 account: {},
                 user: {},
                 project: {},
@@ -150,13 +144,12 @@
 
                 this.filename = this.getFileName(this.currentModule.name);
 
-               /*  if(!globalStore.store.dynamicDomFlow) {
+                if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
-                    console.log(this.report.screenshot);
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                } */
+                }
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
@@ -181,7 +174,6 @@
                 this.report.user = this.user;
 
                 this.report.attachments = this.$refs.fileUploadForm.getFiles();
-                console.log(this.report);
                 
                 if(this.saveToDb) {
                     this.submitReport();
@@ -245,13 +237,10 @@
                 eventBus.$emit('toggle-bug-drop', false);
             },
 
-            async submitReport(){
-                console.log('currentModule', this.currentModule);
-                
+            async submitReport(){               
                 try {
                     const report = await this.postReport(this.account, this.report);
 
-                    console.log(report);
                     if(report.result.bugId){
                         alert('Bug report successfully created.')
                         this.resetReportData();

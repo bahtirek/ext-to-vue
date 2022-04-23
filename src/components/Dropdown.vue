@@ -51,7 +51,6 @@
         methods: {
 
             toggleDropdown(id, state, prevId) {
-                console.log(id, state, prevId);
                 this.drops[prevId] = false;
                 this.drops[id] = state;
             }, 

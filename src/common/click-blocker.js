@@ -38,7 +38,6 @@ const preventClickHandler = function(event) {
 const showDetailsOnClick = function(el) {
     const index = el.getAttribute('data-ext-index');
     if(index && index >= 0) {
-        console.log(index);
         eventBus.$emit('show-details', index);
     } else {
         return false

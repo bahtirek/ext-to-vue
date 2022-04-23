@@ -146,7 +146,6 @@
 
             async getReports(){
                 if(!this.validateForm()) return false;
-                console.log(this.environment, this.module, this.from, this.to);
                 try {
                     const reports = await this.get(this.account, this.environment.environmentId, this.module.moduleId, this.from, this.to);
                     if(reports.length > 0) {
@@ -201,7 +200,6 @@
             },
 
             showElements(){
-                console.log(this.reports);
                 this.reports.forEach((report) => {
                     report.element = this.selectElement(report.xpath, report.bugId);
                 })
@@ -228,8 +226,6 @@
             globalSearch(){
                 if (!this.$refs.bugSearchForm.formValidation()) return false;
                 const globalQuery = this.$refs.bugSearchForm.searchQuery;
-                console.log(globalQuery);
-                
             },
 
             setReports(reports){

@@ -120,7 +120,6 @@
                             project = await this.post({...this.newProject, ...this.account});
                         }
                         
-                        console.log(project);
                         if(project.result){
                             if(project.result.lkProjectStatusId == 2) project = {} 
                             this.$emit('saveProject', project.result)
@@ -166,7 +165,6 @@
                 try {
                     this.newProject.lkProjectStatusId = value;
                     const project = await this.statusPatch({...this.newProject, ...this.account});
-                    console.log(project);
                     if(project.result){ 
                         this.$emit('saveProject', project.result)
                     }                    

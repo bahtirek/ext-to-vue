@@ -93,7 +93,6 @@
                             module = await this.post({...this.newModule, ...this.account, projectId: this.project.id});
                         }
                         
-                        console.log(module.result);
                         if(module){ 
                             this.$emit('saveModule', module.result)
                         }                    
@@ -119,7 +118,6 @@
                 if (confirm('Are you suuure?')) {
                     try {
                         const result = await this.delete(this.module.moduleId, this.account, this.project.id);
-                        console.log(result.status == 'success');
 
                         if(result){ 
                             this.$emit('deleteModule')
@@ -134,15 +132,10 @@
                 }
             },
 
-            activateModule(module) {
-                console.log(module);
-            },
-
             isEditing() {
                 if(this.module && this.module.moduleId) {
                     this.action = 'Edit module';
                     this.newModule = {...this.module};
-                    console.log(this.newModule);
                 }
             }
         }

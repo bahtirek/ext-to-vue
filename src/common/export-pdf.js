@@ -18,7 +18,7 @@ const pdfPages = {
     }
 };
 const savePdf = async function (report) {   
-    const filename = getFileName();
+    /* const filename = getFileName();
     pdfPages.content = [];            
     var pdfMake = require('pdfmake/build/pdfmake.js')
     if (pdfMake.vfs == undefined){
@@ -28,7 +28,7 @@ const savePdf = async function (report) {
     let page = await createPdfContent(report);
     console.log(page);
     pdfPages.content = pdfPages.content.concat(page);
-    pdfMake.createPdf(pdfPages).download(filename + '.pdf');
+    pdfMake.createPdf(pdfPages).download(filename + '.pdf'); */
     return true;               
 }
 

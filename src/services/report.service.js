@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const postReport = (account, report) => {
-    console.log(account, report);
     if(!report.screenshot){
         report.screenshot = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAooAAAFnCAYAAAAhRmhNAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAFoOSURBVHhe7d0HvBTV2fjxZ+nNWEHaRbpGfd/wioWiRo0iIia+VhQR7MYS/ScaKyAXe0k0ltiigqIg4JtEuCAxYKNagu+rsdC5IFdUQKUIAvs/z8yZmTO7s+VeOvy+fPbD3dmdmTNnZneeec6ZPQIAAAAAu4xFTZuesrhZsy+/aNZsweImTbrZyQAAoBKq2f+BnUpK5C7zaGT+bJGqVm2gPxUAAFQGgSJ2SiZI3GD/lHQ6vd7+CQAAKoFAETslExxenxaZb/`
     }
@@ -22,7 +21,6 @@ const postReport = (account, report) => {
             environmentId: report.environment.environmentId,
             url: window.location.href
         }).then(function (response) {
-            console.log(response);
             resolve(response.data)
         }).catch(function (error) {
             if (error.response) {
@@ -50,7 +48,6 @@ const formatDate = (date) => {
 const getReports = (account, environmentId, moduleId, from, to) => {
     from = formatDate(from);
     to = formatDate(to);
-    console.log(account, environmentId, moduleId, from, to);
     return new Promise((resolve, reject) => {       
         axios.get(`${account.repositoryServer}/bug`, {
             params: {
@@ -63,7 +60,6 @@ const getReports = (account, environmentId, moduleId, from, to) => {
                 toDate: to
             }
         }).then(function (response) {
-            console.log(response);
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
@@ -92,7 +88,6 @@ const getReportDetails = (account, bugId) => {
                 bugId: bugId
             }
         }).then(function (response) {
-            console.log(response);
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);

@@ -93,7 +93,6 @@ import eventBus from '../../eventBus';
             },
 
             async getmodules() {
-                console.log(this.project);
                 if (this.searchQuery.length != '') {
                     try {
                         this.searchResults = await this.get(this.account, this.searchQuery, this.project.id)

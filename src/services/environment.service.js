@@ -2,7 +2,6 @@
 import axios from 'axios';
 
 const postEnvironment = (data) => {
-    console.log(data);
     return new Promise((resolve, reject) => {
         axios.post(`${data.repositoryServer}/environment`, {
             registrationKey: data.registrationKey, 
@@ -10,7 +9,6 @@ const postEnvironment = (data) => {
             uuid: data.uuid,
             name: data.name
         }).then(function (response) {
-            console.log(response);
             resolve(response.data)
         }).catch(function (error) {
             if (error.response) {
@@ -38,7 +36,6 @@ const patchEnvironment = (data) => {
             name: data.name,
             environmentId: data.environmentId
         }).then(function (response) {
-            console.log(response.data);
             resolve(response.data)
         }).catch(function (error) {
             
@@ -69,7 +66,6 @@ const getEnvironments = (account, query) => {
                 query: query
             }
         }).then(function (response) {
-            console.log(response);
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
@@ -89,8 +85,6 @@ const getEnvironments = (account, query) => {
 }
 
 const deleteEnvironment = (environmentId, account) => {
-    console.log(environmentId);
-    console.log(account.token);
     return new Promise((resolve, reject) => {       
         axios.delete(`${account.repositoryServer}/environment`, {
             params: {
@@ -100,7 +94,6 @@ const deleteEnvironment = (environmentId, account) => {
                 environmentId: environmentId
             }
         }).then(function (response) {
-            console.log(response.data);
             resolve(response.data)
         }).catch(function (error) {
             console.log(error.reponse);

@@ -12,7 +12,6 @@ const postFiles = (account, formData) => {
                 uuid: account.uuid
             }
         }).then(function (response) {
-            console.log(response);
             resolve(response.data)
         }).catch(function (error) {
             if (error.response) {
@@ -42,7 +41,6 @@ const deleteFile = (account, id) => {
                 attachment_uuid: id
             }
         }).then(function (response) {
-            console.log(response);
             resolve(response.data)
         }).catch(function (error) {
             if (error.response) {

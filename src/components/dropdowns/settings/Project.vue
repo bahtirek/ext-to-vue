@@ -81,7 +81,6 @@
         methods: {
 
             async onResultClick(project) {
-                console.log(project);
                 this.searchQuery = '';
                 this.searchResults = [];
                 this.project = project;

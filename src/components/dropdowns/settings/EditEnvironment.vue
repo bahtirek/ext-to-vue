@@ -76,7 +76,6 @@
                             environment = await this.post({...this.newEnvironment, ...this.account});
                         }
                         
-                        console.log(environment.result);
                         if(environment){ 
                             this.$emit('saveEnvironment', environment.result)
                         }                    
@@ -100,7 +99,6 @@
                 if (confirm('Are you suuure?')) {
                     try {
                         const result = await this.delete(this.environment.environmentId, this.account);
-                        console.log(result.status == 'success');
 
                         if(result){ 
                             this.$emit('deleteEnvironment')
@@ -115,15 +113,10 @@
                 }
             },
 
-            activateEnvironment(environment) {
-                console.log(environment);
-            },
-
             isEditing() {
                 if(this.environment && this.environment.environmentId) {
                     this.action = 'Edit environment';
                     this.newEnvironment = {...this.environment};
-                    console.log(this.newEnvironment);
                 }
             }
         }

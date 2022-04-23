@@ -107,7 +107,6 @@
             async getDetails(){
                 try {
                     const report = await this.get(this.account, this.bugId);
-                    console.log(report);
                     this.report = report;
                     /* if(reports.length > 0) {
                         this.setReports(reports)
@@ -131,7 +130,6 @@
 
             async pdf() {
                 this.filename = this.getFileName('bug');
-                console.log(this.report);
                 await this.savePdf(this.report)
             },
 
@@ -141,7 +139,6 @@
 
             edit() {
                 //emits to parent. parent displays edit view
-                console.log(this.report);
                 this.$emit('edit-report', this.report)
             },
 

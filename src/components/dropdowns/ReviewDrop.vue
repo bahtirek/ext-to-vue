@@ -100,7 +100,6 @@
 
             setReports(reports) {
                 this.reports = reports;
-                console.log(this.reports);
             }
         }
     }

@@ -72,7 +72,6 @@
 
         methods: {
             async onUserSave(){
-                console.log(this.userForm);
                 const userString = JSON.stringify(this.userForm)
                 await this.localStorage.set('user', userString)
                 globalStore.store.user = this.userForm;

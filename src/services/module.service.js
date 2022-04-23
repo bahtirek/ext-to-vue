@@ -4,8 +4,6 @@ import axios from 'axios';
 const postModule = (data) => {
     let saveToJira = 0;
     if (data.saveToJira) saveToJira = 1;
-    console.log(data);
-    console.log(saveToJira);
     return new Promise((resolve, reject) => {
         axios.post(`${data.repositoryServer}/module`, {
             registrationKey: data.registrationKey, 
@@ -15,7 +13,6 @@ const postModule = (data) => {
             description: data.description,
             projectId: data.projectId
         }).then(function (response) {
-            console.log(response);
             resolve(response.data)
         }).catch(function (error) {
             if (error.response) {
@@ -46,11 +43,9 @@ const patchModule = (data) => {
             lkModuleStatusId: data.lkModuleStatusId,
             moduleId: data.moduleId
         }).then(function (response) {
-            console.log(response.data);
             resolve(response.data)
         }).catch(function (error) {
             
-            console.log(error.response);
             if (error.response) {
                 if(error.response.status == 401){
                     alert("Unauthorized");
@@ -68,9 +63,6 @@ const patchModule = (data) => {
 
 
 const getModules = (account, query, projectId) => {
-    console.log(account.registrationKey);
-    console.log(account.token);
-    console.log(projectId);
     return new Promise((resolve, reject) => {       
         axios.get(`${account.repositoryServer}/module`, {
             params: {
@@ -82,7 +74,6 @@ const getModules = (account, query, projectId) => {
                 //includeInactive: account.isAdmin
             }
         }).then(function (response) {
-            console.log(response);
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
@@ -102,8 +93,6 @@ const getModules = (account, query, projectId) => {
 }
 
 const deleteModule = (moduleId, account, projectId) => {
-    console.log(moduleId);
-    console.log(account.token);
     return new Promise((resolve, reject) => {       
         axios.delete(`${account.repositoryServer}/module`, {
             params: {
@@ -113,7 +102,6 @@ const deleteModule = (moduleId, account, projectId) => {
                 moduleId: moduleId
             }
         }).then(function (response) {
-            console.log(response.data);
             resolve(response.data)
         }).catch(function (error) {
             console.log(error.reponse);

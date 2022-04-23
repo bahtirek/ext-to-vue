@@ -40,7 +40,6 @@
 
         mounted() {
             this.account = globalStore?.store?.account;
-            console.log(this.report);
         },
 
         props: [
@@ -72,12 +71,10 @@
             },
 
             async submitReport(){
-                console.log('currentModule', this.currentModule);
                 
                 try {
                     const report = await this.postReport(this.account, this.currentModule.moduleId, this.report);
 
-                    console.log(report);
                     if(report.result.bugId){
                         alert('Bug report successfully created.')
                         this.resetReportData();
@@ -86,7 +83,6 @@
                         this.submitInPorgress = false;
                     }                  
                 } catch(error) {
-                    console.log(error);
                     alert(`Sorry something went wrong. Please try later`);
                     this.submitInPorgress = false;
                 }

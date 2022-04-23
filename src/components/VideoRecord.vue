@@ -130,7 +130,6 @@
             },
 
             onSave(action) {
-                console.log(action);
                 if(this.action.upload) this.upload();
                 if(this.action.download) this.saveFile();
             },

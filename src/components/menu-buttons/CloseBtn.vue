@@ -9,16 +9,12 @@
 
 <script>
 
-    //import operators from '../../common/operators';
 
     export default {
         name: 'CloseBtn',
         
         props: ['toggleCompleted'],
         
-        created() { 
-            //this.onSelect = operators.onSelect;
-        },
 
         data() {
             return {
@@ -29,14 +25,7 @@
         methods: {
 
             toggleBtn(e) {
-                //this.next = this.activateOperator(e.currentTarget);
                 this.$emit('toggle-button', e.currentTarget);
-                this.$nextTick(() => {
-                    console.log(this.toggleCompleted)
-                    if(this.toggleCompleted) {
-                        console.log(this.toggleCompleted)
-                    }
-                })
             },
         }
     }
