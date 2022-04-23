@@ -1,7 +1,10 @@
 <template>
 
     <form class="ui-br-ext-report-form">
+        <ProjectSearch :account="account" :validation="true"  :oldProject="project" ref="projectForm"/>
+
         <ModuleSearch :account="account" :project="project" :validation="validation" :oldModule="module" ref="moduleForm"/>
+
         <EnvironmentSearch :account="account" :validation="validation" :oldEnvironment="environment" ref="environmentForm"/>
 
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
@@ -37,6 +40,7 @@
 
     import EnvironmentSearch from '../shared/EnvironmentSearch';
     import ModuleSearch from '../shared/ModuleSearch';
+    import ProjectSearch from '../shared/ProjectSearch';
     import { globalStore } from './../../main';
 
     export default {
@@ -49,14 +53,15 @@
 
         components: {
             EnvironmentSearch,
-            ModuleSearch
+            ModuleSearch,
+            ProjectSearch
         },
 
         created() {
-            this.account = globalStore?.store?.account;
-            this.project = globalStore?.store?.project;  
+            this.account = globalStore?.store?.account; 
             this.environment = globalStore.store.reportBug.environment;
-            this.module = globalStore.store.reportBug.module; 
+            this.module = globalStore.store.reportBug.module;
+            this.project = globalStore.store.reportBug.project;
         },
 
         mounted() {
@@ -88,13 +93,14 @@
 
             setFormValue(){
                 if(this.report) {
-                    this.form.description= this.report.description || "",
-                    this.form.title= this.report.title || "",
-                    this.form.actualResults= this.report.actualResults || "",
-                    this.form.expectedResults= this.report.expectedResults || "",
-                    this.form.stepsToReproduce= this.report.stepsToReproduce || "",
-                    this.form.environment= this.report.environment || {}
-                    this.form.module= this.report.module || {}
+                    this.form.description = this.report.description || "",
+                    this.form.title = this.report.title || "",
+                    this.form.actualResults = this.report.actualResults || "",
+                    this.form.expectedResults = this.report.expectedResults || "",
+                    this.form.stepsToReproduce = this.report.stepsToReproduce || "",
+                    this.environment = this.report.environment || {},
+                    this.module = this.report.module || {},
+                    this.project = this.report.project || {}
                 }
             },
 
@@ -104,8 +110,7 @@
                     title: '',
                     actualResults: '',
                     expectedResults: '',
-                    stepsToReproduce: '',
-                    environment: {}
+                    stepsToReproduce: ''
                 }
             },
 
@@ -125,6 +130,7 @@
 
                     if(!this.$refs.environmentForm.formValidation()) this.count++;                  
                     if(!this.$refs.moduleForm.formValidation()) this.count++;                  
+                    if(!this.$refs.projectForm.formValidation()) this.count++;                  
                     
                     if(this.count == 0) resolve(true)
                     resolve(false)
@@ -134,6 +140,7 @@
             getReportForm(){
                 this.form.environment = this.$refs.environmentForm.environment;
                 this.form.module = this.$refs.moduleForm.module;
+                this.form.project = this.$refs.projectForm.project;
                 return this.form;
             },
 

@@ -101,7 +101,7 @@ import eventBus from '../../eventBus';
                 this.searchResults = [];
                 this.project = project;
                 this.count = 0;
-                eventBus.$emit('projectChanged', this.project);
+                eventBus.$emit('projectChanged', this.project);// resets modules
             }
         }
     }

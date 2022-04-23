@@ -86,7 +86,8 @@
                 this.searchResults = [];
                 this.project = project;
                 globalStore.store.project = project;
-                globalStore.store.currentModule = {};
+                globalStore.store.reportBug.project = project;
+                globalStore.store.reportBug.module = {};
                 eventBus.$emit('account-loaded');
                 await this.saveToLocal();
             },

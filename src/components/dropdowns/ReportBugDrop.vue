@@ -3,7 +3,7 @@
         <div class="ui-br-ext-drop-title">Report bug</div>
         <div class="ui-br-ext-drop-body">
 
-            <ProjectDetails :project="project" />
+            <!-- <ProjectDetails :project="project" /> -->
 
             <UserDetails :user="user" />
 
@@ -68,7 +68,7 @@
             UserDetails,
             Resize,
             ReportForm,
-            ProjectDetails,
+            //ProjectDetails,
             FileUpload
         },
         
@@ -87,12 +87,12 @@
             this.account = globalStore?.store?.account;
             this.currentModule = globalStore?.store.currentModule;
             this.user = globalStore?.store.user;
-            this.project = globalStore?.store.project;
+            //this.project = globalStore?.store.project;
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
                 this.currentModule = globalStore.store.currentModule;
-                this.project = globalStore.store.project;
+                //this.project = globalStore.store.project;
             })
                         
             eventBus.$on('user-loaded', () => {
@@ -150,13 +150,13 @@
 
                 this.filename = this.getFileName(this.currentModule.name);
 
-                if(!globalStore.store.dynamicDomFlow) {
+               /*  if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
                     console.log(this.report.screenshot);
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                }
+                } */
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
@@ -189,6 +189,7 @@
                 this.submitInPorgress = false;  
                 globalStore.store.reportBug.environment = this.report.environment
                 globalStore.store.reportBug.module = this.report.module       
+                globalStore.store.reportBug.project = this.report.project       
             },
 
             async getScreenshot(){
