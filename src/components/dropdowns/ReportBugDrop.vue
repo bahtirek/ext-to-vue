@@ -98,6 +98,7 @@
             eventBus.$on('user-loaded', () => {
                 this.user = globalStore.store.user;
             })
+            this.saveToDb = this.account && this.account.token ? true : false;
         },
 
         data() {
@@ -122,7 +123,7 @@
                     url: '',
                     user: {}
                 },
-                saveToDb: true,
+                saveToDb: false,
                 filename: '',
                 name: 'test',
                 elementId: 'ui-br-ext-report-bug',
