@@ -142,7 +142,7 @@
             async saveReport(){
                 this.submitInPorgress = true;
 
-                this.filename = this.getFileName(this.currentModule.name);
+                this.filename = this.getFileName(this.report.module.name);
 
                 if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
