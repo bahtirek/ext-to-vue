@@ -89,9 +89,16 @@
         },
 
         mounted() { 
-            this.getDetails()
+            this.getDetails(this.bugId)
         },
 
+        watch: {
+            bugId: {
+                handler: function(newVal, oldVal){
+                    this.getDetails(newVal);
+                }
+            }
+        },
 
         data() {
             return {
@@ -104,9 +111,9 @@
 
         methods: {
 
-            async getDetails(){
+            async getDetails(bugId){
                 try {
-                    const report = await this.get(this.account, this.bugId);
+                    const report = await this.get(this.account, bugId);
                     this.report = report;
                     /* if(reports.length > 0) {
                         this.setReports(reports)
@@ -139,6 +146,7 @@
 
             edit() {
                 //emits to parent. parent displays edit view
+                console.log(this.report);
                 this.$emit('edit-report', this.report)
             },
 

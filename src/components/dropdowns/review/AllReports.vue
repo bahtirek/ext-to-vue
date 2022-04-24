@@ -102,8 +102,7 @@
 
         created() { 
             this.get = reportService.getReports;
-            this.addClickBlocker = clickBlocker.addClickBlocker;         
-            this.removeSingleClickBlocker = clickBlocker.removeSingleClickBlocker;               
+            this.addClickBlocker = clickBlocker.addClickBlocker;  
             this.removeClickBlocker = clickBlocker.removeClickBlocker;  
             this.environment = globalStore.store.reviewBug.environment;
             this.module = globalStore.store.reviewBug.module; 
@@ -120,6 +119,7 @@
                 globalStore.store.reviewBug.module = {};
                 this.project = project;
             });
+            this.removeBugCoverEls();
             this.showElements();
         },
 
@@ -208,6 +208,14 @@
                 this.reportsToDisplay = this.reports.filter(report => !report.element);
             },
 
+            removeBugCoverEls(){
+                const els = document.querySelectorAll('.ui-br-ext-bug-cover')
+                    
+                els.forEach(el => {
+                    el.remove()
+                });
+            },
+
             selectElement(xpath, bugId){
                 let element = false;
                 try {
@@ -216,11 +224,39 @@
                     console.log(e)
                 }
                 if(element){
+                    this.createElement(element, bugId)
                     element.classList.add('ui-br-ext-outlined-element');
-                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";
-                    element.setAttribute('data-ext-index', bugId);                                   
+                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";                                 
                 }
                 return element
+            },
+
+            createElement(element, bugId){
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const rect = this.getBoundingClientRect(element, scrollTop, scrollLeft);
+                const newDiv = document.createElement("div");
+                newDiv.addEventListener('click', (e) => {this.showDetailsOnClick(e.target)});
+                newDiv.setAttribute('data-ext-bugid', bugId);
+                newDiv.setAttribute('class', 'ui-br-ext-bug-cover');
+                Object.entries(rect).forEach(([key, val]) => {
+                    newDiv.style[key] = `${val}px`; 
+                });
+                document.body.appendChild(newDiv);
+            },
+
+            showDetailsOnClick(el) {
+                const bugId = el.getAttribute('data-ext-bugid');
+                if(!(bugId && bugId >= 0)) return false;
+
+                eventBus.$emit('show-details', bugId)
+            },
+
+            getBoundingClientRect(element, scrollTop, scrollLeft){     
+                let {top, right, bottom, left, width, height, x, y} = element.getBoundingClientRect();
+                top = top + scrollTop;
+                left = left + scrollLeft;   
+                return {top, left} 
             },
 
             globalSearch(){
@@ -229,6 +265,9 @@
             },
 
             setReports(reports){
+                const els = document.querySelectorAll('.ui-br-ext-outlined-element');
+                this.removeClickBlocker(els);
+                this.removeBugCoverEls();
                 this.reports = reports;
                 this.$emit('setReports', reports);
             }

@@ -17,9 +17,12 @@ const removeClickBlocker = function(bodyChildren) {
         bodyChildren = document.querySelectorAll('body > *:not(#ui-br-ext-extension):not(script):not(noscript):not(style)')
     }
     bodyChildren.forEach(el => {
+        console.log(el.classList);
         el.removeEventListener('click', preventClick, true);
         el.removeEventListener('mousedown', preventClick, true);
         el.removeEventListener('mouseup', preventClick, true);
+        el.classList.remove('ui-br-ext-outlined-element');
+        el.style.cssText = el.style.cssText.replace('outline: red dashed 3px !important;', '');
     });
 }
 
@@ -29,19 +32,7 @@ const preventClickHandler = function(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
     event.stopPropagation();
-    if(event.type == 'click') {
-        showDetailsOnClick(event.target);
-    }
     return false;
-}
-
-const showDetailsOnClick = function(el) {
-    const index = el.getAttribute('data-ext-index');
-    if(index && index >= 0) {
-        eventBus.$emit('show-details', index);
-    } else {
-        return false
-    }
 }
 
 export default {

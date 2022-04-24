@@ -16,6 +16,34 @@ body {
     }
 }
 
+.ui-br-ext-bug-cover {
+    position: absolute;
+    background-color: red;
+    outline: 2px solid @primary-color;
+    height: 10px;
+    width: 10px;
+    cursor: pointer;
+    border-radius: 1px;
+    &:before {
+        display: none;
+        color: white;
+        content: attr(data-ext-bugid);
+        background: red;
+        width: fit-content;
+        padding: 2px;
+        outline: 2px solid @primary-color;
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 12px;
+        border-radius: 2px;
+        line-height: 12px;
+    }
+    &:hover:before {
+        display: block;
+    }
+}
+
 .ui-br-ext-extension {
     position: fixed;
     left: 50%;
