@@ -17,7 +17,6 @@ const removeClickBlocker = function(bodyChildren) {
         bodyChildren = document.querySelectorAll('body > *:not(#ui-br-ext-extension):not(script):not(noscript):not(style)')
     }
     bodyChildren.forEach(el => {
-        console.log(el.classList);
         el.removeEventListener('click', preventClick, true);
         el.removeEventListener('mousedown', preventClick, true);
         el.removeEventListener('mouseup', preventClick, true);
