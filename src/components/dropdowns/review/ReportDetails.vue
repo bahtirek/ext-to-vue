@@ -2,6 +2,15 @@
     <div >  
         <div class="ui-br-ext-close-details" @click="close">Close</div>  
         <div  class="ui-br-ext-review-card" v-if="report">
+            <div class="ui-br-ext-review-box" v-if="report.sameElementBugs">
+                <div class="ui-br-ext-review-title">Other bugs for current element:</div>
+                <div class="ui-br-ext-review-text">
+                    <a v-for="(bug, index) in report.sameElementBugs" :key="index" target="_blank" @click="getDetails(bug.bugId)">
+                        {{bug.bugIndex}}
+                    </a> &nbsp;&nbsp;
+                </div>
+            </div>
+
             <ProjectDetails :project="reviewBug.project" />
             <ModuleDetails :module="reviewBug.module" />
            <!--  <UserDetails :user="report.user" /> -->
@@ -79,6 +88,7 @@
         props: [
             'bugId',
             'account',
+            'sharedReports'
         ],
 
         created() { 
@@ -115,12 +125,15 @@
                 try {
                     const report = await this.get(this.account, bugId);
                     this.report = report;
-                    /* if(reports.length > 0) {
-                        this.setReports(reports)
-                        this.showElements();
-                        this.ifFilter = false;
-                        this.ifGlobal = false;
-                    } */
+                    
+                    this.sharedReports.forEach((report) => {
+                        const sameXpath = this.sharedReports.filter((item) => {
+                                return (item.xpath == this.report.xpath) && (item.bugId != this.report.bugId)
+                            }).map((item) => { 
+                                return {bugId: item.bugId, bugIndex: item.bugIndex}
+                            });
+                        if (sameXpath && sameXpath.length > 0) this.report['sameElementBugs'] = sameXpath;
+                    })
                     
                 } catch(error) {
                     console.log(error);

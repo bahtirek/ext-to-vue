@@ -5,7 +5,7 @@
 
             <AllReports v-if="toggle.allReports" :sharedReports="reports" @show-details="showDetails" @setReports="setReports"/>
 
-            <ReportDetails v-if="toggle.details" @close-details="closeDetails" :bugId="bugId" :account="account" />
+            <ReportDetails v-if="toggle.details" :sharedReports="reports" @close-details="closeDetails" :bugId="bugId" :account="account" />
 
             <EditReport v-if="toggle.edit" :report="report" @save-edited-report="saveEditedReport" @cancel-edit-report="cancelEditReport" />
 
