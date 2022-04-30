@@ -49,7 +49,8 @@
 <script>
 
     import screenshot from '../../common/screenshot';
-    import exportPdf from '../../common/export-pdf';
+    import exportPdf from '../../services/pdf.service';
+    import filename from '../../services/filename.service';
     import select from '../../common/select';
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus';
@@ -74,8 +75,8 @@
         created() { 
             this.onGetScreenshot = screenshot.getScreenshot;
             this.getQueryWidth = screenshot.getQueryWidth;
-            this.getFileName = exportPdf.getFileName;
-            this.savePdf = exportPdf.savePdf;
+            this.getFileName = filename.getFileName;
+            this.getPdf = exportPdf.getPdf;
             this.getElementXpath = select.getElementXpath;
             this.sendEmail = email.sendEmail;
             this.postBlob = reportService.postBlob;
@@ -112,7 +113,7 @@
                     sendEmail: false,
                     saveScreenshot: false,
                     screenshot: '',
-                    xPath: '',
+                    xpath: '',
                     queryWidth: undefined,
                     url: '',
                     user: {}
@@ -135,14 +136,12 @@
                 }
 
                 Object.assign(this.report, this.$refs.reportForm.getReportForm());
-                
+                console.log(this.$refs.reportForm.getReportForm());
                 this.saveReport();
             },
 
             async saveReport(){
                 this.submitInPorgress = true;
-
-                this.filename = this.getFileName(this.report.module.name);
 
                 if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
@@ -155,10 +154,6 @@
                     this.screenshotLink(this.report.screenshot, this.filename);
                 }
 
-                if(this.report.savePdf){
-                    await this.savePdf(this.report)
-                }
-
                 if(this.report.saveJira){
                     console.log('save jira')
                 }
@@ -167,14 +162,17 @@
                     await this.sendEmail(this.report)
                 }
                 
-                this.report.xPath = this.getElementXpath(globalStore.store.selectedElement);
+                this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
 
                 this.report.url = window.location;
 
                 this.report.user = this.user;
 
                 this.report.attachments = this.$refs.fileUploadForm.getFiles();
-                
+
+                if(this.report.savePdf){
+                    this.submitPdf();
+                }
                 if(this.saveToDb) {
                     this.submitReport();
                 } 
@@ -201,7 +199,8 @@
             },
 
             async downloadScreenshot() {
-                const filename = this.getFileName(this.currentModule.name);
+
+                const filename = this.getFileName(this.report.module);
                 let dataUrl = globalStore.store.screenshot;
 
                 if(!globalStore.store.dynamicDomFlow) {
@@ -222,7 +221,7 @@
                     savePdf: false,
                     saveScreenshot: false,
                     screenshot: '',
-                    xPath: '',
+                    xpath: '',
                     url: '',
                     queryWidth: 550,
                     attachments: []
@@ -248,6 +247,23 @@
                         alert(`Sorry something went wrong. Please try later`);
                         this.submitInPorgress = false;
                     }                  
+                } catch(error) {
+                    console.log(error);
+                    alert(`Sorry something went wrong. Please try later`);
+                    this.submitInPorgress = false;
+                }
+            },
+
+            async submitPdf(){               
+                try {
+                    const result = await this.getPdf(this.report, this.account);
+                    if(result){
+                        window.open(result, '_blank');
+                    } else {
+                        alert(`Sorry something went wrong. Please try later`);
+                        this.submitInPorgress = false;
+                    } 
+                    console.log(result);                  
                 } catch(error) {
                     console.log(error);
                     alert(`Sorry something went wrong. Please try later`);
