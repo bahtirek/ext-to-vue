@@ -67,6 +67,16 @@ const onDeselect = function(){
     // Disabling the "Report Bug" button if select operator is turned off.
     displayReportBugButton(false);
 
+    removeBugCoverEls();
+
+}
+
+const removeBugCoverEls = function(){
+    const els = document.querySelectorAll('.ui-br-ext-bug-cover')
+        
+    els.forEach(el => {
+        el.remove()
+    });
 }
 
 const addClickToHtml = function(eventFunction){
