@@ -43,7 +43,7 @@ export const globalStore = new Vue({
         saveJira: false,
         savePdf: false,
         saveScreenshot: false,
-        xPath: '',
+        xpath: '',
         screenshot: '',
         url:'',
         queryWidth: 550,
