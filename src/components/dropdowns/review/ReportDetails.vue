@@ -58,11 +58,12 @@
             </div>
             
             <div class="ui-br-ext-svg-cont">
+                <span class="ui-br-ext-btn-svg btn-svg-status" @click="statusUpdate" data-title="Status update"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-edit" @click="edit" data-title="Edit"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-pdf" @click="pdf" data-title="PDF"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-addJira"  @click="addJira" data-title="Jira link"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-createJira" @click="createJira" data-title="Create Jira"></span>
-                <span class="ui-br-ext-btn-svg btn-svg-edit" @click="edit" data-title="Edit"></span>
-                <span class="ui-br-ext-btn-svg btn-svg-delete" @click="deleteReport" data-title="Delete"></span>
+                <!-- <span class="ui-br-ext-btn-svg btn-svg-delete" @click="deleteReport" data-title="Delete"></span> -->
             </div >
         </div>
     </div>
@@ -169,6 +170,11 @@
                 if (deleteConfirmation) {
                     this.$emit('delete-report', this.report)
                 }
+            },
+
+            statusUpdate() {
+                console.log('update')
+                this.$emit('status-update', this.report.projectId, this.report.bugId)
             }
         }
     }

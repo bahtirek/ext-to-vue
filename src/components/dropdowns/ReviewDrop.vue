@@ -5,9 +5,11 @@
 
             <AllReports v-if="toggle.allReports" :sharedReports="reports" @show-details="showDetails" @setReports="setReports"/>
 
-            <ReportDetails v-if="toggle.details" :sharedReports="reports" @close-details="closeDetails" :bugId="bugId" :account="account" />
+            <ReportDetails v-if="toggle.details" :sharedReports="reports" @status-update="showStatusUpdate" @edit-report="showEditReport" @close-details="closeDetails" :bugId="bugId" :account="account" />
 
-            <EditReport v-if="toggle.edit" :report="report" @save-edited-report="saveEditedReport" @cancel-edit-report="cancelEditReport" />
+            <StatusChoice v-if="toggle.status" @close-status="closeStatus" :projectId="projectId" :account="account" />
+
+            <EditReport v-if="toggle.edit" :report="report" @cancel-edit-report="cancelEditReport"  :account="account" />
 
         </div>
         <div class="ui-br-ext-drop-body"  v-if="!(account && account.token)">
@@ -28,6 +30,7 @@
     import eventBus from './../../eventBus';
     import AllReports from './review/AllReports';
     import ReportDetails from './review/ReportDetails';
+    import StatusChoice from './review/StatusChoice';
     import clickBlocker from '../../common/click-blocker';
     import Resize from '../shared/Resize';
     import EditReport from './review/EditReport';
@@ -39,7 +42,8 @@
             AllReports,
             ReportDetails,
             Resize,
-            EditReport
+            EditReport,
+            StatusChoice
         },
 
         created() { 
@@ -71,10 +75,12 @@
                 toggle: {
                     allReports: true,
                     details: false,
-                    edit: false
+                    edit: false,
+                    status: false
                 },
                 elementId: 'ui-br-ext-review',
-                bugId: undefined
+                bugId: undefined,
+                projectId: undefined
             }
         },
 
@@ -86,6 +92,22 @@
 
             showDetails(bugId) {
                 this.bugId = bugId;
+                this.toggleChildren('details');
+            },
+
+            showEditReport(report) {
+                this.bugId = report.bugId;
+                this.toggleChildren('edit');
+            },
+
+            showStatusUpdate(projectId, bugId) {
+                console.log(projectId);
+                this.bugId = bugId;
+                this.projectId = projectId;
+                this.toggleChildren('status');
+            },
+
+            closeStatus() {
                 this.toggleChildren('details');
             },
 
