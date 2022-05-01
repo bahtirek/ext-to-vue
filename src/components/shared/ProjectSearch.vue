@@ -87,7 +87,7 @@ import eventBus from '../../eventBus';
             },
 
             async getprojects() {
-                if (this.searchQuery.length != '') {
+                if (this.searchQuery.length != '' && this.searchQuery.length <= 10) {
                     try {
                         this.searchResults = await this.get(this.account, this.searchQuery)
                     } catch(error) {

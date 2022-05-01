@@ -95,7 +95,7 @@ import eventBus from '../../eventBus';
             async getmodules() {
                 if (this.searchQuery.length != '') {
                     try {
-                        this.searchResults = await this.get(this.account, this.searchQuery, this.project.id)
+                        if(this.project.id) this.searchResults = await this.get(this.account, this.searchQuery, this.project.id)
                     } catch(error) {
                         console.log(error);
                     }                   
