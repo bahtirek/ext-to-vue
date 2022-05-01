@@ -1,7 +1,7 @@
 <template>
     <div class="ui-br-ext-dropdown-item ui-br-ext-review" id="ui-br-ext-review" ref="divToResize">
         <div class="ui-br-ext-drop-title">Reports</div>
-        <div class="ui-br-ext-drop-body">
+        <div class="ui-br-ext-drop-body" v-if="account && account.token">
 
             <AllReports v-if="toggle.allReports" :sharedReports="reports" @show-details="showDetails" @setReports="setReports"/>
 
@@ -10,7 +10,12 @@
             <EditReport v-if="toggle.edit" :report="report" @save-edited-report="saveEditedReport" @cancel-edit-report="cancelEditReport" />
 
         </div>
-        
+        <div class="ui-br-ext-drop-body"  v-if="!(account && account.token)">
+
+            <p>Report for users with Account</p>
+            <p>Features:</p>
+
+        </div>
         <Resize :elementId="elementId" />
 
     </div>
@@ -40,13 +45,13 @@
         created() { 
             this.addClickBlocker = clickBlocker.addClickBlocker;         
             this.removeSingleClickBlocker = clickBlocker.removeSingleClickBlocker;               
-            this.removeClickBlocker = clickBlocker.removeClickBlocker;               
+            this.removeClickBlocker = clickBlocker.removeClickBlocker;  
+            this.account = globalStore.store.account;             
         },
 
         mounted: function () {
             this.currentModule = globalStore?.store.currentModule;
             this.project = globalStore.store.project;
-            this.account = globalStore.store.account;
 
             eventBus.$on('show-details', (index) => {
                 this.showDetails(index)
