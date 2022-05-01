@@ -56,13 +56,14 @@
                     </a> &nbsp;&nbsp;
                 </div>
             </div>
-            <div>
-                <span class="ui-br-ext-btn-lnk" @click="pdf">Export PDF</span>
-                <span class="ui-br-ext-btn-lnk" @click="addJira">Add JIRA ticket</span>
-                <span class="ui-br-ext-btn-lnk" @click="createJira">Create JIRA issue</span>
-                <span class="ui-br-ext-btn-lnk" @click="edit">Edit report</span>
-                <span class="ui-br-ext-btn-lnk" @click="deleteReport">Delete report</span>
-            </div>
+            
+            <div class="ui-br-ext-svg-cont">
+                <span class="ui-br-ext-btn-svg btn-svg-pdf" @click="pdf" data-title="PDF"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-addJira"  @click="addJira" data-title="Jira link"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-createJira" @click="createJira" data-title="Create Jira"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-edit" @click="edit" data-title="Edit"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-delete" @click="deleteReport" data-title="Delete"></span>
+            </div >
         </div>
     </div>
 </template>
