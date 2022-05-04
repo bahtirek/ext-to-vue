@@ -37,7 +37,7 @@ export const globalStore = new Vue({
       reports: [],
       report: {
         description: '',
-        actualResults: '',
+        actualResult: '',
         expectedResult: '',
         stepsToReproduce: '',
         saveJira: false,

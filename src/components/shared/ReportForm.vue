@@ -19,8 +19,8 @@
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-act-results">Actual results</label>
-            <textarea name="ui-br-ext-act-results" v-model="form.actualResults" rows="3" data-gramm="false" maxlength="1000"></textarea>
-            <span class="ui-br-ext-message" v-if="count>0 && form.actualResults==''">Field is required</span>
+            <textarea name="ui-br-ext-act-results" v-model="form.actualResult" rows="3" data-gramm="false" maxlength="1000"></textarea>
+            <span class="ui-br-ext-message" v-if="count>0 && form.actualResult==''">Field is required</span>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-exp-results">Expected results</label>
@@ -74,7 +74,7 @@
                 form: {
                     description: '',
                     title: '',
-                    actualResults: '',
+                    actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: '',
                     environment: {}
@@ -95,7 +95,7 @@
                 if(this.report) {
                     this.form.description = this.report.description || "",
                     this.form.title = this.report.title || "",
-                    this.form.actualResults = this.report.actualResults || "",
+                    this.form.actualResult = this.report.actualResult || "",
                     this.form.expectedResult = this.report.expectedResult || "",
                     this.form.stepsToReproduce = this.report.stepsToReproduce || "",
                     this.environment = this.report.environment || {},
@@ -108,7 +108,7 @@
                 this.form = {
                     description: '',
                     title: '',
-                    actualResults: '',
+                    actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: ''
                 }

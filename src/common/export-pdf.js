@@ -33,10 +33,10 @@ const savePdf = async function (report) {
 }
 
 const createPdfContent = async function (report) {
-    const list = ['description', 'actualResults', 'expectedResult', 'stepsToReproduce'];
+    const list = ['description', 'actualResult', 'expectedResult', 'stepsToReproduce'];
     const titles = {
         description: 'Description',
-        actualResults: 'Actual results',
+        actualResult: 'Actual results',
         expectedResult: 'Expected results',
         stepsToReproduce: 'Steps to reproduce'
     }

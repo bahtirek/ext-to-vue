@@ -10,7 +10,7 @@ const postReport = (account, report) => {
             token: account.token,
             uuid: account.uuid,
             moduleId: report.module.moduleId,
-            actualResult: report.actualResults,
+            actualResult: report.actualResult,
             description: report.description,
             stepsToReproduce: report.stepsToReproduce,
             expectedResult: report.expectedResult,

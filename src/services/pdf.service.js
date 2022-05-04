@@ -13,7 +13,7 @@ const getPdf = (report, account) => {
             module: report.module.name,
             environment: report.environment.name,
             title: report.title,
-            actualResult: report.actualResults,
+            actualResult: report.actualResult,
             description: report.description,
             stepsToReproduce: report.stepsToReproduce,
             expectedResult: report.expectedResult,

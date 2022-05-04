@@ -105,7 +105,7 @@
                 project: {},
                 report: {
                     description: '',
-                    actualResults: '',
+                    actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: '',
                     saveJira: false,
@@ -143,12 +143,12 @@
             async saveReport(){
                 this.submitInPorgress = true;
 
-                /* if(!globalStore.store.dynamicDomFlow) {
+                if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                } */
+                }
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
@@ -214,7 +214,7 @@
             resetReportData(){
                 this.report = {
                     description: '',
-                    actualResults: '',
+                    actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: '',
                     saveJira: false,
