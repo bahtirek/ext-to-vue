@@ -7,11 +7,11 @@ const sendEmail = async function(report, user) {
 }
 
 const createEmailContent = function (report) {
-    const list = ['description', 'actualResults', 'expectedResults', 'stepsToReproduce'];
+    const list = ['description', 'actualResults', 'expectedResult', 'stepsToReproduce'];
     const titles = {
         description: 'Description',
         actualResults: 'Actual results',
-        expectedResults: 'Expected results',
+        expectedResult: 'Expected results',
         stepsToReproduce: 'Steps to reproduce'
     }
 

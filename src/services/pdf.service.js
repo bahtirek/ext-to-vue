@@ -16,7 +16,7 @@ const getPdf = (report, account) => {
             actualResult: report.actualResults,
             description: report.description,
             stepsToReproduce: report.stepsToReproduce,
-            expectedResult: report.expectedResults,
+            expectedResult: report.expectedResult,
             xpath: report.xpath,
             screenshot: report.screenshot,
             url: window.location.href

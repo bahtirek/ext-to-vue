@@ -24,8 +24,8 @@
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-exp-results">Expected results</label>
-            <textarea name="ui-br-ext-exp-results" v-model="form.expectedResults" rows="3" data-gramm="false" maxlength="1000"></textarea>
-            <span class="ui-br-ext-message" v-if="count>0 && form.expectedResults==''">Field is required</span>
+            <textarea name="ui-br-ext-exp-results" v-model="form.expectedResult" rows="3" data-gramm="false" maxlength="1000"></textarea>
+            <span class="ui-br-ext-message" v-if="count>0 && form.expectedResult==''">Field is required</span>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-rep-steps">Steps to reproduce</label>
@@ -75,7 +75,7 @@
                     description: '',
                     title: '',
                     actualResults: '',
-                    expectedResults: '',
+                    expectedResult: '',
                     stepsToReproduce: '',
                     environment: {}
                 },
@@ -96,7 +96,7 @@
                     this.form.description = this.report.description || "",
                     this.form.title = this.report.title || "",
                     this.form.actualResults = this.report.actualResults || "",
-                    this.form.expectedResults = this.report.expectedResults || "",
+                    this.form.expectedResult = this.report.expectedResult || "",
                     this.form.stepsToReproduce = this.report.stepsToReproduce || "",
                     this.environment = this.report.environment || {},
                     this.module = this.report.module || {},
@@ -109,7 +109,7 @@
                     description: '',
                     title: '',
                     actualResults: '',
-                    expectedResults: '',
+                    expectedResult: '',
                     stepsToReproduce: ''
                 }
             },

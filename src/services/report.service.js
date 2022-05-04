@@ -13,7 +13,7 @@ const postReport = (account, report) => {
             actualResult: report.actualResults,
             description: report.description,
             stepsToReproduce: report.stepsToReproduce,
-            expectedResult: report.expectedResults,
+            expectedResult: report.expectedResult,
             xpath: report.xpath,
             screenshot: report.screenshot,
             attachments: report.attachments,
