@@ -46,6 +46,14 @@ import eventBus from '../../eventBus';
             });
         },
 
+        watch: {
+            oldModule: {
+                handler: function(newVal, oldVal){
+                    this.setFormValue()
+                }
+            }
+        },
+
         data() {
             return {
                 count: 0,

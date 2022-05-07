@@ -38,6 +38,13 @@
             this.setFormValue();
             this.get = environmentService.getEnvironments;
         },
+        watch: {
+            oldEnvironment: {
+                handler: function(newVal, oldVal){
+                    this.setFormValue()
+                }
+            }
+        },
 
         data() {
             return {

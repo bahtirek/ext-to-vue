@@ -97,11 +97,11 @@
 
             showEditReport(report) {
                 this.bugId = report.bugId;
+                this.report = report;
                 this.toggleChildren('edit');
             },
 
             showStatusUpdate(projectId, bugId) {
-                console.log(projectId);
                 this.bugId = bugId;
                 this.projectId = projectId;
                 this.toggleChildren('status');

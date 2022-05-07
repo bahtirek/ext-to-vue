@@ -40,6 +40,14 @@ import eventBus from '../../eventBus';
             this.get = projectService.getProjects;
         },
 
+        watch: {
+            oldProject: {
+                handler: function(newVal, oldVal){
+                    this.setFormValue()
+                }
+            }
+        },
+
         data() {
             return {
                 count: 0,

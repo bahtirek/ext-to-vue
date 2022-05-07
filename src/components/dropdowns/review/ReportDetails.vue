@@ -160,7 +160,9 @@
             },
 
             edit() {
-                //emits to parent. parent displays edit view
+                this.report.project = {id: this.report.projectId, projectKey: this.report.projectName};
+                this.report.environment = {environmentId: this.report.bugEnvironmentId, name: this.report.bugEnvironment};
+                this.report.module = {moduleId: this.report.moduleId, name: this.report.moduleName};
                 console.log(this.report);
                 this.$emit('edit-report', this.report)
             },

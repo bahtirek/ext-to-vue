@@ -1,10 +1,11 @@
 <template>
     <div > 
-
+        <div class="ui-br-ext-close-details" @click="close">Close</div>  
+        <div class="ui-br-ext-spacer-3"></div>
         <ReportForm ref="reportForm" :report="report"/>
 
         <ReplaceScreenshot :account="account" ref="replaceScreenshotForm"  />
-        <FileUpload :account="account" ref="fileUploadForm"  />
+        <FileUpload :account="account" ref="fileUploadForm" :attachments="report.attachments" />
 
         
         <div class="ui-br-ext-btn-group">
@@ -21,9 +22,7 @@
 </template>
 
 
-<script>
-
-    
+<script>   
     import ReportForm from '../../shared/ReportForm';
     import { globalStore } from './../../../main';
     import FileUpload from '../../shared/FileUpload';
@@ -37,18 +36,15 @@
             FileUpload,
             ReplaceScreenshot
         },
-
-        mounted() {
-            this.account = globalStore?.store?.account;
-        },
-
+        
         props: [
-            'report'
+            'report',
+            'account'
         ],
 
         data() {
             return {
-                account:{}
+                //account:{}
             }
         },
 
@@ -86,7 +82,11 @@
                     alert(`Sorry something went wrong. Please try later`);
                     this.submitInPorgress = false;
                 }
-            }
+            },
+            
+            close(){
+                this.cancel()
+            },
         }
     }
 </script>
