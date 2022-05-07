@@ -27,7 +27,6 @@
     import ReportForm from '../../shared/ReportForm';
     import { globalStore } from './../../../main';
     import FileUpload from '../../shared/FileUpload';
-    import ReplaceScreenshot from '../../shared/ReplaceScreenshot';
 
     export default {
         name: 'ReviewDrop',
@@ -35,7 +34,6 @@
         components: {
             ReportForm,
             FileUpload,
-            ReplaceScreenshot
         },
 
         props: [
