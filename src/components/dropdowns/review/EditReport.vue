@@ -4,7 +4,8 @@
         <div class="ui-br-ext-spacer-3"></div>
         <ReportForm ref="reportForm" :report="report"/>
 
-        <ReplaceScreenshot :account="account" ref="replaceScreenshotForm"  />
+        <!-- <ReplaceScreenshot :account="account" ref="replaceScreenshotForm"  /> -->
+        <!-- Reselect Element -->
         <FileUpload :account="account" ref="fileUploadForm" :attachments="report.attachments" />
 
         
@@ -36,7 +37,7 @@
             FileUpload,
             ReplaceScreenshot
         },
-        
+
         props: [
             'report',
             'account'
