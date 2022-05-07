@@ -49,7 +49,7 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   z-index: 99999999;
   line-height: normal !important;
   /* Video Recorder Styles START */
-  /* Video Recorder Styles START */
+  /* Video Recorder Styles END */
 }
 @media (max-width: 767px) {
   .ui-br-ext-extension {
@@ -886,6 +886,9 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-file-upload-comp .ui-br-ext-file-upload ul li span:first-child:hover {
   cursor: pointer;
+}
+.ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-status {
+  text-transform: capitalize;
 }
 .ui-br-ext-extension .ui-br-ext-message {
   font-size: 10px;

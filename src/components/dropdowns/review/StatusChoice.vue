@@ -5,12 +5,11 @@
         <div  class="ui-br-ext-review-card">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-status">Status choice</label>
-                <select id="ui-br-ext-status" name="status" v-model="status">
-                    <option disabled value="">Please select one</option>
-                    <option value="active">Active</option>
-                    <option value="inProgress">In progress</option>
-                    <option value="completed">Completed</option>
-                    <option value="canceled">Canceled</option>
+                <select id="ui-br-ext-status" name="status" v-model="lkBugStatusId">
+
+                    <option v-for="(status, index) in statusList" :key="index" :value="status.lkBugStatusId">
+                        {{status.description}}
+                    </option>
                 </select>
                 <span class="ui-br-ext-message" v-if="count>0 && status==''">Field is required</span>
             </div>
@@ -30,8 +29,7 @@
 
 <script>
 
-    import reportService from '../../../services/report.service';
-    import { globalStore } from './../../../main';
+    import statusService from '../../../services/status.service';
 
     export default {
         name: 'StatusChoice',
@@ -40,35 +38,42 @@
         },
 
         props: [
-            'projectId',
+            'report',
             'account',
         ],
 
         created() { 
-            this.update = reportService.updateStatus;
+            this.update = statusService.patchStatus;
+            this.getList = statusService.getStatusList;
+            this.lkBugStatusId = "" + this.report.lkBugStatusId;
+            console.log(this.lkBugStatusId);
         },
 
         mounted() { 
-            
+            console.log(this.report);
+            this.getStatusList();
+            this.lkBugStatusId = this.report.lkBugStatusId
         },
 
         data() {
             return {
-                status: '',
-                count: 0,
-                submitInPorgress: false
+                lkBugStatusId: undefined,
+                submitInPorgress: false,
+                statusList: [],
+                count: 0
             }
         },
 
         methods: {
 
             async  updateStatus(){
-                console.log(this.status);
-                if(this.status && this.status.length > 0) {
+                const status = parseInt(this.lkBugStatusId);
+                if(status && status > 0) {
                     this.submitInPorgress = true;
                     try {
-                        console.log(this.status);
+                        const result = await this.update(this.account, status, this.report.bugId)
                         this.submitInPorgress = false;
+                        if(!result == "success") return false;
                         this.close();
                     } catch(error) {
                         console.log(error);
@@ -77,6 +82,16 @@
                 } else {
                     this.count++
                 }               
+            },
+
+            async  getStatusList(){
+                try {
+                    this.statusList = await this.getList(this.account);
+                    console.log(this.statusList);
+                } catch(error) {
+                    console.log(error);
+                }
+                              
             },
 
             close(){

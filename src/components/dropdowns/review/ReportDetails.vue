@@ -51,7 +51,7 @@
             <div class="ui-br-ext-review-box" v-if="report.attachments">
                 <div class="ui-br-ext-review-title">Attachments:</div>
                 <div class="ui-br-ext-review-text">
-                    <a v-for="(attachment, index) in report.attachments" :key="index" target="_blank" :href="attachment">
+                    <a v-for="(attachment, index) in report.attachments" :key="index" target="_blank" :href="attachment.path">
                         Attch-{{index+1}}
                     </a> &nbsp;&nbsp;
                 </div>
@@ -127,7 +127,7 @@
                 try {
                     const report = await this.get(this.account, bugId);
                     this.report = report;
-                    
+                    console.log(this.report);
                     this.sharedReports.forEach((report) => {
                         const sameXpath = this.sharedReports.filter((item) => {
                                 return (item.xpath == this.report.xpath) && (item.bugId != this.report.bugId)
@@ -176,7 +176,7 @@
 
             statusUpdate() {
                 console.log('update')
-                this.$emit('status-update', this.report.projectId, this.report.bugId)
+                this.$emit('status-update', this.report)
             }
         }
     }

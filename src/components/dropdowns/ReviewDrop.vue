@@ -7,7 +7,7 @@
 
             <ReportDetails v-if="toggle.details" :sharedReports="reports" @status-update="showStatusUpdate" @edit-report="showEditReport" @close-details="closeDetails" :bugId="bugId" :account="account" />
 
-            <StatusChoice v-if="toggle.status" @close-status="closeStatus" :projectId="projectId" :account="account" />
+            <StatusChoice v-if="toggle.status" @close-status="closeStatus" :report="report" :account="account" />
 
             <EditReport v-if="toggle.edit" :report="report" @cancel-edit-report="cancelEditReport"  :account="account" />
 
@@ -101,9 +101,9 @@
                 this.toggleChildren('edit');
             },
 
-            showStatusUpdate(projectId, bugId) {
-                this.bugId = bugId;
-                this.projectId = projectId;
+            showStatusUpdate(report) {
+                this.bugId = report.bugId;
+                this.report = report;
                 this.toggleChildren('status');
             },
 
