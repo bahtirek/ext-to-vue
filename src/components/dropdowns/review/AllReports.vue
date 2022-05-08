@@ -26,6 +26,18 @@
                             <span class="ui-br-ext-message" v-if="count>0 && to==''" >Field is required</span>
                         </div>
                     </div>
+                    <div class="ui-br-ext-input-wrap">
+                        <div class="ui-br-ext-input-wrap-label">Include</div>
+                        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+                            <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf" v-model="includeCompleted">
+                            <label for="ui-br-ext-save-to-pdf">Completed</label>
+                        </div>
+                        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+                            <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="includeCanceled">
+                            <label for="ui-br-ext-send-email">Canceled</label>
+                        </div>
+                    </div>
+                    
                     <div v-if="reportNotFound" class="ui-br-ext-warning-text" >
                         No Bug report found
                     </div>
@@ -39,6 +51,17 @@
 
                 <div class="ui-br-ext-tab-item" v-if="ifGlobal">
                     <BugSearch :account="account" ref="bugSearchForm"/>
+                    <div class="ui-br-ext-input-wrap">
+                        <div class="ui-br-ext-input-wrap-label">Include</div>
+                        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+                            <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf" v-model="includeCompleted">
+                            <label for="ui-br-ext-save-to-pdf">Completed</label>
+                        </div>
+                        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+                            <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="includeCanceled">
+                            <label for="ui-br-ext-send-email">Canceled</label>
+                        </div>
+                    </div>
                     <div class="ui-br-ext-btn-group">
                         <button class="ui-br-ext-btn" @click="globalSearch" data-listener="off">
                             <span class="ui-br-ext-spinner"></span>
@@ -138,16 +161,19 @@
                 ifFilter: false,
                 ifGlobal:false,
                 searchQuery: '',
-                reportNotFound: false
+                reportNotFound: false,
+                includeCompleted: false,
+                includeCanceled: false,
             }
         },
 
         methods: {
 
             async getReports(){
+                console.log(this.include);
                 if(!this.validateForm()) return false;
                 try {
-                    const reports = await this.get(this.account, this.environment.environmentId, this.module.moduleId, this.from, this.to);
+                    const reports = await this.get(this.account, this.environment.environmentId, this.module.moduleId, this.from, this.to, this.includeCompleted, this.includeCanceled);
                     if(reports.length > 0) {
                         this.setReports(reports)
                         this.showElements();

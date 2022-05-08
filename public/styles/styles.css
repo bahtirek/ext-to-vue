@@ -890,6 +890,17 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
 .ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-status {
   text-transform: capitalize;
 }
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-input-wrap {
+  position: relative;
+}
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-input-wrap .ui-br-ext-input-wrap-label {
+  color: #666666;
+  font-size: 16px;
+  font-weight: normal !important;
+  margin-bottom: 9px;
+  padding-left: 5px;
+  padding-top: 5px;
+}
 .ui-br-ext-extension .ui-br-ext-message {
   font-size: 10px;
   display: none;

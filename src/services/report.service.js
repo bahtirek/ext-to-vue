@@ -45,7 +45,7 @@ const formatDate = (date) => {
 }
 
 
-const getReports = (account, environmentId, moduleId, from, to) => {
+const getReports = (account, environmentId, moduleId, from, to, includeCompleted, includeCanceled) => {
     from = formatDate(from);
     to = formatDate(to);
     return new Promise((resolve, reject) => {       
@@ -57,7 +57,9 @@ const getReports = (account, environmentId, moduleId, from, to) => {
                 environmentId: environmentId,
                 moduleId: moduleId,
                 fromDate: from,
-                toDate: to
+                toDate: to,
+                includeCompleted: includeCompleted,
+                includeCanceled: includeCanceled
             }
         }).then(function (response) {
             resolve(response.data.result)
