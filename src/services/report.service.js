@@ -79,6 +79,36 @@ const getReports = (account, environmentId, moduleId, from, to, includeCompleted
         });     
     })
 }
+const getGlobalReports = (account, searchQuery, includeCompleted, includeCanceled) => {
+
+    return new Promise((resolve, reject) => {       
+        axios.get(`${account.repositoryServer}/bug-global-search`, {
+            params: {
+                registrationKey: account.registrationKey, 
+                token: account.token,
+                uuid: account.uuid,
+                query: searchQuery,
+                includeCompleted: includeCompleted,
+                includeCanceled: includeCanceled
+            }
+        }).then(function (response) {
+            resolve(response.data.result)
+        }).catch(function (error) {
+            console.log(error.reponse);
+            if (error.response) {
+                if(error.response.status == 401){
+                    alert("Unauthorized");
+                    return false
+                }
+                reject(error.response.data);
+            } else if (error.request) {
+                alert('Please check connection');
+            } else {
+                alert('Sorry, something went wrong please try again later');
+            }
+        });     
+    })
+}
 
 const getReportDetails = (account, bugId) => {
     return new Promise((resolve, reject) => {       
@@ -111,5 +141,6 @@ const getReportDetails = (account, bugId) => {
 export default {
     postReport,
     getReports,
-    getReportDetails
+    getReportDetails,
+    getGlobalReports
 }

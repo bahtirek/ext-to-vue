@@ -51,17 +51,7 @@
 
                 <div class="ui-br-ext-tab-item" v-if="ifGlobal">
                     <BugSearch :account="account" ref="bugSearchForm"/>
-                    <div class="ui-br-ext-input-wrap">
-                        <div class="ui-br-ext-input-wrap-label">Include</div>
-                        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-                            <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf" v-model="includeCompleted">
-                            <label for="ui-br-ext-save-to-pdf">Completed</label>
-                        </div>
-                        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-                            <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="includeCanceled">
-                            <label for="ui-br-ext-send-email">Canceled</label>
-                        </div>
-                    </div>
+                    
                     <div class="ui-br-ext-btn-group">
                         <button class="ui-br-ext-btn" @click="globalSearch" data-listener="off">
                             <span class="ui-br-ext-spinner"></span>
@@ -125,6 +115,7 @@
 
         created() { 
             this.get = reportService.getReports;
+            this.getGlobal = reportService.getGlobalReports;
             this.addClickBlocker = clickBlocker.addClickBlocker;  
             this.removeClickBlocker = clickBlocker.removeClickBlocker;  
             this.environment = globalStore.store.reviewBug.environment;
@@ -285,9 +276,26 @@
                 return {top, left} 
             },
 
-            globalSearch(){
+            async globalSearch(){
                 if (!this.$refs.bugSearchForm.formValidation()) return false;
-                const globalQuery = this.$refs.bugSearchForm.searchQuery;
+                const searchQuery = this.$refs.bugSearchForm.searchQuery;
+                const includeCompleted = this.$refs.bugSearchForm.includeCompleted;
+                const includeCanceled = this.$refs.bugSearchForm.includeCanceled;
+                try {
+                    const reports = await this.getGlobal(this.account, searchQuery, includeCompleted, includeCanceled);
+                    if(reports.length > 0) {
+                        this.setReports(reports)
+                        this.showElements();
+                        this.ifFilter = false;
+                        this.ifGlobal = false;
+                        this.reportNotFound = false;
+                    } else {
+                        this.reportNotFound = true;
+                    }
+                    
+                } catch(error) {
+                    console.log(error);
+                }
             },
 
             setReports(reports){
