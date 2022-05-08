@@ -13,6 +13,10 @@
 
             <ProjectDetails :project="reviewBug.project" />
             <ModuleDetails :module="reviewBug.module" />
+            <div class="ui-br-ext-review-box" v-if="report.lkBugStatus">
+                <div class="ui-br-ext-review-title">Status:</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{report.lkBugStatus}}</div>
+            </div>
            <!--  <UserDetails :user="report.user" /> -->
             <div class="ui-br-ext-spacer-1"></div>
 
