@@ -31,14 +31,43 @@ const postFiles = (account, formData) => {
 }
 
 
-const deleteFile = (account, id) => {
+const deleteFile = (account, uuid, bugId) => {
+    return new Promise((resolve, reject) => {
+        axios.delete(`${account.repositoryServer}/attachment`, {
+            params: {
+                registrationKey: account.registrationKey, 
+                token: account.token,
+                uuid: account.uuid,
+                attachment_uuid: uuid,
+                bugId: bugId
+            }
+        }).then(function (response) {
+            resolve(response.data)
+        }).catch(function (error) {
+            if (error.response) {
+                if(error.response.status == 401){
+                    alert("Unauthorized");
+                    return false
+                }
+                console.log(error.response.data);
+                reject(error);
+            } else if (error.request) {
+                alert('Please check connection');
+            } else {
+                alert('Sorry, something went wrong please try again later');
+            }
+        });
+    })
+}
+
+const deleteTempFile = (account, uuid) => {
     return new Promise((resolve, reject) => {
         axios.delete(`${account.repositoryServer}/temp_attachment`, {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
                 uuid: account.uuid,
-                attachment_uuid: id
+                attachment_uuid: uuid
             }
         }).then(function (response) {
             resolve(response.data)
@@ -61,5 +90,6 @@ const deleteFile = (account, id) => {
 
 export default {
     postFiles,
-    deleteFile
+    deleteTempFile,
+    deleteFile,
 }
