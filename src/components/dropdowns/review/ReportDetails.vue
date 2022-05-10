@@ -11,14 +11,26 @@
                 </div>
             </div>
 
-            <ProjectDetails :project="reviewBug.project" />
-            <ModuleDetails :module="reviewBug.module" />
+            
+            <div class="ui-br-ext-review-box" v-if="report.projectName">
+                <div class="ui-br-ext-review-title">Project:</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{report.projectName}}</div>
+            </div>
+            <div class="ui-br-ext-review-box" v-if="report.moduleName">
+                <div class="ui-br-ext-review-title">Module:</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{report.moduleName}}</div>
+            </div>
+            <div class="ui-br-ext-review-box" v-if="report.bugEnvironment">
+                <div class="ui-br-ext-review-title">Environment:</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{report.bugEnvironment}}</div>
+            </div>
+
+            <div class="ui-br-ext-spacer-1"></div>
+
             <div class="ui-br-ext-review-box" v-if="report.lkBugStatus">
                 <div class="ui-br-ext-review-title">Status:</div>
                 <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{report.lkBugStatus}}</div>
             </div>
-           <!--  <UserDetails :user="report.user" /> -->
-            <div class="ui-br-ext-spacer-1"></div>
 
             <div class="ui-br-ext-review-box" v-if="report.bugIndex">
                 <div class="ui-br-ext-review-title">Bug ID:</div>
@@ -44,24 +56,18 @@
                 <div class="ui-br-ext-review-title">Expected results:</div>
                 <pre class="ui-br-ext-review-text">{{report.expectedResult}}</pre>
             </div>
-            <div class="ui-br-ext-review-box" v-if="report.screenshots">
-                <div class="ui-br-ext-review-title">Screenshots:</div>
-                <div class="ui-br-ext-review-text">
-                    <a v-for="(screenshot, index) in report.screenshots" :key="index" target="_blank" :href="screenshot">
-                        Image-{{index+1}}
-                    </a> &nbsp;&nbsp;
-                </div>
-            </div>
             <div class="ui-br-ext-review-box" v-if="report.attachments">
                 <div class="ui-br-ext-review-title">Attachments:</div>
                 <div class="ui-br-ext-review-text">
                     <a v-for="(attachment, index) in report.attachments" :key="index" target="_blank" :href="attachment.path">
-                        Attch-{{index+1}}
+                        {{attachment.fileName}}
                     </a> &nbsp;&nbsp;
                 </div>
             </div>
             
             <div class="ui-br-ext-svg-cont">
+                <span class="ui-br-ext-btn-svg btn-svg-screenshot" @click="viewScreenshot" data-title="View screenshot"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-reselect" @click="reselect" data-title="Reselect element"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-status" @click="statusUpdate" data-title="Status update"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-edit" @click="edit" data-title="Edit"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-pdf" @click="pdf" data-title="PDF"></span>
@@ -75,20 +81,13 @@
 
 <script>
 
-    import ModuleDetails from '../../shared/ModuleDetails';
-    import UserDetails from '../../shared/UserDetails';
-    import ProjectDetails from '../../shared/ProjectDetails';
     import exportPdf from '../../../common/export-pdf';
     import reportService from '../../../services/report.service';
-    import { globalStore } from './../../../main';
 
     export default {
         name: 'ReportDetails',
 
         components: {
-            ModuleDetails,
-            /* UserDetails, */
-            ProjectDetails
         },
 
         props: [
@@ -101,7 +100,6 @@
             this.getFileName = exportPdf.getFileName;
             this.savePdf = exportPdf.savePdf;
             this.get = reportService.getReportDetails;
-            this.reviewBug = globalStore.store.reviewBug;
         },
 
         mounted() { 
@@ -126,6 +124,14 @@
         },
 
         methods: {
+
+            viewScreenshot(){
+                if(this.report.screenshots[0]) window.open(this.report.screenshots[0], '_blank');
+            },
+
+            reselect(){
+
+            },
 
             async getDetails(bugId){
                 try {
