@@ -38,6 +38,42 @@ const postReport = (account, report) => {
         });
     });
 }
+const patchReport = (account, report) => {
+
+    return new Promise((resolve, reject) => {
+        axios.patch(`${account.repositoryServer}/bug`, {
+            registrationKey: account.registrationKey, 
+            token: account.token,
+            uuid: account.uuid,
+            moduleId: report.module.moduleId,
+            actualResult: report.actualResult,
+            description: report.description,
+            stepsToReproduce: report.stepsToReproduce,
+            expectedResult: report.expectedResult,
+            xpath: report.xpath,
+            bugId: report.bugId,
+            attachments: report.attachments,
+            title: report.title,
+            environmentId: report.environment.environmentId,
+            url: window.location.href
+        }).then(function (response) {
+            resolve(response.data)
+        }).catch(function (error) {
+            if (error.response) {
+                if(error.response.status == 401){
+                    alert("Unauthorized");
+                    return false
+                }
+                console.log(error.response.data);
+                reject(error.response.data);
+            } else if (error.request) {
+                alert('Please check connection');
+            } else {
+                alert('Sorry, something went wrong please try again later');
+            }
+        });
+    });
+}
 
 const formatDate = (date) => {
     const arr = date.split("-")
@@ -48,6 +84,8 @@ const formatDate = (date) => {
 const getReports = (account, environmentId, moduleId, from, to, includeCompleted, includeCanceled) => {
     from = formatDate(from);
     to = formatDate(to);
+    includeCompleted = includeCompleted == true ? 1 : 0
+    includeCanceled = includeCanceled == true ? 1 : 0
     return new Promise((resolve, reject) => {       
         axios.get(`${account.repositoryServer}/bug`, {
             params: {
@@ -80,7 +118,8 @@ const getReports = (account, environmentId, moduleId, from, to, includeCompleted
     })
 }
 const getGlobalReports = (account, searchQuery, includeCompleted, includeCanceled) => {
-
+    includeCompleted = includeCompleted == true ? 1 : 0
+    includeCanceled = includeCanceled == true ? 1 : 0
     return new Promise((resolve, reject) => {       
         axios.get(`${account.repositoryServer}/bug-global-search`, {
             params: {
@@ -140,6 +179,7 @@ const getReportDetails = (account, bugId) => {
 
 export default {
     postReport,
+    patchReport,
     getReports,
     getReportDetails,
     getGlobalReports

@@ -2,11 +2,11 @@
     <div > 
         <div class="ui-br-ext-close-details" @click="close">Close</div>  
         <div class="ui-br-ext-spacer-3"></div>
-        <ReportForm ref="reportForm" :report="report"/>
+        <ReportForm ref="reportForm" :report="report" :validation="saveToDb" />
 
         <!-- <ReplaceScreenshot :account="account" ref="replaceScreenshotForm"  /> -->
         <!-- Reselect Element -->
-        <FileUpload :account="account" ref="fileUploadForm" :attachments="report.attachments" />
+        <FileUpload :account="account" ref="fileUploadForm" :report="report" />
 
         
         <div class="ui-br-ext-btn-group">
@@ -25,8 +25,8 @@
 
 <script>   
     import ReportForm from '../../shared/ReportForm';
-    import { globalStore } from './../../../main';
     import FileUpload from '../../shared/FileUpload';
+    import reportService from '../../../services/report.service';
 
     export default {
         name: 'ReviewDrop',
@@ -41,24 +41,43 @@
             'account'
         ],
 
+        created() { 
+            this.patchReport = reportService.patchReport;
+        },
+
         data() {
             return {
-                //account:{}
+                saveToDb: true
             }
         },
 
         methods: {
             async  formValidation(){
                 if(await this.$refs.reportForm.formValidation()) {
-                    Object.assign(this.report, this.$refs.reportForm.form);
-                    this.report.attachments = this.$refs.fileUploadForm.getFiles();
+                    Object.assign(this.report, this.$refs.reportForm.getReportForm());
+                    this.report.attachments = this.$refs.fileUploadForm.getNewUploads();
                     this.saveReport();
                 }
             },
 
             async saveReport(){
-                Object.assign(this.report, this.$refs.reportForm.form);
-                this.$emit('save-edited-report', this.report );            
+                console.log('savereport');
+                console.log(this.report);
+                try {
+                    const result = await this.patchReport(this.account, this.report);
+                    console.log(result);
+                    if(result.result == 'success'){
+                        this.$refs.fileUploadForm.deleteFiles();
+                        this.close()
+                    } else {
+                        alert(`Sorry something went wrong. Please try later`);
+                        this.submitInPorgress = false;
+                    }                  
+                } catch(error) {
+                    console.log(error);
+                    alert(`Sorry something went wrong. Please try later`);
+                    this.submitInPorgress = false;
+                }           
             },
 
             cancel(){
