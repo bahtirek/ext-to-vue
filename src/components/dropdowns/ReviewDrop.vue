@@ -3,11 +3,13 @@
         <div class="ui-br-ext-drop-title">Reports</div>
         <div class="ui-br-ext-drop-body" v-if="account && account.token">
 
-            <AllReports v-if="toggle.allReports" :sharedReports="reports" @show-details="showDetails" @setReports="setReports"/>
+            <AllReports v-if="toggle.allReports" :sharedReports="reports" @show-details="showDetails" @setReports="setReports" ref="allReportsRef"/>
 
-            <ReportDetails v-if="toggle.details" :sharedReports="reports" @status-update="showStatusUpdate" @edit-report="showEditReport" @close-details="closeDetails" :bugId="bugId" :account="account" />
+            <ReportDetails v-if="toggle.details" :sharedReports="reports" @reselect="showReselect" @status-update="showStatusUpdate" @edit-report="showEditReport" @close-details="closeDetails" :bugId="bugId" :account="account" />
 
             <StatusChoice v-if="toggle.status" @close-status="closeStatus" :report="report" :account="account" />
+
+            <Reselect v-if="toggle.reselect" @close-reselect="closeReselect" @reselected="updateReportOnReselect" :report="report" :account="account" @toggle-extension="$emit('toggle-extension')" />
 
             <EditReport v-if="toggle.edit" :report="report" @cancel-edit-report="cancelEditReport"  :account="account" />
 
@@ -34,6 +36,7 @@
     import clickBlocker from '../../common/click-blocker';
     import Resize from '../shared/Resize';
     import EditReport from './review/EditReport';
+    import Reselect from './review/Reselect';
 
     export default {
         name: 'ReviewDrop',
@@ -43,7 +46,8 @@
             ReportDetails,
             Resize,
             EditReport,
-            StatusChoice
+            StatusChoice,
+            Reselect
         },
 
         created() { 
@@ -76,7 +80,8 @@
                     allReports: true,
                     details: false,
                     edit: false,
-                    status: false
+                    status: false,
+                    reselect: false
                 },
                 elementId: 'ui-br-ext-review',
                 bugId: undefined,
@@ -107,6 +112,15 @@
                 this.toggleChildren('status');
             },
 
+            showReselect(report) {
+                this.report = report;
+                this.toggleChildren('reselect');
+            },
+
+            closeReselect() {
+                this.toggleChildren('details');
+            },
+
             closeStatus() {
                 this.toggleChildren('details');
             },
@@ -124,6 +138,18 @@
                     }
                 })
             },
+
+            updateReportOnReselect(val) {
+                const index = this.reports.findIndex(report => report.bugId == val.bugId);
+                this.reports[index]['xpath'] = val.xpath;
+                const element = document.evaluate(val.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                element.classList.add('ui-br-ext-outlined-element');
+                element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";                
+            },
+
+            /* toggleExtension(){
+                this.$emit('toggle-extension');
+            }, */
 
             setReports(reports) {
                 this.reports = reports;

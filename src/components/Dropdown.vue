@@ -3,7 +3,7 @@
     <div class="ui-br-ext-container ui-br-ext-dropdown">
         <ReportBugDrop  v-if="drops.reportbug" @toggle-extension="$emit('toggle-extension')"/>
         <SettingsDrop v-if="drops.settings" />
-        <ReviewDrop v-if="drops.review"/>
+        <ReviewDrop v-if="drops.review" @toggle-extension="$emit('toggle-extension')"/>
         <VideoRecordDrop v-if="drops.video"/>
     </div>
 </template>

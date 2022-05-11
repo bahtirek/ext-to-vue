@@ -6,6 +6,7 @@ body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   outline: none!important;
 }
 .ui-br-ext-bug-cover {
+  z-index: 1000;
   position: absolute;
   background-color: red;
   outline: 2px solid #00ad55;

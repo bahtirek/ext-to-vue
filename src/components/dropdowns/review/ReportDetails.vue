@@ -34,7 +34,7 @@
 
             <div class="ui-br-ext-review-box" v-if="report.bugIndex">
                 <div class="ui-br-ext-review-title">Bug ID:</div>
-                <div class="ui-br-ext-review-text">{{report.bugId}}</div>
+                <div class="ui-br-ext-review-text">{{report.bugIndex}}</div>
             </div>
             <div class="ui-br-ext-review-box" v-if="report.title">
                 <div class="ui-br-ext-review-title">Title:</div>
@@ -130,7 +130,7 @@
             },
 
             reselect(){
-
+                this.$emit('reselect', this.report)
             },
 
             async getDetails(bugId){
@@ -185,7 +185,6 @@
             },
 
             statusUpdate() {
-                console.log('update')
                 this.$emit('status-update', this.report)
             }
         }
