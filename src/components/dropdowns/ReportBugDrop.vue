@@ -38,6 +38,9 @@
                 <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
                 <span>Save report</span> 
             </button>
+            <button class="ui-br-ext-btn-danger" @click="cancel" data-listener="off">
+                <span>Cancel</span> 
+            </button>
         </div>
 
         <Resize :elementId="elementId" />
@@ -141,7 +144,7 @@
             },
 
             async saveReport(){
-                this.submitInPorgress = true;
+                
 
                /*  if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
@@ -176,7 +179,7 @@
                 if(this.saveToDb) {
                     this.submitReport();
                 } 
-                this.submitInPorgress = false;  
+                //this.submitInPorgress = false;  
                 globalStore.store.reportBug.environment = this.report.environment
                 globalStore.store.reportBug.module = this.report.module       
                 globalStore.store.reportBug.project = this.report.project       
@@ -232,11 +235,17 @@
                 globalStore.store.currentElementInlineStyle = '';
                 globalStore.store.selectedElementRect = '';
                 this.$refs.reportForm.resetReportData();
+                this.cancel();
+            },
+
+            cancel(){
                 this.submitInPorgress = false;
+                document.body.classList.remove('ui-br-ext-freeze');
                 eventBus.$emit('toggle-bug-drop', false);
             },
 
-            async submitReport(){               
+            async submitReport(){
+                this.submitInPorgress = true;               
                 try {
                     const report = await this.postReport(this.account, this.report);
 
@@ -254,7 +263,8 @@
                 }
             },
 
-            async submitPdf(){               
+            async submitPdf(){
+                this.submitInPorgress = true;               
                 try {
                     const result = await this.getPdf(this.report, this.account);
                     if(result){
