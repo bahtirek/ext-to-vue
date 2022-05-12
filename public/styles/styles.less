@@ -6,13 +6,17 @@
 body {
     .ui-br-ext-hovered {
         outline: 1px dashed!important;
-        outline-color: red!important; 
+        outline-color: red!important;
     }
 
     &.ui-br-ext-hide-hovered {
         .ui-br-ext-hovered {
             outline: none!important;
         }
+    }
+    &.ui-br-ext-freeze {
+        pointer-events: none!important;
+        overflow: hidden!important;
     }
 }
 

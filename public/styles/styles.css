@@ -5,6 +5,10 @@ body .ui-br-ext-hovered {
 body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
   outline: none!important;
 }
+body.ui-br-ext-freeze {
+  pointer-events: none!important;
+  overflow: hidden!important;
+}
 .ui-br-ext-bug-cover {
   z-index: 1000;
   position: absolute;

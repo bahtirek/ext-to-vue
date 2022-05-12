@@ -55,7 +55,7 @@
                 this.videoMode = data.videoMode
             })
             eventBus.$on('toggle-bug-drop', (data) => {
-                this.$emit('toggle-drop', {id: 'report-bug', state: data})
+                this.collapseBugDrop(data)
             })
         },
 
@@ -74,6 +74,7 @@
 
         methods: {
             toggleButton(el) {
+                document.body.classList.remove('ui-br-ext-freeze');
                 if (el.id == 'ui-br-ext-close-button') {
                     this.onDeselect();
                     window.destroyeUibrextInstance()
@@ -82,6 +83,7 @@
                     this.toggleDrops(el.id, this.toggleCompleted); //Expand dropdown if exist
                     if(el.id == 'ui-br-ext-report-bug-button') {
                         this.removeClickFromBodyOnReport();
+                        document.body.classList.add('ui-br-ext-freeze');
                     }
                 }               
             },  
@@ -156,6 +158,21 @@
 
             toggleVideoDrop(val){
                 this.$emit('toggle-drop', {id: 'video', state: val})
+            },
+
+            collapseBugDrop(data){
+                this.$emit('toggle-drop', {id: 'report-bug', state: data})
+                document.body.classList.remove('ui-br-ext-freeze');
+                const el =  document.getElementById('ui-br-ext-report-bug-button');
+                const els = document.querySelectorAll('.ui-br-ext-outlined-element')
+ 
+                el.classList.add('ui-br-ext-report-bug-inactive');
+                els.forEach(element => {
+                    element.classList.remove('ui-br-ext-outlined-element');
+                    element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
+                    element.removeAttribute('data-ext-index');
+                });
+            
             }
         }
     }
