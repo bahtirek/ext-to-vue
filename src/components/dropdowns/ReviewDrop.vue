@@ -147,10 +147,6 @@
                 element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";                
             },
 
-            /* toggleExtension(){
-                this.$emit('toggle-extension');
-            }, */
-
             setReports(reports) {
                 this.reports = reports;
             }
