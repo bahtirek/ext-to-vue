@@ -57,7 +57,7 @@
 
         methods: {
             async addFile(){
-                const ext = /(\.jpg|\.jpeg|\.bmp|\.gif|\.png|\.webm|\.avi|\.mpeg|\.mkv|\.doc|\.docx|\.xls|\.xlsx|\.pdf)$/i;
+                const ext = /(\.jpg|\.jpeg|\.bmp|\.gif|\.svg|\.png|\.webm|\.avi|\.mpeg|\.mkv|\.doc|\.docx|\.xls|\.xlsx|\.pdf)$/i;
                 const file = this.$refs.file.files[0];
                 const fileName = file.name;
                 
@@ -86,7 +86,7 @@
                     }                    
                 } catch(error) {
                     alert(`Sorry something went wrong, we couldn't upload the file(s).`);
-                    this.files.splice(index);                 
+                    this.files.splice(index, 1);                 
                 }
             },
 
@@ -94,7 +94,7 @@
                 const uuid = this.files[index]['uuid'];
                 if (this.files[index]['path']) {
                     this.filesToRemove.push(uuid);
-                    this.files.splice(index);
+                    this.files.splice(index, 1);
                 } else {
                     this.deleteTempFile(index, uuid)
                 }
@@ -103,7 +103,6 @@
 
             async deleteFiles(){
                 this.filesToRemove.forEach((uuid) => {
-                console.log(uuid);
                     this.deleteFile(uuid)
                 })
             },
@@ -124,9 +123,9 @@
                 try {
                     const result = await this.deleteTemp(this.account, uuid);
                     if(result.result == "success"){
-                        this.files.splice(index)
+                        this.files.splice(index, 1)
                         const newUploadIndex = this.newUploads.findIndex(id => id == uuid)
-                        this.newUploads.splice(newUploadIndex)
+                        this.newUploads.splice(newUploadIndex, 1)
                     }                    
                 } catch {
                     alert(`Sorry something went wrong, we couldn't delete the file(s).`);

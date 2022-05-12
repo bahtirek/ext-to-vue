@@ -4,17 +4,14 @@
         <div class="ui-br-ext-spacer-3"></div>
         <ReportForm ref="reportForm" :report="report" :validation="saveToDb" />
 
-        <!-- <ReplaceScreenshot :account="account" ref="replaceScreenshotForm"  /> -->
-        <!-- Reselect Element -->
         <FileUpload :account="account" ref="fileUploadForm" :report="report" />
-
         
         <div class="ui-br-ext-btn-group">
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="formValidation" data-listener="off">
+            <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
                 <span>Save</span> 
             </button>
             <button class="ui-br-ext-btn-danger" @click="cancel" data-listener="off">
-                <span class="ui-br-ext-spinner"></span>
                 <span>Cancel</span> 
             </button>
         </div>
@@ -27,6 +24,8 @@
     import ReportForm from '../../shared/ReportForm';
     import FileUpload from '../../shared/FileUpload';
     import reportService from '../../../services/report.service';
+    import fileService from '../../../services/file.service';
+
 
     export default {
         name: 'ReviewDrop',
@@ -43,11 +42,13 @@
 
         created() { 
             this.patchReport = reportService.patchReport;
+            this.delete = fileService.deleteFile;
         },
 
         data() {
             return {
-                saveToDb: true
+                saveToDb: true,
+                submitInPorgress: false
             }
         },
 
@@ -61,14 +62,16 @@
             },
 
             async saveReport(){
-                console.log('savereport');
-                console.log(this.report);
+                this.submitInPorgress = true;
                 try {
                     const result = await this.patchReport(this.account, this.report);
-                    console.log(result);
                     if(result.result == 'success'){
-                        this.$refs.fileUploadForm.deleteFiles();
-                        this.close()
+                        const filesToRemove = this.$refs.fileUploadForm.filesToRemove;
+                        if(filesToRemove.length > 0) {
+                            this.deleteFiles(filesToRemove);
+                        } else { 
+                            this.close();
+                        }
                     } else {
                         alert(`Sorry something went wrong. Please try later`);
                         this.submitInPorgress = false;
@@ -80,7 +83,22 @@
                 }           
             },
 
+            async deleteFiles(filesToRemove){
+                let count = 0
+                filesToRemove.forEach(async (uuid) => {
+                    count++
+                    try {
+                        await this.delete(this.account, uuid, this.report.bugId); 
+                        if(count == filesToRemove.length)  this.close()                  
+                    } catch(e) {
+                        console.log(e);
+                    } 
+                });
+            },
+
+
             cancel(){
+                this.submitInPorgress = false;
                 this.$emit('cancel-edit-report')            
             },
 
