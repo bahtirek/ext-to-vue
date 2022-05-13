@@ -6,7 +6,7 @@
 
 <script>
 
-    //import operators from '../../common/operators';
+    import { globalStore } from '../../main';
 
     export default {
         name: 'ReportBugBtn',
@@ -26,14 +26,43 @@
         methods: {
 
             toggleBtn(e) {
-                //this.next = this.activateOperator(e.currentTarget);
                 this.$emit('toggle-button', e.currentTarget);
+                this.moveElementToViewport()
                 this.$nextTick(() => {
                     if(this.toggleCompleted) {
                         console.log(this.toggleCompleted);
                     }
                 })
             },
+
+            moveElementToViewport(){
+                const isInViewport = this.isElementInViewport(globalStore.store.selectedElement);
+                console.log(isInViewport);
+                if(!isInViewport){
+                    globalStore.store.selectedElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'center' });
+                    //intersectionObserver.observe(globalStore.store.selectedElement);
+                }
+            },
+
+            isElementInViewport(el) {
+                const rect = el.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+            },
+
+
+            /* intersectionObserver = new IntersectionObserver((entries) => {
+            let [entry] = entries;
+            if (entry.isIntersecting) {
+                setTimeout(() => alert(`${entry.target.id} is visible`), 100)
+            }
+            }), */
+            
         }
     }
 </script>
+
