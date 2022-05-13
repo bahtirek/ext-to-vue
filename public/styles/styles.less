@@ -58,7 +58,7 @@ body {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     display: block;
-    font-family: Roboto, Arial;
+    font-family: Roboto, Arial!important;
     flex-direction: column;
     pointer-events: initial !important;
     min-width: 300px;
@@ -285,25 +285,23 @@ body {
                     input[type=date],
                     select,
                     textarea {
-                        font-family: arial;
+                        font-family: arial !important;
                         width: 100%;
-                        padding: 6px 10px;
-                        border: 1px solid #c4c8c9;
-                        border-radius: 4px;
-                        white-space: pre-wrap;
-                        box-sizing: border-box;
+                        padding: 6px 10px !important;
+                        border: 1px solid #c4c8c9 !important;
+                        border-radius: 4px !important;
+                        white-space: pre-wrap !important;
+                        box-sizing: border-box !important;
                         font-size: 14px!important;
                         color: #404040!important;
-                        font-style: arial;
                         height: auto;
-
-                        &:focus-visible {
-                            outline: none;
-                        }
+                        outline: none !important;
+                        display: block!important;
+                        box-shadow: none!important;
 
                         &:focus,
                         &:active {
-                            border-color: @primary-color;
+                            border-color: @primary-color !important;
                         }
                     }
 
@@ -379,16 +377,17 @@ body {
             }
 
             .ui-br-ext-btn, .ui-br-ext-btn-danger{
+                font-family: Roboto, Arial!important;
                 font-size: 14px !important;
                 height: 29px !important;
-                padding: 7px 12px;
-                border-radius: 4px;
+                padding: 7px 12px !important;
+                border-radius: 4px !important;
                 margin: 20px 25px 0 auto;
-                display: block;
-                border: none;
-                background-color: #ffffff;
-                font-weight: bold;
-                box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+                display: block !important;
+                border: none !important;
+                background-color: #ffffff !important;
+                font-weight: bold !important;
+                box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px !important;
 
                 &:hover {
                     cursor: pointer;
@@ -400,7 +399,7 @@ body {
             }
 
             .ui-br-ext-btn {
-                color: @primary-color;
+                color: @primary-color !important;
                 &.disabled {
                     color: #c4c8c7;
                     pointer-events: none;
@@ -408,7 +407,7 @@ body {
                 }
             }
             .ui-br-ext-btn-danger {
-                color: @danger-color;
+                color: @danger-color !important;
             }
 
             .ui-br-ext-btn-group {
@@ -754,7 +753,7 @@ body {
                 padding-left: 5px;
                 display: block;
                 label {
-                    color: @primary-color;
+                    color: @primary-color !important;
                     cursor: pointer;
                     span {
                         color: #666666;
@@ -1025,6 +1024,23 @@ body {
 
     .ui-br-ext-capitalize {
         text-transform: capitalize;
+    }
+}
+
+/* Default reset */
+.ui-br-ext-extension {
+    label {
+        color: #707070!important;
+    }
+    [type=checkbox] {
+        position: initial !important;
+        opacity: 1 !important;
+    }
+    pre {
+        background-color: #ffffff !important;
+        border: none;
+        margin: 0 0 15px 0!important;
+        padding: 5px 10px 0 10px !important;
     }
 }
 
