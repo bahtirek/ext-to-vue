@@ -37,6 +37,7 @@
     import Resize from '../shared/Resize';
     import EditReport from './review/EditReport';
     import Reselect from './review/Reselect';
+    import outline from '../../services/outline.service';
 
     export default {
         name: 'ReviewDrop',
@@ -54,7 +55,8 @@
             this.addClickBlocker = clickBlocker.addClickBlocker;         
             this.removeSingleClickBlocker = clickBlocker.removeSingleClickBlocker;               
             this.removeClickBlocker = clickBlocker.removeClickBlocker;  
-            this.account = globalStore.store.account;             
+            this.account = globalStore.store.account;
+            this.outlineElement = outline.outlineElement;             
         },
 
         mounted: function () {
@@ -118,6 +120,7 @@
             },
 
             closeReselect() {
+                if (this.report.xpath) this.outlineElement(this.report.xpath)
                 this.toggleChildren('details');
             },
 
@@ -142,9 +145,7 @@
             updateReportOnReselect(val) {
                 const index = this.reports.findIndex(report => report.bugId == val.bugId);
                 this.reports[index]['xpath'] = val.xpath;
-                const element = document.evaluate(val.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-                element.classList.add('ui-br-ext-outlined-element');
-                element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";                
+                this.outlineElement(val.xpath)              
             },
 
             setReports(reports) {
