@@ -71,7 +71,7 @@
                 <span class="ui-br-ext-btn-svg btn-svg-status" @click="statusUpdate" data-title="Status update"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-edit" @click="edit" data-title="Edit"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-pdf" @click="pdf" data-title="PDF"></span>
-                <span class="ui-br-ext-btn-svg btn-svg-addJira"  @click="addJira" data-title="Jira link"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-mail"  @click="createEmail" data-title="Email"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-createJira" @click="createJira" data-title="Create Jira"></span>
                 <!-- <span class="ui-br-ext-btn-svg btn-svg-delete" @click="deleteReport" data-title="Delete"></span> -->
             </div >
@@ -81,8 +81,11 @@
 
 <script>
 
-    import exportPdf from '../../../common/export-pdf';
+    import exportPdf from '../../../services/pdf.service';
+    import outline from '../../../services/outline.service';
     import reportService from '../../../services/report.service';
+    import screenshot from '../../../common/screenshot';
+    import email from '../../../common/email';
 
     export default {
         name: 'ReportDetails',
@@ -97,9 +100,13 @@
         ],
 
         created() { 
-            this.getFileName = exportPdf.getFileName;
-            this.savePdf = exportPdf.savePdf;
             this.get = reportService.getReportDetails;
+            this.onGetScreenshot = screenshot.getScreenshot;
+            this.getPdf = exportPdf.getPdf;
+            this.removeBugCoverEls = outline.removeBugCoverEls;
+            this.removeOutline = outline.removeOutline;
+            this.outlineElement = outline.outlineElement;
+            this.sendEmail = email.sendEmail;
         },
 
         mounted() { 
@@ -119,7 +126,8 @@
                 filename: '',
                 report: {
                     screenshots: []
-                }
+                },
+                screenshot: ''
             }
         },
 
@@ -152,17 +160,39 @@
                 }
             },
 
-            addJira(){
-                console.log('addjira');
-            },
-
             createJira(){
                 console.log('create jira');
             },
 
+            async setReportForPdfEmail() {
+                this.removeBugCoverEls();
+                this.removeOutline();
+                if (this.report.xpath) this.outlineElement(this.report.xpath)
+                await this.getScreenshot(); 
+                this.setProjectModuleEnvObjects();
+            },
+
             async pdf() {
-                this.filename = this.getFileName('bug');
-                await this.savePdf(this.report)
+                await this.setReportForPdfEmail();
+                this.submitPdf();
+            },
+
+            async submitPdf(){
+                this.submitInPorgress = true;               
+                try {
+                    console.log(this.report.projectKey);
+                    const result = await this.getPdf(this.report, this.account);
+                    if(result){
+                        window.open(result, '_blank');
+                    } else {
+                        alert(`Sorry something went wrong. Please try later`);
+                        this.submitInPorgress = false;
+                    }                  
+                } catch(error) {
+                    console.log(error);
+                    alert(`Sorry something went wrong. Please try later`);
+                    this.submitInPorgress = false;
+                }
             },
 
             close(){
@@ -170,11 +200,14 @@
             },
 
             edit() {
+                this.setProjectModuleEnvObjects()
+                this.$emit('edit-report', this.report)
+            },
+
+            setProjectModuleEnvObjects(){
                 this.report.project = {id: this.report.projectId, projectKey: this.report.projectName};
                 this.report.environment = {environmentId: this.report.bugEnvironmentId, name: this.report.bugEnvironment};
                 this.report.module = {moduleId: this.report.moduleId, name: this.report.moduleName};
-                console.log(this.report);
-                this.$emit('edit-report', this.report)
             },
 
             deleteReport(){
@@ -186,6 +219,18 @@
 
             statusUpdate() {
                 this.$emit('status-update', this.report)
+            },
+
+            async getScreenshot(){
+                this.$emit('toggle-extension');
+                this.report.screenshot = await this.onGetScreenshot();
+                this.report.queryWidth = await this.getQueryWidth();
+                this.$emit('toggle-extension');
+            },
+
+            async createEmail(){
+                await this.setReportForPdfEmail();
+                await this.sendEmail(this.report)
             }
         }
     }
