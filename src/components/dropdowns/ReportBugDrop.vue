@@ -58,7 +58,6 @@
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus';
     import UserDetails from '../shared/UserDetails';
-    import ProjectDetails from '../shared/ProjectDetails';
     import Resize from '../shared/Resize';
     import ReportForm from '../shared/ReportForm';
     import FileUpload from '../shared/FileUpload';
@@ -146,12 +145,12 @@
             async saveReport(){
                 
 
-                if(!globalStore.store.dynamicDomFlow) {
+                /* if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                }
+                } */
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
@@ -250,15 +249,15 @@
                     const report = await this.postReport(this.account, this.report);
 
                     if(report.result.bugId){
-                        alert('Bug report successfully created.')
+                        eventBus.$emit('toggle-toast', { text: 'Bug report successfully created', danger: false })
                         this.resetReportData();
                     } else {
-                        alert(`Sorry something went wrong. Please try later`);
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
                         this.submitInPorgress = false;
                     }                  
                 } catch(error) {
                     console.log(error);
-                    alert(`Sorry something went wrong. Please try later`);
+                    eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
                     this.submitInPorgress = false;
                 }
             },
@@ -267,16 +266,16 @@
                 this.submitInPorgress = true;               
                 try {
                     const result = await this.getPdf(this.report, this.account);
+                    this.submitInPorgress = false;
                     if(result){
                         window.open(result, '_blank');
                     } else {
-                        alert(`Sorry something went wrong. Please try later`);
-                        this.submitInPorgress = false;
+                       eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
                     } 
                     console.log(result);                  
                 } catch(error) {
                     console.log(error);
-                    alert(`Sorry something went wrong. Please try later`);
+                    eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
                     this.submitInPorgress = false;
                 }
             }
