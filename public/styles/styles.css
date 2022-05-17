@@ -1106,6 +1106,56 @@ body.ui-br-ext-freeze {
 .ui-br-ext-extension .ui-br-ext-capitalize {
   text-transform: capitalize;
 }
+.ui-br-ext-extension .ui-br-ext-toast {
+  width: auto;
+  position: absolute;
+  top: 4px;
+  box-sizing: border-box;
+  left: 4px;
+}
+.ui-br-ext-extension .ui-br-ext-toast.ui-br-ext-toast-width {
+  min-width: 290px;
+}
+.ui-br-ext-extension .ui-br-ext-toast .ui-br-ext-toast-container {
+  display: block;
+  white-space: nowrap;
+}
+.ui-br-ext-extension .ui-br-ext-toast .ui-br-ext-toast-container .ui-br-ext-toast-body {
+  display: flex;
+  height: 34px;
+  border-radius: 3px;
+  background: #00ad55;
+  align-items: center;
+  box-sizing: border-box;
+  width: 0;
+  color: #ffffff;
+  overflow: hidden;
+  -webkit-transition: width 0.5s ease-in-out;
+  -moz-transition: width 0.5s ease-in-out;
+  -o-transition: width 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out;
+}
+.ui-br-ext-extension .ui-br-ext-toast .ui-br-ext-toast-container .ui-br-ext-toast-body .ui-br-ext-toast-text {
+  flex-grow: 1;
+  font-size: 14px;
+  padding-right: 16px;
+}
+.ui-br-ext-extension .ui-br-ext-toast .ui-br-ext-toast-container .ui-br-ext-toast-body .ui-br-ext-toast-close {
+  width: 24px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-x'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+  background-position: center center;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+.ui-br-ext-extension .ui-br-ext-toast .ui-br-ext-toast-container .ui-br-ext-toast-body.ui-br-ext-bg-danger {
+  background: #e04414;
+}
+.ui-br-ext-extension .ui-br-ext-toast .ui-br-ext-toast-container .ui-br-ext-toast-body.ui-br-ext-toast-show {
+  width: 100%;
+  padding: 0 4px 0 10px;
+}
 /* Default reset */
 .ui-br-ext-extension label {
   color: #707070 !important;
