@@ -41,18 +41,27 @@ export default {
 
     mounted() {
         eventBus.$on('toggle-toast', (data) => {
-            this.toastText = data.text;
-            this.dangerToast = data.danger;
-            this.showToast = true;
+            this.setToast(data);
         })
     },
     methods: {
+        setToast(data){
+            this.toastText = data.text;
+            this.dangerToast = data.danger;
+            this.showToast = true;
+            setTimeout(() => {
+                this.hideToast()
+            }, 4000);
+        },
+
         toggleDrop(data) {
             this.dropToToggle = data;
         },
+
         toggleExtension(val){
             this.toggleExtensionVal = !this.toggleExtensionVal;
         },
+
         hideToast(){
             this.showToast = false;
             this.toastText = '';
