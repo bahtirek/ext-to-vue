@@ -3,19 +3,19 @@
 
         <div class="ui-br-ext-drop-title">Screen Capture</div>
 
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+        <!-- <div class="ui-br-ext-form-container ui-br-ext-checkbox">
             <input type="checkbox" name="jira" v-model="upload" :disabled="canUpload" id="ui-br-ext-upload-video">
             <label for="ui-br-ext-upload-video">Upload</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
             <input type="checkbox" name="pdf" v-model="download" id="ui-br-ext-download-video">
             <label for="ui-br-ext-download-video">Download</label>
-        </div>
+        </div> -->
         <div class="ui-br-ext-btn-group">
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="preview" data-listener="off">
+            <!-- <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="preview" data-listener="off">
                 <span class="ui-br-ext-spinner"></span>
                 <span>Preview</span> 
-            </button>
+            </button> -->
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="saveVideo" data-listener="off">
                 <span>Save</span> 
             </button>
@@ -73,8 +73,9 @@
             },
 
             saveVideo(){ 
-               if(this.upload) eventBus.$emit('upload')
-               if(this.download) eventBus.$emit('download')
+               /* if(this.upload) eventBus.$emit('upload')
+               if(this.download) eventBus.$emit('download') */
+               eventBus.$emit('download')
             },
             
             preview(){
