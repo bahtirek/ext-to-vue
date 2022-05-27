@@ -224,7 +224,6 @@
             async getScreenshot(){
                 this.$emit('toggle-extension');
                 this.report.screenshot = await this.onGetScreenshot();
-                this.report.queryWidth = await this.getQueryWidth();
                 this.$emit('toggle-extension');
             },
 

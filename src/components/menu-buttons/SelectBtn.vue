@@ -21,7 +21,6 @@
         created() { 
             this.onSelect = operators.onSelect;
             this.onGetScreenshot = screenshot.getScreenshot;
-            this.getQueryWidth = screenshot.getQueryWidth;
         },
 
         mounted: function () {
@@ -61,7 +60,6 @@
             async getScreenshot(){
                 this.$emit('toggle-extension');
                 globalStore.store.screenshot = await this.onGetScreenshot();
-                globalStore.store.queryWidth = await this.getQueryWidth();
                 this.$emit('toggle-extension');
             },
         }

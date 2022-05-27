@@ -76,7 +76,6 @@
         
         created() { 
             this.onGetScreenshot = screenshot.getScreenshot;
-            this.getQueryWidth = screenshot.getQueryWidth;
             this.getFileName = filename.getFileName;
             this.getPdf = exportPdf.getPdf;
             this.getElementXpath = select.getElementXpath;
@@ -145,12 +144,12 @@
             async saveReport(){
                 
 
-                /* if(!globalStore.store.dynamicDomFlow) {
+                if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                } */
+                }
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
@@ -187,7 +186,6 @@
             async getScreenshot(){
                 this.$emit('toggle-extension');
                 this.report.screenshot = await this.onGetScreenshot();
-                this.report.queryWidth = await this.getQueryWidth();
                 this.$emit('toggle-extension');
             },
 
