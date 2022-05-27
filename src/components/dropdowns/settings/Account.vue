@@ -32,7 +32,7 @@
     import { globalStore } from './../../../main';
     import regKeyAuth from './../../../services/regkey.service';
     import storage from './../../../common/storage';
-    import eventBus from './../../../eventBus'
+    import eventBus from './../../../eventBus';
 
     export default {
         name: 'Account',
@@ -83,6 +83,7 @@
                         try {
                             await this.localStorage.set('regKey', this.reg.key);
                         } catch(error) {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
                             console.log(error);
                         }
                         this.reg.spinner = false;

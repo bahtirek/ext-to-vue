@@ -71,7 +71,7 @@ export default {
     async fakeGetkey(){
       const regKey = 'sup_623baf370cca56.01630938';
       globalStore.store.account = await this.auth(regKey);
-
+      console.log(globalStore.store.account)
       setTimeout(()=>{
         
     

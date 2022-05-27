@@ -30,7 +30,8 @@
 
 
 <script>
-    import environmentService from '../../../services/environment.service'
+    import environmentService from '../../../services/environment.service';
+    import eventBus from './../../../eventBus';
 
     export default {
         name: 'EditEnvironment',
@@ -72,14 +73,17 @@
 
                         if (this.newEnvironment.environmentId) {
                             environment = await this.patch({...this.newEnvironment, ...this.account});
+                            eventBus.$emit('toggle-toast', { text: 'Environment updated', danger: false })
                         } else {
                             environment = await this.post({...this.newEnvironment, ...this.account});
+                            eventBus.$emit('toggle-toast', { text: 'Environment created', danger: false })
                         }
                         
                         if(environment){ 
                             this.$emit('saveEnvironment', environment.result)
                         }                    
                     } catch(error) {
+                        eventBus.$emit('toggle-toast', { text: 'Check the error', danger: true })
                         console.log(error.error);
                         this.errorMessage.name = error.error
                     }                                      
@@ -101,12 +105,14 @@
                         const result = await this.delete(this.environment.environmentId, this.account);
 
                         if(result){ 
+                            eventBus.$emit('toggle-toast', { text: 'Environment deleted', danger: false })
                             this.$emit('deleteEnvironment')
                         } else {
-                            alert('Sorry. Something went wrong. Please try later.')
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
                         }
 
                     } catch(error) {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
                         console.log(error);
                         alert('Sorry. Something went wrong. Please try later.')
                     }

@@ -83,6 +83,9 @@
                 </div >
             </div>
         </div>
+        <div v-if="reportNotFound" class="ui-br-ext-warning-text" >
+                        No Bug report found
+                    </div>
     </div>
 </template>
 
