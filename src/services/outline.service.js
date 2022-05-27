@@ -1,6 +1,6 @@
 const removeOutline =  function(){
     document.querySelectorAll('.ui-br-ext-outlined-element').forEach(element => {
-        element.classList.remove('ui-br-ext-outlined-element');
+        element.classList?.remove('ui-br-ext-outlined-element');
         element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
         element.removeAttribute('data-ext-index');
     });
@@ -14,8 +14,10 @@ const removeBugCoverEls =  function(){
 
 const outlineElement =  function(xpath){
     const element = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-    element.classList.add('ui-br-ext-outlined-element');
-    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";  
+    if(element) {
+        element.classList.add('ui-br-ext-outlined-element');
+        element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";  
+    }
 }
 
 export default {
