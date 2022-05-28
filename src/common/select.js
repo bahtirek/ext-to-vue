@@ -228,22 +228,31 @@ const displayReportBugButton = function(enable){
  * @returns xpath of outlined/selected element.
  */
 const getElementXpath = function(elm){
-
+    
+    const mainRect = elm.getBoundingClientRect();
     let allNodes = document.getElementsByTagName('*'); 
     let segs = [];
     let sib;
+    let xpath = null;
+    let id = null;
     for (; elm && elm.nodeType == 1; elm = elm.parentNode) 
     { 
+        let breakParent = false;
+
         if (elm.hasAttribute('id')) { 
+
 
             for (let i=0; i < allNodes.length; i++) { 
                 
-                    // Once next parent with ID is found, relative xpath is constructed based on that parent.
-                    if (allNodes[i].hasAttribute('id') && allNodes[i].id == elm.id){
-                        segs.unshift('//*[@id="' + elm.getAttribute('id') + '"]');
-                        return segs.join('/'); 
-                    }  
-                }
+                // Once next parent with ID is found, relative xpath is constructed based on that parent.
+                if (allNodes[i].hasAttribute('id') && allNodes[i].id == elm.id){
+                    id = elm.id;
+                    segs.unshift('//*[@id="' + elm.getAttribute('id') + '"]');
+                    xpath =  segs.join('/') ?? null;
+                    breakParent = true;
+                    break; 
+                }  
+            }
              
         } else { 
             let i;
@@ -255,13 +264,32 @@ const getElementXpath = function(elm){
                 segs.unshift(elm.localName.toLowerCase() + '[' + i + ']'); 
         } 
 
-        if(elm.localName.toLowerCase() === 'html'){
+        if(elm.localName.toLowerCase() === 'html' || breakParent){
             break;
         }
     } 
 
-    return segs.length ? '/' + segs.join('/') : null;    
+    if (xpath == null) {
+        xpath =  segs.length ? '/' + segs.join('/') : null;
+    } 
+    
+    if (id) {
+        const elements = document.querySelectorAll(`#${id}`);
+        if(elements && elements.length > 0){
+            for (let index = 0; index < elements.length; index++) {
+                const element = elements[index];
+                const rect = element.getBoundingClientRect();
+                if (mainRect.left == rect.left && mainRect.right == rect.right) {
+                    xpath = `(${xpath})[${index+1}]`;
+                }
+            }
+        } 
+    }
+
+    return xpath;   
 }
+
+
 
 export default {
     getElementXpath,
