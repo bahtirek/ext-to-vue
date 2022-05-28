@@ -55,7 +55,11 @@
                 this.videoMode = data.videoMode
             })
             eventBus.$on('toggle-bug-drop', (data) => {
-                this.collapseBugDrop(data)
+                this.collapseBugDrop(data.state)
+                if(data.toggleReportDetails) {
+                    /* open new bug in bug details */
+                    this.toggleBugDetail(data.toggleReportDetails)
+                }
             })
         },
 
@@ -158,6 +162,12 @@
 
             toggleVideoDrop(val){
                 this.$emit('toggle-drop', {id: 'video', state: val})
+            },
+
+            toggleBugDetail(bugId) {
+                console.log(bugId);
+                this.$emit('toggle-drop', {id: 'review', state: true});
+                eventBus.$emit('show-details', bugId)
             },
 
             collapseBugDrop(data){

@@ -62,6 +62,7 @@
         mounted: function () {
             this.currentModule = globalStore?.store.currentModule;
             this.project = globalStore.store.project;
+            this.displayNewBug()
 
             eventBus.$on('show-details', (index) => {
                 this.showDetails(index)
@@ -120,7 +121,6 @@
             },
 
             closeReselect() {
-                if (this.report.xpath) this.outlineElement(this.report.xpath)
                 this.toggleChildren('details');
             },
 
@@ -150,6 +150,28 @@
 
             setReports(reports) {
                 this.reports = reports;
+            },
+
+            displayNewBug(){
+                if(globalStore.store.bugId) {
+                    this.showDetails(globalStore.store.bugId);
+                    this.selectElement(globalStore.store.xpath)            
+                    globalStore.store.bugId = undefined;
+                    globalStore.store.xpath = '';
+                }
+            },
+
+            selectElement(xpath){
+                let element = false;
+                try {
+                    element = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                } catch(e) {
+                    console.log(e)
+                }
+                if(element){
+                    element.classList.add('ui-br-ext-outlined-element');
+                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";                                 
+                }
             }
         }
     }

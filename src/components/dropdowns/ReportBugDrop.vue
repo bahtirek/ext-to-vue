@@ -96,6 +96,7 @@
                 this.user = globalStore.store.user;
             })
             this.saveToDb = this.account && this.account.token ? true : false;
+            this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
         },
 
         data() {
@@ -123,7 +124,7 @@
                 filename: '',
                 name: 'test',
                 elementId: 'ui-br-ext-report-bug',
-                submitInPorgress: false
+                submitInPorgress: false,
             }
         },
 
@@ -144,12 +145,12 @@
             async saveReport(){
                 
 
-                if(!globalStore.store.dynamicDomFlow) {
+                /* if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
                     this.report.queryWidth = globalStore.store.queryWidth;
-                }
+                } */
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
@@ -162,8 +163,6 @@
                 if(this.report.sendEmail){
                     await this.sendEmail(this.report)
                 }
-                
-                this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
 
                 this.report.url = window.location;
 
@@ -238,7 +237,8 @@
             cancel(){
                 this.submitInPorgress = false;
                 document.body.classList.remove('ui-br-ext-freeze');
-                eventBus.$emit('toggle-bug-drop', false);
+                /* open new bug in bug details */
+                eventBus.$emit('toggle-bug-drop', {state: false, toggleReportDetails: globalStore.store.bugId});
             },
 
             async submitReport(){
@@ -247,6 +247,8 @@
                     const report = await this.postReport(this.account, this.report);
 
                     if(report.result.bugId){
+                        globalStore.store.bugId = report.result.bugId;
+                        globalStore.store.xpath = this.report.xpath;
                         eventBus.$emit('toggle-toast', { text: 'Bug report successfully created', danger: false })
                         this.resetReportData();
                     } else {

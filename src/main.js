@@ -24,6 +24,8 @@ export const globalStore = new Vue({
       currentElementInlineStyle: '',
       selectedElementRect: '',
       account: {},
+      bugId: undefined,
+      xpath: '',
       project: {
         projectKey: '',
         jiraId: '', 
