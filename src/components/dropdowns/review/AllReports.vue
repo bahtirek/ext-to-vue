@@ -3,8 +3,8 @@
         <div>
             <div class="ui-br-ext-tabs-container">
                 <div class="ui-br-ext-tabs">
-                    <div class="ui-br-ext-tab" @click="ifFilter = !ifFilter; ifGlobal = false; setReports([])" :class="{active: ifFilter}">Search filters</div>
-                    <div class="ui-br-ext-tab" @click="ifGlobal = !ifGlobal; ifFilter = false; setReports([])" :class="{active: ifGlobal}">Global search</div>
+                    <div class="ui-br-ext-tab" @click="ifFilter = !ifFilter; ifGlobal = false; setReports([]); reportNotFound=false" :class="{active: ifFilter}">Search filters</div>
+                    <div class="ui-br-ext-tab" @click="ifGlobal = !ifGlobal; ifFilter = false; setReports([]); reportNotFound=false" :class="{active: ifGlobal}">Global search</div>
                 </div>
                 <div class="ui-br-ext-tab-item" v-if="ifFilter">
                     <ProjectSearch :account="account" :validation="true"  :oldProject="project" ref="projectForm"/>
@@ -51,7 +51,9 @@
 
                 <div class="ui-br-ext-tab-item" v-if="ifGlobal">
                     <BugSearch :account="account" ref="bugSearchForm"/>
-                    
+                    <div v-if="reportNotFound" class="ui-br-ext-warning-text" >
+                        No Bug report found
+                    </div>
                     <div class="ui-br-ext-btn-group">
                         <button class="ui-br-ext-btn" @click="globalSearch" data-listener="off">
                             <span class="ui-br-ext-spinner"></span>
@@ -78,14 +80,10 @@
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-btn-lnk"  @click="showDetails(report.bugId)">Details</span>
                         <a class="ui-br-ext-btn-lnk" v-if="report.screenshotPath"  :href="report.screenshotPath" target="_blank">Screenshot</a>
-                    </div>
-                    
+                    </div>                   
                 </div >
             </div>
-        </div>
-        <div v-if="reportNotFound" class="ui-br-ext-warning-text" >
-                        No Bug report found
-                    </div>
+        </div>                      
     </div>
 </template>
 
