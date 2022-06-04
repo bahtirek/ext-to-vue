@@ -56,6 +56,10 @@
                 <div class="ui-br-ext-review-title">Expected results:</div>
                 <pre class="ui-br-ext-review-text">{{report.expectedResult}}</pre>
             </div>
+            <!-- <div class="ui-br-ext-review-box ui-br-ext-pre" v-if="report.jiraLink">
+                <div class="ui-br-ext-review-title">Jira link:</div>
+                <div class="ui-br-ext-review-text"><a>{{report.expectedResult}}</a></div>
+            </div> -->
             <div class="ui-br-ext-review-box" v-if="report.attachments">
                 <div class="ui-br-ext-review-title">Attachments:</div>
                 <div class="ui-br-ext-review-text">
@@ -67,14 +71,13 @@
             
             <div class="ui-br-ext-svg-cont">
                 <span class="ui-br-ext-btn-svg btn-svg-screenshot" @click="viewScreenshot" data-title="View screenshot"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-createJira" v-if="report.jiraLink" @click="reviewJira" data-title="Review Jira"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-reselect" @click="reselect" data-title="Reselect element"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-status" @click="statusUpdate" data-title="Status update"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-edit" @click="edit" data-title="Edit"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-pdf" @click="pdf" data-title="PDF"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-mail"  @click="createEmail" data-title="Email"></span>
-                <span class="ui-br-ext-btn-svg btn-svg-addJira" @click="addJira" data-title="Add Jira Link"></span>
-                <span class="ui-br-ext-btn-svg btn-svg-createJira" @click="createJira" data-title="Create Jira"></span>
-                <!-- <span class="ui-br-ext-btn-svg btn-svg-delete" @click="deleteReport" data-title="Delete"></span> -->
+                <span class="ui-br-ext-btn-svg btn-svg-createJira" v-if="report.projectJiraId" @click="createJira" data-title="Create Jira"></span>
             </div >
         </div>
     </div>
@@ -85,7 +88,6 @@
     import exportPdf from '../../../services/pdf.service';
     import outline from '../../../services/outline.service';
     import reportService from '../../../services/report.service';
-    import screenshot from '../../../common/screenshot';
     import email from '../../../common/email';
 
     export default {
@@ -161,8 +163,8 @@
                 }
             },
 
-            addJira(){
-                console.log('add jira');
+            reviewJira(){
+                window.open(this.report.jiraLink, '_blank');
             },
             createJira(){
                 console.log('create jira');
