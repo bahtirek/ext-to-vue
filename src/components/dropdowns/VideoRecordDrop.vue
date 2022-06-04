@@ -24,7 +24,7 @@
             </button>
         </div>
 
-        <a href="" ref="downloadVideo" style="display: none !important;"></a>
+        <a href="" id="uiExtBrDownloadVideo" style="display: none !important;"></a>
     </div>
 </template>
 

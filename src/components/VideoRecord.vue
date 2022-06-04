@@ -14,14 +14,13 @@
                 </video>
             </div>
         </div>
-        <a href="" ref="downloadVideoCapture" style="display: none !important;"></a>
     </div>
 </template>
 
 <script>
 
     import StopBtn from './menu-buttons/StopRecordBtn';
-    import video from '../common/videorecorder';
+    ///import video from '../common/videorecorder';
     import eventBus from '../eventBus';
 
     export default {
@@ -32,9 +31,9 @@
         },
 
         created() { 
-            this.start = video.startRecord;
-            this.stop = video.stopRecord;
-            this.start = Date.now();
+            //this.start = video.startRecord;
+            //this.stop = video.stopRecord;
+            //this.start = Date.now();
         },
 
         mounted (){
@@ -54,7 +53,8 @@
                 recordedChunks: [],
                 mimeType:'video/webm',
                 video: '',
-                error: ''
+                error: '',
+                startTime: undefined
             }
         },
 
@@ -65,11 +65,14 @@
                 try {
                     const displayStream = await navigator.mediaDevices.getDisplayMedia({video: true, audio: true});
                     const voiceStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    this.startTime = Math.round(Date.now() / 1000);
+                    chrome.runtime.sendMessage({todo: "setAlarm"});
                     let tracks = [...displayStream.getTracks(), ...voiceStream.getAudioTracks()]
                     const stream = new MediaStream(tracks);
                     this.mediaRecorder = this.createRecorder(stream);
                 } catch (error) {
                     console.log(error.message);
+                    chrome.runtime.sendMessage({todo: "clearAlarm"});
                     this.error = error.message;
                     eventBus.$emit('permission-denied');
                     this.time = 0;
@@ -104,19 +107,21 @@
                 return mediaRecorder;
             },
 
-            saveFile(recordedChunks){
+            saveFile(){
                 const blob = new Blob(this.recordedChunks, {
-                    type: 'video/webm'
+                    type: 'video/mp4'
                 });
-                let downloadLink = this.$refs.downloadVideoCapture;
+                let downloadLink = document.getElementById('uiExtBrDownloadVideo');
+                downloadLink.download = `reportbug.mp4`;
                 downloadLink.href = URL.createObjectURL(blob);
-                downloadLink.download = `reportbug.webm`;
                 downloadLink.click();
                 URL.revokeObjectURL(blob); // clear from memory
             },
 
             onStopRecord(){
-                clearInterval(this.timer)
+                clearInterval(this.timer);
+                chrome.runtime.sendMessage({todo: "clearAlarm"});
+                this.startTime = 0;
                 this.$emit('toggle-video-drop', true);
                 if(this.mediaRecorder) this.mediaRecorder.stop();
             },
@@ -129,15 +134,12 @@
                 this.startRecord();
             },
 
-            onSave(action) {
-                if(this.action.upload) this.upload();
-                if(this.action.download) this.saveFile();
-            },
-
             timerBody(){
                 this.width++;
-                this.time++;
+                this.time = Math.round(Date.now() / 1000) - this.startTime;
                 if (this.time == 100) {
+                    this.startTime = 0;
+                    chrome.runtime.sendMessage({todo: "clearAlarm"});
                     eventBus.$emit('click-stop')
                 }
             },

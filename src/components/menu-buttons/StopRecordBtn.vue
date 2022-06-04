@@ -21,6 +21,7 @@
         mounted() { 
             eventBus.$on('permission-denied', this.stopRecord)
             eventBus.$on('click-stop', this.stopRecord)
+            window.stopRecordButton = this;
         },
 
         data() {
