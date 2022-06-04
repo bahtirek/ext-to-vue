@@ -18,7 +18,7 @@
             <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="saveToDb">
             <label for="ui-br-ext-save-to-jira">Save to DB</label>
         </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
+        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="project && project.jiraId">
             <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveJira">
             <label for="ui-br-ext-save-to-jira">Create Jira ticket on save</label>
         </div>
@@ -82,6 +82,7 @@
             this.sendEmail = email.sendEmail;
             this.postBlob = reportService.postBlob;
             this.postReport = reportService.postReport;
+            this.project = globalStore.store.reportBug.project;
         },
 
         mounted: function () {
@@ -90,6 +91,10 @@
 
             eventBus.$on('account-loaded', (val) => {
                 this.account = globalStore.store.account;
+            })
+
+            eventBus.$on('projectChanged', (val) => {
+                this.project = val;
             })
                         
             eventBus.$on('user-loaded', () => {
@@ -110,7 +115,7 @@
                     actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: '',
-                    saveJira: false,
+                    saveJira: true,
                     savePdf: false,
                     sendEmail: false,
                     saveScreenshot: false,
