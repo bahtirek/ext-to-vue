@@ -179,6 +179,7 @@ const findElementFromPoint = function(pageX, pageY){
         ){
             
             outlineSelectedElement(element);
+            console.log(getElementXpath(element))
             displayReportBugButton(true);
             globalStore.store.selectedElement = element;
             //Used to crop dynamic elements
@@ -246,10 +247,10 @@ const getElementXpath = function(elm){
                 
                 // Once next parent with ID is found, relative xpath is constructed based on that parent.
                 if (allNodes[i].hasAttribute('id') && allNodes[i].id == elm.id){
-                    id = elm.id;
                     segs.unshift('//*[@id="' + elm.getAttribute('id') + '"]');
                     xpath =  segs.join('/') ?? null;
                     breakParent = true;
+                    id = true;
                     break; 
                 }  
             }
@@ -273,17 +274,18 @@ const getElementXpath = function(elm){
         xpath =  segs.length ? '/' + segs.join('/') : null;
     } 
     
-    if (id) {
-        const elements = document.querySelectorAll(`#${id}`);
-        if(elements && elements.length > 0){
-            for (let index = 0; index < elements.length; index++) {
-                const element = elements[index];
-                const rect = element.getBoundingClientRect();
+    if(id) {
+        const result = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        if(result && result.snapshotLength > 1) {
+            for(let i = 0; i < result.snapshotLength; i++) {
+                const node = result.snapshotItem(i);
+                const rect = node.getBoundingClientRect();
                 if (mainRect.left == rect.left && mainRect.right == rect.right) {
-                    xpath = `(${xpath})[${index+1}]`;
+                    xpath = `(${xpath})[${i+1}]`;
+                    break;
                 }
             }
-        } 
+        }
     }
 
     return xpath;   
