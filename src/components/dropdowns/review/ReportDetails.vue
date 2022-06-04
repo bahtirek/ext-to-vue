@@ -72,6 +72,7 @@
                 <span class="ui-br-ext-btn-svg btn-svg-edit" @click="edit" data-title="Edit"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-pdf" @click="pdf" data-title="PDF"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-mail"  @click="createEmail" data-title="Email"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-addJira" @click="addJira" data-title="Add Jira Link"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-createJira" @click="createJira" data-title="Create Jira"></span>
                 <!-- <span class="ui-br-ext-btn-svg btn-svg-delete" @click="deleteReport" data-title="Delete"></span> -->
             </div >
@@ -101,7 +102,7 @@
 
         created() { 
             this.get = reportService.getReportDetails;
-            this.onGetScreenshot = screenshot.getScreenshot;
+            this.getScreenshotBlob = reportService.getScreenshotBlob;
             this.getPdf = exportPdf.getPdf;
             this.removeBugCoverEls = outline.removeBugCoverEls;
             this.removeOutline = outline.removeOutline;
@@ -160,6 +161,9 @@
                 }
             },
 
+            addJira(){
+                console.log('add jira');
+            },
             createJira(){
                 console.log('create jira');
             },
@@ -172,15 +176,15 @@
                 this.setProjectModuleEnvObjects();
             },
 
-            async pdf() {
-                await this.setReportForPdfEmail();
+            async pdf() { 
+                await this.getScreenshot();
+                this.setProjectModuleEnvObjects();
                 this.submitPdf();
             },
 
             async submitPdf(){
                 this.submitInPorgress = true;               
                 try {
-                    console.log(this.report.projectKey);
                     const result = await this.getPdf(this.report, this.account);
                     if(result){
                         window.open(result, '_blank');
@@ -222,13 +226,16 @@
             },
 
             async getScreenshot(){
-                this.$emit('toggle-extension');
-                this.report.screenshot = await this.onGetScreenshot();
-                this.$emit('toggle-extension');
+                try {
+                    this.report.screenshot = 'data:image/png;base64,' + await this.getScreenshotBlob(this.account, this.report.bugId);
+                } catch(error) {
+                    console.log(error);
+                }
             },
 
             async createEmail(){
-                await this.setReportForPdfEmail();
+                await this.getScreenshot();
+                this.setProjectModuleEnvObjects();
                 await this.sendEmail(this.report)
             }
         }
