@@ -18,7 +18,7 @@
                 <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.jiraId" maxlength="10" minlength="2" />
                 <span class="ui-br-ext-message">{{errorMessage.jiraId}}</span>
             </div>
-            <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
+            <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.jiraSettings">
                 <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.saveToJira">
                 <label for="ui-br-ext-save-to-jira">Jira project</label>
             </div>
