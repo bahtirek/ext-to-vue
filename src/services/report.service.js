@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 const postReport = (account, report) => {
+    let saveToJira = report.saveToJira? 1 : 0;
+    console.log(saveToJira); 
     if(!report.screenshot){
         report.screenshot = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAooAAAFnCAYAAAAhRmhNAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAFoOSURBVHhe7d0HvBTV2fjxZ+nNWEHaRbpGfd/wioWiRo0iIia+VhQR7MYS/ScaKyAXe0k0ltiigqIg4JtEuCAxYKNagu+rsdC5IFdUQKUIAvs/z8yZmTO7s+VeOvy+fPbD3dmdmTNnZneeec6ZPQIAAAAAu4xFTZuesrhZsy+/aNZsweImTbrZyQAAoBKq2f+BnUpK5C7zaGT+bJGqVm2gPxUAAFQGgSJ2SiZI3GD/lHQ6vd7+CQAAKoFAETslExxenxaZb/`
     }
@@ -19,10 +21,41 @@ const postReport = (account, report) => {
             attachments: report.attachments,
             title: report.title,
             environmentId: report.environment.environmentId,
-            url: window.location.href
+            url: window.location.href,
+            saveToJira: saveToJira,
+            jiraSettings: account.jiraSettings
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
+            if (error.response) {
+                if(error.response.status == 401){
+                    alert("Unauthorized");
+                    return false
+                }
+                console.log(error.response.data);
+                reject(error.response.data);
+            } else if (error.request) {
+                alert('Please check connection');
+            } else {
+                alert('Sorry, something went wrong please try again later');
+            }
+        });
+    });
+}
+const postJira = (account, bugId) => {
+    
+    return new Promise((resolve, reject) => {
+        axios.post(`${account.repositoryServer}/jira-issue`, {
+            registrationKey: account.registrationKey, 
+            token: account.token,
+            uuid: account.uuid,
+            bugId: bugId,
+            jiraSettings: account.jiraSettings
+        }).then(function (response) {
+            console.log(response);
+            resolve(response.data)
+        }).catch(function (error) {
+            console.log(error);
             if (error.response) {
                 if(error.response.status == 401){
                     alert("Unauthorized");
@@ -211,5 +244,6 @@ export default {
     getReports,
     getReportDetails,
     getGlobalReports,
-    getScreenshotBlob
+    getScreenshotBlob,
+    postJira
 }

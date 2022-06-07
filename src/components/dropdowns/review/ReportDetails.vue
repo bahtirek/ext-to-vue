@@ -71,13 +71,13 @@
             
             <div class="ui-br-ext-svg-cont">
                 <span class="ui-br-ext-btn-svg btn-svg-screenshot" @click="viewScreenshot" data-title="View screenshot"></span>
-                <span class="ui-br-ext-btn-svg btn-svg-createJira" v-if="report.jiraLink" @click="reviewJira" data-title="Review Jira"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-jiraLink" v-if="report.jiraTicketUrl" @click="reviewJira" data-title="Review Jira"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-reselect" @click="reselect" data-title="Reselect element"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-status" @click="statusUpdate" data-title="Status update"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-edit" @click="edit" data-title="Edit"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-pdf" @click="pdf" data-title="PDF"></span>
                 <span class="ui-br-ext-btn-svg btn-svg-mail"  @click="createEmail" data-title="Email"></span>
-                <span class="ui-br-ext-btn-svg btn-svg-createJira" v-if="report.projectJiraId" @click="createJira" data-title="Create Jira"></span>
+                <span class="ui-br-ext-btn-svg btn-svg-createJira" v-if="!report.jiraTicketUrl && report.projectJiraId" @click="createJira" data-title="Create Jira"></span>
             </div >
         </div>
     </div>
@@ -89,6 +89,7 @@
     import outline from '../../../services/outline.service';
     import reportService from '../../../services/report.service';
     import email from '../../../common/email';
+    import eventBus from '../../../eventBus';
 
     export default {
         name: 'ReportDetails',
@@ -104,6 +105,7 @@
 
         created() { 
             this.get = reportService.getReportDetails;
+            this.postJira = reportService.postJira;
             this.getScreenshotBlob = reportService.getScreenshotBlob;
             this.getPdf = exportPdf.getPdf;
             this.removeBugCoverEls = outline.removeBugCoverEls;
@@ -164,10 +166,20 @@
             },
 
             reviewJira(){
-                window.open(this.report.jiraLink, '_blank');
+                window.open(this.report.jiraTicketUrl, '_blank');
             },
-            createJira(){
-                console.log('create jira');
+            async createJira(){
+                try {
+                    const result = await this.postJira(this.account, this.report.bugId);
+                    if(result.result == 'success'){
+                        this.getDetails(this.report.bugId)
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
+                    }                  
+                } catch(error) {
+                    console.log(error);
+                    eventBus.$emit('toggle-toast', { text: error.result, danger: true })
+                }
             },
 
             async setReportForPdfEmail() {

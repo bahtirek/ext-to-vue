@@ -19,7 +19,7 @@
             <label for="ui-br-ext-save-to-jira">Save to DB</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="project && project.jiraId">
-            <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveJira">
+            <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveToJira">
             <label for="ui-br-ext-save-to-jira">Create Jira ticket on save</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
@@ -115,7 +115,7 @@
                     actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: '',
-                    saveJira: true,
+                    saveToJira: true,
                     savePdf: false,
                     sendEmail: false,
                     saveScreenshot: false,
@@ -159,10 +159,6 @@
 
                 if(this.report.saveScreenshot) {
                     this.screenshotLink(this.report.screenshot, this.filename);
-                }
-
-                if(this.report.saveJira){
-                    console.log('save jira')
                 }
 
                 if(this.report.sendEmail){
@@ -221,7 +217,7 @@
                     actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: '',
-                    saveJira: false,
+                    saveToJira: false,
                     savePdf: false,
                     saveScreenshot: false,
                     screenshot: '',
@@ -250,11 +246,13 @@
                 this.submitInPorgress = true;               
                 try {
                     const report = await this.postReport(this.account, this.report);
-
+                    console.log(report);
                     if(report.result.bugId){
                         globalStore.store.bugId = report.result.bugId;
                         globalStore.store.xpath = this.report.xpath;
-                        eventBus.$emit('toggle-toast', { text: 'Bug report successfully created', danger: false })
+                        if(report.result.message){
+                            eventBus.$emit('toggle-toast', { text: report.result.message, danger: true })
+                        }
                         this.resetReportData();
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
@@ -276,8 +274,7 @@
                         window.open(result, '_blank');
                     } else {
                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
-                    } 
-                    console.log(result);                  
+                    }                 
                 } catch(error) {
                     console.log(error);
                     eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
