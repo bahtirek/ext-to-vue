@@ -9,6 +9,7 @@ const addClickBlocker = function(bodyChildren) {
         el.addEventListener('click', preventClick, {capture: true});
         el.addEventListener('mousedown', preventClick, {capture: true});
         el.addEventListener('mouseup', preventClick, {capture: true});
+        el.addEventListener('dblclick', preventClick, {capture: true});
     });
 }
 
@@ -20,6 +21,7 @@ const removeClickBlocker = function(bodyChildren) {
         el.removeEventListener('click', preventClick, true);
         el.removeEventListener('mousedown', preventClick, true);
         el.removeEventListener('mouseup', preventClick, true);
+        el.addEventListener('dblclick', preventClick, {capture: true});
         el.classList.remove('ui-br-ext-outlined-element');
         el.style.cssText = el.style.cssText.replace('outline: red dashed 3px !important;', '');
     });
