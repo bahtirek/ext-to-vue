@@ -2,6 +2,7 @@
     <div class="ui-br-ext-extension ui-br-ext-alwaysOn" id="ui-br-ext-extension" style="outline: none !important;" v-show="toggleExtensionVal">
         <MainMenu   @toggle-drop="toggleDrop"   @toggle-extension="toggleExtension" />
         <Dropdown   :dropToToggle="dropToToggle"   @toggle-extension="toggleExtension" />
+        <Modal />
         <div class="ui-br-ext-toast" :class="{'ui-br-ext-toast-width': showToast}">
             <div class="ui-br-ext-toast-container">
                 <div class="ui-br-ext-toast-body" :class="{ 'ui-br-ext-toast-show': showToast, 'ui-br-ext-bg-danger': dangerToast }">
@@ -21,12 +22,14 @@
 import MainMenu from './MainMenu';
 import Dropdown from './Dropdown';
 import eventBus from '../eventBus';
+import Modal from '../components/modal/ModalContainer';
 
 export default {
     name: "Extension",
     components: {
         MainMenu,
-        Dropdown
+        Dropdown,
+        Modal
     },
     
     data() {
