@@ -63,12 +63,12 @@
                 const fileName = file.name;
                 
                 if(file.size > 50000000) {
-                    alert('File size cannot exceed 50mb');
+                    eventBus.$emit('toggle-toast', { text: 'File size cannot exceed 50mb', danger: true });
                     return false;
                 }
 
                 if (!ext.exec(fileName)) {
-                    alert("File extension not supported!");
+                    eventBus.$emit('toggle-toast', { text: 'File extension not supported!', danger: true });
                     return false;
                 } 
                 this.files.push({fileName: fileName, uuid: ''});
