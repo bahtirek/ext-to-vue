@@ -24,25 +24,25 @@ body {
     z-index: 1000;
     position: absolute;
     background-color: red;
-    outline: 2px solid @primary-color;
-    height: 10px;
-    width: 10px;
+    outline: 2px solid red;
+    height: 9px;
+    width: 9px;
     cursor: pointer;
     border-radius: 1px;
     &:before {
         display: none;
         color: white;
-        content: attr(data-ext-bugid);
+        //content: attr(data-ext-bugid);
+        content: "";
         background: red;
         width: fit-content;
         padding: 2px;
-        outline: 2px solid @primary-color;
+        outline: 2px solid red;
         position: absolute;
         top: 0;
         left: 0;
-        font-size: 12px;
-        border-radius: 2px;
-        line-height: 12px;
+        height: 10px;
+        width: 10px;
     }
     &:hover:before {
         display: block;
