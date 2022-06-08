@@ -109,6 +109,11 @@
                         this.searchResults = await this.get(this.account, this.searchQuery, this.project.id)
                     } catch(error) {
                         console.log(error);
+                        if(error.result.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                        }
                     }                   
                 } else {
                     this.searchResults = []

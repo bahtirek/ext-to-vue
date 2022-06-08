@@ -105,6 +105,11 @@
                         this.searchResults = await this.get(this.account, this.searchQuery)
                     } catch(error) {
                         console.log(error);
+                        if(error.result.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                        }
                     }                   
                 } else {
                     this.searchResults = []
@@ -115,7 +120,6 @@
                 const projectString = JSON.stringify(this.project)
                 try{
                     await this.localStorage.set('project', projectString)
-                    alert(`project ${this.newProject.projectKey} successfully saved`);
                 } catch(error) {
                     console.log(error);
                 }

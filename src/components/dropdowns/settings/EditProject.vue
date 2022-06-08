@@ -51,7 +51,8 @@
 
 
 <script>
-    import projectService from '../../../services/project.service'
+    import projectService from '../../../services/project.service';
+    import eventBus from '../../../eventBus';
 
     export default {
         name: 'EditProject',
@@ -146,17 +147,16 @@
             async deleteProject(project) {
                 if (confirm('Are you suuure?')) {
                     try {
-                        const result = await this.delete(this.project.id, this.account);
+                        await this.delete(this.project.id, this.account);
 
-                        if(result){ 
-                            this.$emit('deleteProject')
-                        } else {
-                            alert('Sorry. Something went wrong. Please try later.')
-                        }
-
+                        this.$emit('deleteProject')
                     } catch(error) {
                         console.log(error);
-                        alert('Sorry. Something went wrong. Please try later.')
+                        if(error.result.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                        }
                     }
                 }
             },

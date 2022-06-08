@@ -247,20 +247,21 @@
                 try {
                     const report = await this.postReport(this.account, this.report);
                     console.log(report);
-                    if(report.result.bugId){
-                        globalStore.store.bugId = report.result.bugId;
-                        globalStore.store.xpath = this.report.xpath;
-                        if(report.result.message){
-                            eventBus.$emit('toggle-toast', { text: report.result.message, danger: true })
-                        }
-                        this.resetReportData();
-                    } else {
-                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
-                        this.submitInPorgress = false;
-                    }                  
+                    globalStore.store.bugId = report.result.bugId;
+                    globalStore.store.xpath = this.report.xpath;
+                    //Exclusion error message
+                    if(report.result.message){
+                        eventBus.$emit('toggle-toast', { text: report.result.message, danger: true })
+                    }
+                    this.resetReportData();
+                    this.submitInPorgress = false;                     
                 } catch(error) {
                     console.log(error);
-                    eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                     this.submitInPorgress = false;
                 }
             },
@@ -270,14 +271,14 @@
                 try {
                     const result = await this.getPdf(this.report, this.account);
                     this.submitInPorgress = false;
-                    if(result){
-                        window.open(result, '_blank');
-                    } else {
-                       eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
-                    }                 
+                    window.open(result, '_blank');               
                 } catch(error) {
                     console.log(error);
-                    eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                     this.submitInPorgress = false;
                 }
             }

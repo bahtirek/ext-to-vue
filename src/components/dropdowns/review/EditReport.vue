@@ -25,6 +25,7 @@
     import FileUpload from '../../shared/FileUpload';
     import reportService from '../../../services/report.service';
     import fileService from '../../../services/file.service';
+    import eventBus from '../../../eventBus';
 
 
     export default {
@@ -64,21 +65,21 @@
             async saveReport(){
                 this.submitInPorgress = true;
                 try {
-                    const result = await this.patchReport(this.account, this.report);
-                    if(result.result == 'success'){
-                        const filesToRemove = this.$refs.fileUploadForm.filesToRemove;
-                        if(filesToRemove.length > 0) {
-                            this.deleteFiles(filesToRemove);
-                        } else { 
-                            this.close();
-                        }
-                    } else {
-                        alert(`Sorry something went wrong. Please try later`);
-                        this.submitInPorgress = false;
-                    }                  
+                    await this.patchReport(this.account, this.report);                   
+                    const filesToRemove = this.$refs.fileUploadForm.filesToRemove;
+                    if(filesToRemove.length > 0) {
+                        this.deleteFiles(filesToRemove);
+                    } else { 
+                        this.close();
+                    }
+                    this.submitInPorgress = false;                  
                 } catch(error) {
                     console.log(error);
-                    alert(`Sorry something went wrong. Please try later`);
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                     this.submitInPorgress = false;
                 }           
             },
@@ -108,14 +109,14 @@
                     const report = await this.postReport(this.account, this.currentModule.moduleId, this.report);
 
                     if(report.result.bugId){
-                        alert('Bug report successfully created.')
                         this.resetReportData();
-                    } else {
-                        alert(`Sorry something went wrong. Please try later`);
-                        this.submitInPorgress = false;
-                    }                  
+                    }                 
                 } catch(error) {
-                    alert(`Sorry something went wrong. Please try later`);
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                     this.submitInPorgress = false;
                 }
             },

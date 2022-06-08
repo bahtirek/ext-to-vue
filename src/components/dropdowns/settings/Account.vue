@@ -83,7 +83,11 @@
                         try {
                             await this.localStorage.set('regKey', this.reg.key);
                         } catch(error) {
-                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
+                            if(error.result.message) {
+                                eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                            } else {
+                                eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                            }
                             console.log(error);
                         }
                         this.reg.spinner = false;

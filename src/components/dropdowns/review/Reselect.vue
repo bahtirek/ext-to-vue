@@ -29,6 +29,7 @@
     import clickBlocker from '../../../common/click-blocker'; 
     import reselectService from '../../../services/reselect.service'; 
     import { globalStore } from '../../../main.js';
+    import eventBus from '../../../eventBus.js';
 
     export default {
         name: 'Reselect',
@@ -68,7 +69,6 @@
 
             async saveSelection(){
                 this.removeClickFromBody(this.getMouseCoordinates);
-                this.submitInPorgress = true;
                 if(!globalStore.store.dynamicDomFlow) {
                     await this.getScreenshot();
                 } else {
@@ -77,18 +77,16 @@
                 const xpath = this.getElementXpath(globalStore.store.selectedElement);
                 if(this.screenshot && xpath) {
                     try {
-                        const result = await this.patch(this.account, xpath, this.screenshot, this.report.bugId);
-                        if(result == 'success'){
-                            this.$emit('reselected', {bugId: this.report.bugId, xpath: xpath});
-                            this.close();
-                        } else {
-                            alert(`Sorry something went wrong. Please try later`);
-                            this.submitInPorgress = false;
-                        }                  
+                        await this.patch(this.account, xpath, this.screenshot, this.report.bugId);
+                        this.$emit('reselected', {bugId: this.report.bugId, xpath: xpath});
+                        this.close();                 
                     } catch(error) {
                         console.log(error);
-                        alert(`Sorry something went wrong. Please try later`);
-                        this.submitInPorgress = false;
+                        if(error.result.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                        }
                     }
                 }
                 

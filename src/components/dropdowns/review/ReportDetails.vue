@@ -171,14 +171,14 @@
             async createJira(){
                 try {
                     const result = await this.postJira(this.account, this.report.bugId);
-                    if(result.result == 'success'){
-                        this.getDetails(this.report.bugId)
-                    } else {
-                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
-                    }                  
+                    this.getDetails(this.report.bugId)                 
                 } catch(error) {
                     console.log(error);
-                    eventBus.$emit('toggle-toast', { text: error.result, danger: true })
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                 }
             },
 
@@ -196,20 +196,18 @@
                 this.submitPdf();
             },
 
-            async submitPdf(){
-                this.submitInPorgress = true;               
+            async submitPdf(){               
                 try {
                     const result = await this.getPdf(this.report, this.account);
-                    if(result){
-                        window.open(result, '_blank');
-                    } else {
-                        alert(`Sorry something went wrong. Please try later`);
-                        this.submitInPorgress = false;
-                    }                  
+                    window.open(result, '_blank');
+                                     
                 } catch(error) {
                     console.log(error);
-                    alert(`Sorry something went wrong. Please try later`);
-                    this.submitInPorgress = false;
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                 }
             },
 

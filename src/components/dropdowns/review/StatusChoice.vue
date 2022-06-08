@@ -30,6 +30,7 @@
 <script>
 
     import statusService from '../../../services/status.service';
+    import eventBus from '../../../eventBus';
 
     export default {
         name: 'StatusChoice',
@@ -69,15 +70,17 @@
             async  updateStatus(){
                 const status = parseInt(this.lkBugStatusId);
                 if(status && status > 0) {
-                    this.submitInPorgress = true;
                     try {
                         const result = await this.update(this.account, status, this.report.bugId)
-                        this.submitInPorgress = false;
                         if(!result == "success") return false;
                         this.close();
                     } catch(error) {
                         console.log(error);
-                        this.submitInPorgress = false;
+                        if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                     }
                 } else {
                     this.count++

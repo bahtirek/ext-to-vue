@@ -73,10 +73,8 @@
 
                         if (this.newEnvironment.environmentId) {
                             environment = await this.patch({...this.newEnvironment, ...this.account});
-                            eventBus.$emit('toggle-toast', { text: 'Environment updated', danger: false })
                         } else {
                             environment = await this.post({...this.newEnvironment, ...this.account});
-                            eventBus.$emit('toggle-toast', { text: 'Environment created', danger: false })
                         }
                         
                         if(environment){ 
@@ -102,19 +100,16 @@
             async deleteEnvironment(environment) {
                 if (confirm('Are you suuure?')) {
                     try {
-                        const result = await this.delete(this.environment.environmentId, this.account);
-
-                        if(result){ 
-                            eventBus.$emit('toggle-toast', { text: 'Environment deleted', danger: false })
-                            this.$emit('deleteEnvironment')
-                        } else {
-                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
-                        }
-
+                        await this.delete(this.environment.environmentId, this.account);
+                        eventBus.$emit('toggle-toast', { text: 'Environment deleted', danger: false })
+                        this.$emit('deleteEnvironment')
                     } catch(error) {
-                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong. Please try later', danger: true })
+                        if(error.result.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                        }
                         console.log(error);
-                        alert('Sorry. Something went wrong. Please try later.')
                     }
                 }
             },

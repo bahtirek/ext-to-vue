@@ -38,7 +38,8 @@
 
 
 <script>
-    import moduleService from '../../../services/module.service'
+    import moduleService from '../../../services/module.service';
+    import eventBus from '../../../eventBus';
 
     export default {
         name: 'EditModule',
@@ -117,17 +118,15 @@
             async deleteModule(module) {
                 if (confirm('Are you suuure?')) {
                     try {
-                        const result = await this.delete(this.module.moduleId, this.account, this.project.id);
-
-                        if(result){ 
-                            this.$emit('deleteModule')
-                        } else {
-                            alert('Sorry. Something went wrong. Please try later.')
-                        }
-
+                        await this.delete(this.module.moduleId, this.account, this.project.id);
+                        this.$emit('deleteModule')
                     } catch(error) {
                         console.log(error);
-                        alert('Sorry. Something went wrong. Please try later.')
+                        if(error.result.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                        }
                     }
                 }
             },

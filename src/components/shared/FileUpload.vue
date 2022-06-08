@@ -22,7 +22,8 @@
 
 <script>
 
-    import fileService from '../../services/file.service'
+    import fileService from '../../services/file.service';
+    import eventBus from '../../eventBus';
             
     export default {
         name: 'FileUpload',
@@ -85,8 +86,12 @@
                         this.newUploads.push(result.result)
                     }                    
                 } catch(error) {
-                    alert(`Sorry something went wrong, we couldn't upload the file(s).`);
-                    this.files.splice(index, 1);                 
+                    this.files.splice(index, 1); 
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }                
                 }
             },
 
@@ -114,8 +119,13 @@
                         const index = this.filesToRemove.findIndex(id => id == uuid)
                         this.filesToRemove.splice(index)
                     }                     
-                } catch(e) {
-                    console.log(e);
+                } catch(error) {
+                    console.log(error);
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                 }                
             },
 
@@ -127,8 +137,12 @@
                         const newUploadIndex = this.newUploads.findIndex(id => id == uuid)
                         this.newUploads.splice(newUploadIndex, 1)
                     }                    
-                } catch {
-                    alert(`Sorry something went wrong, we couldn't delete the file(s).`);
+                } catch(error) {
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                 }
             },
 

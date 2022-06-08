@@ -22,7 +22,8 @@
 
 <script>
 
-    import reportService from '../../services/report.service'
+    import reportService from '../../services/report.service';
+    import eventBus from '../../eventBus';
             
     export default {
         name: 'ReplaceScreenshot',
@@ -76,11 +77,13 @@
 
                 try {
                     const result = await this.postFiles(this.account, formData);
-                    if(result){
-                        this.screenshot.id = result.result;
-                    }                    
+                    this.screenshot.id = result.result;                   
                 } catch(error) {
-                    alert(`Sorry something went wrong, we couldn't upload the file(s).`);
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                     this.screenshot = {}
                 }
             },
@@ -89,11 +92,13 @@
                 const id = this.screenshot.id;
                 try {
                     const result = await this.deleteFile(this.account, id);
-                    if(result.result == "success"){
-                        this.screenshot = {}
-                    }                    
-                } catch {
-                    alert(`Sorry something went wrong, we couldn't delete the file(s).`);
+                    this.screenshot = {}                   
+                } catch(error) {
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                 }
             },
 
