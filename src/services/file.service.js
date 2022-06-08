@@ -14,18 +14,7 @@ const postFiles = (account, formData) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                console.log(error.response.data);
-                reject(error);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error);
         });
     })
 }
@@ -44,18 +33,7 @@ const deleteFile = (account, uuid, bugId) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                console.log(error.response.data);
-                reject(error);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error);
         });
     })
 }
@@ -72,18 +50,7 @@ const deleteTempFile = (account, uuid) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                console.log(error.response.data);
-                reject(error);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error);
         });
     })
 }

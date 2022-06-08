@@ -21,13 +21,7 @@ const getPdf = (report, account) => {
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
-            if (error.response) {
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });     
     })
 }

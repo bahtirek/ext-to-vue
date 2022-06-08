@@ -27,18 +27,7 @@ const postReport = (account, report) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                console.log(error.response.data);
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });
     });
 }
@@ -56,18 +45,7 @@ const postJira = (account, bugId) => {
             resolve(response.data)
         }).catch(function (error) {
             console.log(error);
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                console.log(error.response.data);
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });
     });
 }
@@ -92,18 +70,7 @@ const patchReport = (account, report) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                console.log(error.response.data);
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });
     });
 }
@@ -136,17 +103,7 @@ const getReports = (account, environmentId, moduleId, from, to, includeCompleted
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });     
     })
 }
@@ -167,17 +124,7 @@ const getGlobalReports = (account, searchQuery, includeCompleted, includeCancele
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });     
     })
 }
@@ -195,17 +142,7 @@ const getScreenshotBlob = (account, bugId) => {
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });     
     })
 }
@@ -223,17 +160,7 @@ const getReportDetails = (account, bugId) => {
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });     
     })
 }

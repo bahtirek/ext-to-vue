@@ -11,18 +11,7 @@ const postEnvironment = (data) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                console.log(error.response.data);
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });
     });
 }
@@ -38,19 +27,8 @@ const patchEnvironment = (data) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            
             console.log(error.response);
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });
     });
 }
@@ -69,17 +47,7 @@ const getEnvironments = (account, query) => {
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });     
     })
 }
@@ -97,17 +65,7 @@ const deleteEnvironment = (environmentId, account) => {
             resolve(response.data)
         }).catch(function (error) {
             console.log(error.reponse);
-            if (error.response) {
-                if(error.response.status == 401){
-                    alert("Unauthorized");
-                    return false
-                }
-                reject(error.response.data);
-            } else if (error.request) {
-                alert('Please check connection');
-            } else {
-                alert('Sorry, something went wrong please try again later');
-            }
+            reject(error.response.data);
         });     
     })
 }
