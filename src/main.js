@@ -26,6 +26,8 @@ export const globalStore = new Vue({
       account: {},
       bugId: undefined,
       xpath: '',
+      activeBugElement: undefined,
+      activeBugCover: undefined,
       project: {
         projectKey: '',
         jiraId: '', 

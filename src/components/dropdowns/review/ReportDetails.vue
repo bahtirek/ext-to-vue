@@ -90,6 +90,7 @@
     import reportService from '../../../services/report.service';
     import email from '../../../common/email';
     import eventBus from '../../../eventBus';
+    import { globalStore } from '../../../main';
 
     export default {
         name: 'ReportDetails',
@@ -159,9 +160,22 @@
                             });
                         if (sameXpath && sameXpath.length > 0) this.report['sameElementBugs'] = sameXpath;
                     })
-                    
+                    this.highLightActiveElement(report.xpath)
                 } catch(error) {
                     console.log(error);
+                }
+            },
+
+            highLightActiveElement(xpath){
+                let el; 
+                try {
+                    el = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+                } catch(e) {
+                    console.log(e)
+                }
+                if (el){
+                    el.style.cssText = el.style.cssText.replace('outline: red dashed 3px !important;', 'outline: #4fff00 dashed 3px !important;');
+                    globalStore.store.activeBugElement = el;
                 }
             },
 

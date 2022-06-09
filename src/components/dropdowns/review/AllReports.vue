@@ -264,9 +264,23 @@
             },
 
             showDetailsOnClick(el) {
+                const prevEl = globalStore.store.activeBugElement;
                 const bugId = el.getAttribute('data-ext-bugid');
+                const prevBugCover = globalStore.store.prevBugCover;
+                if(prevBugCover) {
+                    const prevBugId = prevBugCover.getAttribute('data-ext-bugid');
+                    if(prevBugId == bugId) return false;
+                }
+                if(prevEl){
+                    prevEl.style.cssText = el.style.cssText.replace('outline: #4fff00 dashed 3px !important;', '');                   
+                    prevEl.style.cssText = prevEl.style.cssText + "outline: red dashed 3px !important;";                   
+                }
+                if(prevBugCover){
+                   prevBugCover.classList.remove('ui-br-ext-bug-cover-active');                   
+                }
+                el.classList.add('ui-br-ext-bug-cover-active');
+                globalStore.store.prevBugCover = el;
                 if(!(bugId && bugId >= 0)) return false;
-
                 eventBus.$emit('show-details', bugId)
             },
 
