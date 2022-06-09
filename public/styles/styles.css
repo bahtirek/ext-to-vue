@@ -526,6 +526,7 @@ body.ui-br-ext-freeze {
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review .ui-br-ext-drop-body .ui-br-ext-review-card {
   padding: 0px 10px 5px;
   margin-bottom: 5px;
+  border-top: 1px solid #d3d3d3;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-drop-body .ui-br-ext-review-card .ui-br-ext-btn-lnk,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-select .ui-br-ext-drop-body .ui-br-ext-review-card .ui-br-ext-btn-lnk,
@@ -584,6 +585,13 @@ body.ui-br-ext-freeze {
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-settings .ui-br-ext-drop-body .ui-br-ext-review-card:last-child,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review .ui-br-ext-drop-body .ui-br-ext-review-card:last-child {
   border-bottom: none;
+}
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-drop-body .ui-br-ext-review-card:last-child:not(:only-child),
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-select .ui-br-ext-drop-body .ui-br-ext-review-card:last-child:not(:only-child),
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-comments .ui-br-ext-drop-body .ui-br-ext-review-card:last-child:not(:only-child),
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-settings .ui-br-ext-drop-body .ui-br-ext-review-card:last-child:not(:only-child),
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review .ui-br-ext-drop-body .ui-br-ext-review-card:last-child:not(:only-child) {
+  border-top: none;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-report-bug .ui-br-ext-drop-body .ui-br-ext-settings-container .ui-br-ext-setting-title,
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-select .ui-br-ext-drop-body .ui-br-ext-settings-container .ui-br-ext-setting-title,

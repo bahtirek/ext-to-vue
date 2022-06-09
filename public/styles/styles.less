@@ -519,6 +519,7 @@ body {
                 .ui-br-ext-review-card {
                     padding: 0px 10px 5px;
                     margin-bottom: 5px;
+                    border-top: 1px solid #d3d3d3;
                     .ui-br-ext-btn-lnk {
                         color: #00ad55;
                         cursor: pointer;
@@ -553,6 +554,9 @@ body {
                     }
                     &:last-child {
                          border-bottom: none;
+                    }
+                    &:last-child:not(:only-child) {
+                         border-top: none;
                     }
                 }
 
