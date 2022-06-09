@@ -181,6 +181,7 @@
                     element.classList.remove('ui-br-ext-outlined-element');
                     element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
                     element.style.cssText = element.style.cssText.replace('outline: #4fff00 dashed 3px !important;', '');
+                    element.style.cssText = element.style.cssText.replace('outline: rgb(79, 255, 0) dashed 3px !important;', '');
                     element.removeAttribute('data-ext-index');
                 });
             

@@ -25,6 +25,7 @@ const removeClickBlocker = function(bodyChildren) {
         el.classList.remove('ui-br-ext-outlined-element');
         el.style.cssText = el.style.cssText.replace('outline: red dashed 3px !important;', '');
         el.style.cssText = el.style.cssText.replace('outline: #4fff00 dashed 3px !important;', '');
+        el.style.cssText = el.style.cssText.replace('outline: rgb(79, 255, 0) dashed 3px !important;', '');
     });
 }
 
