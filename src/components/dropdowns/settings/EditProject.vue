@@ -6,7 +6,7 @@
         <form novalidate name="ui-br-ext-new-project" onsubmit="return false">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-project-label">Project key</label>
-                <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.projectKey" maxlength="10" minlength="2" :disabled="newProject.id && newProject.lkProjectStatusId == 2" />
+                <input type="text" name="ui-br-ext-new-project-label" autocomplete="off" v-model="newProject.projectKey" maxlength="10" minlength="2" :disabled="newProject.id && newProject.lkProjectStatusId == 2" />
                 <span class="ui-br-ext-message">{{errorMessage.projectKey}}</span>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
@@ -15,7 +15,7 @@
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea" v-if="newProject.saveToJira">
                 <label for="ui-br-ext-new-project-label">Jira id</label>
-                <input type="text" name="ui-br-ext-new-project-label" v-model="newProject.jiraId" maxlength="10" minlength="2" />
+                <input type="text" name="ui-br-ext-new-project-label" autocomplete="off" v-model="newProject.jiraId" maxlength="10" minlength="2" />
                 <span class="ui-br-ext-message">{{errorMessage.jiraId}}</span>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.jiraSettings">

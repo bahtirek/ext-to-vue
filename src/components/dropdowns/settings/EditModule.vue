@@ -6,7 +6,7 @@
         <form novalidate name="ui-br-ext-new-module" onsubmit="return false">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-module-label">Module name</label>
-                <input type="text" name="ui-br-ext-new-module-label" v-model="newModule.name" maxlength="50" minlength="2"/>
+                <input type="text" name="ui-br-ext-new-module-label" v-model="newModule.name" maxlength="50" minlength="2" autocomplete="off"/>
                 <span class="ui-br-ext-message">{{errorMessage.name}}</span>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
@@ -14,7 +14,7 @@
                 <textarea type="text" name="ui-br-ext-new-module-label" v-model="newModule.description" maxlength="255" ></textarea>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="newModule.moduleId && !newModule.allowDelete">
-                <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newModule.inactivate">
+                <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newModule.inactivate" />
                 <label for="ui-br-ext-save-to-jira">Inactivate</label>
             </div>
         </form>

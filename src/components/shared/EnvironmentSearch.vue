@@ -3,7 +3,7 @@
     <form class="ui-br-ext-report-form">
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-modules">Environment</label>
-            <input type="text" v-model="searchQuery" @input="onSearch">
+            <input type="text" v-model="searchQuery" @input="onSearch" autocomplete="off">
             <span class="ui-br-ext-message" v-if="validation && searchQuery!=='' && searchResults && searchResults.length == 0 && !environment.environmentId">No environments found</span>
             <span class="ui-br-ext-message" v-if="validation && count>0 && searchQuery==''" >Field is required</span>
             <span class="ui-br-ext-search-icon">
