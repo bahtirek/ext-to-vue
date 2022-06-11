@@ -20,7 +20,6 @@
 <script>
 
     import StopBtn from './menu-buttons/StopRecordBtn';
-    ///import video from '../common/videorecorder';
     import eventBus from '../eventBus';
 
     export default {

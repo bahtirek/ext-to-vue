@@ -28,8 +28,7 @@
     </div>
 </template>
 
-<script>
-    import video from '../../common/videorecorder';   
+<script>  
     import eventBus from '../../eventBus';
     import { globalStore } from './../../main';
 
