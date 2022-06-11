@@ -77,7 +77,9 @@
                     actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: '',
-                    environment: {}
+                    environment: {},
+                    module: {},
+                    project: {}
                 },
                 count: 0,
                 searchQuery: '',
@@ -138,9 +140,15 @@
             },
 
             getReportForm(){
-                this.form.environment = this.$refs.environmentForm.environment;
-                this.form.module = this.$refs.moduleForm.module;
-                this.form.project = this.$refs.projectForm.project;
+                if (this.validation){
+                    this.form.environment = this.$refs.environmentForm.environment;
+                    this.form.module = this.$refs.moduleForm.module;
+                    this.form.project = this.$refs.projectForm.project;
+                } else {
+                    this.form.environment['name'] = this.$refs.environmentForm.searchQuery;
+                    this.form.module['name'] = this.$refs.moduleForm.searchQuery;
+                    this.form.project['projectKey'] = this.$refs.projectForm.searchQuery;
+                }
                 return this.form;
             },
 

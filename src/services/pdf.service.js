@@ -3,7 +3,6 @@ import axios from 'axios';
 const getPdf = (report, account) => {
     let url = 'https://extension-service.evendor.app/api';
     if (account && account.token) url = account.repositoryServer;
-
     return new Promise((resolve, reject) => {       
         axios.post(`${url}/generate_pdf`, {
             project: report.project.projectKey,

@@ -7,12 +7,23 @@ const sendEmail = async function(report, user) {
 }
 
 const createEmailContent = function (report) {
-    const list = ['description', 'actualResult', 'expectedResult', 'stepsToReproduce'];
+    report.url = window.location.href
+    report.environment = report.environment.name;
+    report.project = report.project.projectKey;
+    report.module = report.module.name;
+    const list = ['project', 'module' ,'environment', 'title', 'description', 'actualResult', 'expectedResult', 'stepsToReproduce', 'jira', 'url', 'xpath'];
     const titles = {
+        project: 'Project', 
+        module: 'Module' ,
+        environment: 'Environment', 
+        title: 'Summary', 
         description: 'Description',
         actualResult: 'Actual results',
         expectedResult: 'Expected results',
-        stepsToReproduce: 'Steps to reproduce'
+        stepsToReproduce: 'Steps to reproduce',
+        url: 'URL',
+        xpath: 'xPath',
+        jira: 'Jira'
     }
 
     let content = ``;
@@ -30,7 +41,7 @@ const createEmailContent = function (report) {
     }
     
     let emailBody = 
-`X-Unsent: 1\nSubject: Bug Report\nContent-Type: multipart/related;\n boundary="multipart_related_boundary"\n\nThis is a multi-part message in MIME format\n--multipart_related_boundary\nContent-Type: text/html\nContent-Transfer-Encoding: 7bit
+`X-Unsent: 1\nSubject: EZBug Report\nContent-Type: multipart/related;\n boundary="multipart_related_boundary"\n\nThis is a multi-part message in MIME format\n--multipart_related_boundary\nContent-Type: text/html\nContent-Transfer-Encoding: 7bit
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
     <html>
