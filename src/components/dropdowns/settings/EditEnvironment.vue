@@ -81,9 +81,14 @@
                             this.$emit('saveEnvironment', environment.result)
                         }                    
                     } catch(error) {
-                        eventBus.$emit('toggle-toast', { text: 'Check the error', danger: true })
-                        console.log(error.error);
-                        this.errorMessage.name = error.error
+                        console.log(error);
+                        if(error.error) {
+                            this.errorMessage.name = error.error
+                        } else if(error.result.message){
+                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                        }
                     }                                      
                 } else {
                     this.errorMessage.name = 'Enter environment key'
@@ -101,7 +106,6 @@
                 if (confirm('Are you suuure?')) {
                     try {
                         await this.delete(this.environment.environmentId, this.account);
-                        eventBus.$emit('toggle-toast', { text: 'Environment deleted', danger: false })
                         this.$emit('deleteEnvironment')
                     } catch(error) {
                         if(error.result.message) {

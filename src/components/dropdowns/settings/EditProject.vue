@@ -126,8 +126,14 @@
                             this.$emit('saveProject', project.result)
                         }                    
                     } catch(error) {
-                        console.log(error.error);
-                        this.errorMessage.projectKey = error.error
+                        console.log(error);
+                        if(error.error) {
+                            this.errorMessage.name = error.error
+                        } else if(error.result.message){
+                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                        }
                     }                                      
                 } else {
                     this.errorMessage.projectKey = 'Enter project key'
@@ -169,8 +175,12 @@
                         this.$emit('saveProject', project.result)
                     }                    
                 } catch(error) {
-                    console.log(error.error);
-                    this.errorMessage.projectKey = error.error
+                    console.log(error);
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                 } 
             },
 

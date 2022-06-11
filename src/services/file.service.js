@@ -14,7 +14,7 @@ const postFiles = (account, formData) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            reject(error);
+            reject(error.response.data);
         });
     })
 }
@@ -33,7 +33,7 @@ const deleteFile = (account, uuid, bugId) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            reject(error);
+            reject(error.response.data);
         });
     })
 }
@@ -50,7 +50,7 @@ const deleteTempFile = (account, uuid) => {
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
-            reject(error);
+            reject(error.response.data);
         });
     })
 }

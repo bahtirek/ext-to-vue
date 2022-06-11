@@ -98,8 +98,14 @@
                             this.$emit('saveModule', module.result)
                         }                    
                     } catch(error) {
-                        console.log(error.error);
-                        this.errorMessage.name = error.error
+                        console.log(error);
+                        if(error.error) {
+                            this.errorMessage.name = error.error
+                        } else if(error.result.message){
+                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else {
+                            eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                        }
                     }                                      
                 } else {
                     this.errorMessage.name = 'Enter module key'
