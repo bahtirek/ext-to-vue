@@ -8,7 +8,7 @@
         <EnvironmentSearch :account="account" :validation="validation" :oldEnvironment="environment" ref="environmentForm"/>
 
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
-            <label for="ui-br-ext-title">Title</label>
+            <label for="ui-br-ext-title">Summary:</label>
             <textarea name="ui-br-ext-title" v-model="form.title" rows="1" data-gramm="false" maxlength="100"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.title==''">Field is required</span>
         </div>

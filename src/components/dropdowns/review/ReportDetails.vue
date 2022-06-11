@@ -37,7 +37,7 @@
                 <div class="ui-br-ext-review-text">{{report.bugIndex}}</div>
             </div>
             <div class="ui-br-ext-review-box" v-if="report.title">
-                <div class="ui-br-ext-review-title">Title:</div>
+                <div class="ui-br-ext-review-title">Summary:</div>
                 <div class="ui-br-ext-review-text">{{report.title}}</div>
             </div>
             <div class="ui-br-ext-review-box ui-br-ext-pre" v-if="report.description">
