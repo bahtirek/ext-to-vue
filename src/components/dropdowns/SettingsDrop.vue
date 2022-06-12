@@ -8,12 +8,12 @@
                         <Module v-if="ifModule" />
                     </div>
 
-                    <div class="ui-br-ext-settings-container" v-if="account && account.registrationKey">
+                    <div class="ui-br-ext-settings-container" v-if="account && account.token">
                         <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifGlobal = false; ifModule = false; ifAccount = false; ifUser = false; ifEnvironment = false">Project</div>
                         <Project v-if="ifProject" />
                     </div>
 
-                    <div class="ui-br-ext-settings-container" v-if="account && account.registrationKey">
+                    <div class="ui-br-ext-settings-container" v-if="account && account.token">
                         <div class="ui-br-ext-setting-title" @click="ifEnvironment = !ifEnvironment; ifGlobal = false; ifProject = false; ifModule = false; ifAccount = false; ifUser = false">Environment</div>
                         <Environment v-if="ifEnvironment" />
                     </div>
@@ -23,7 +23,7 @@
                         <Account v-if="ifAccount" />
                     </div>
 
-                    <!-- <div class="ui-br-ext-settings-container" v-if="account && account.registrationKey">
+                    <!-- <div class="ui-br-ext-settings-container" v-if="account && account.token">
                         <div class="ui-br-ext-setting-title" @click="ifGlobal = !ifGlobal; ifProject = false; ifModule = false; ifAccount = false; ifUser = false">Global</div>
                         <Global v-if="ifGlobal" />
                     </div> -->

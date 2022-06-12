@@ -6,7 +6,7 @@
 
     import Extension from './components/Extension';
     import storage from './common/storage';
-    import regKeyAuthentication from './services/regkey.service';
+    import authService from './services/auth.service';
     import { globalStore } from './main';
     import eventBus from './eventBus'
         
@@ -19,19 +19,19 @@ export default {
 
   data() {
     return {
-      regKey: '',
+      regData: '',
       account: {}
     }
   },
 
   created() { 
     this.localStorage = storage;
-    this.auth = regKeyAuthentication.auth;
+    this.auth = authService.auth;
     //this.fakeGetkey();
-    this.getRegKey();
-    this.getUserFromLocal();
-    this.getProjectFromLocal();
-    this.getModuleFromLocal();
+    this.getregData();
+    //this.getUserFromLocal();
+    //this.getProjectFromLocal();
+    //this.getModuleFromLocal();
   },
 
   watch: {
@@ -39,38 +39,44 @@ export default {
   },
 
   methods: {
-    async getRegKey(){
-      const regKey = await this.localStorage.get('regKey');
-      if(regKey) {
-        globalStore.store.account = await this.auth(regKey);
-        eventBus.$emit('account-loaded')
+    async getregData(){
+      const regData = await this.localStorage.get('regData');
+      if(regData) {
+        try {
+          const result = await this.auth(regData);
+          globalStore.store.account = {...result, ...regData}
+          eventBus.$emit('account-loaded')
+        } catch(error) {
+          console.log(error);
+        }
+        
       }
     },
 
-    async getUserFromLocal() {
+    /* async getUserFromLocal() {
         const user = await this.localStorage.get('user');
         if (user) {
           globalStore.store.user = JSON.parse(user);
         }
-    },
+    }, */
 
-    async getModuleFromLocal() {
+   /*  async getModuleFromLocal() {
         const module = await this.localStorage.get('module');
         if (module) {
           globalStore.store.currentModule = JSON.parse(module);
         }
-    },
+    }, */
 
-    async getProjectFromLocal() {
+/*     async getProjectFromLocal() {
         const project = await this.localStorage.get('project');
         if (project) {
           globalStore.store.project = JSON.parse(project);
         }
-    },
+    }, */
 
     async fakeGetkey(){
-      const regKey = 'sup_61b589b5f03c42.30439098';
-      globalStore.store.account = await this.auth(regKey);
+      const regData = 'sup_61b589b5f03c42.30439098';
+      globalStore.store.account = await this.auth(regData);
       console.log(globalStore.store.account)
       setTimeout(()=>{
         

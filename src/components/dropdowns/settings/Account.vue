@@ -2,23 +2,31 @@
     
     <div class="ui-br-ext-settings-body">
         <div class="ui-br-ext-btn-link ui-br-ext-btn-create-project">
-            <span id="ui-br-ext-btn-link" @click="showAddKey = !showAddKey;" :class="{active: showAddKey}">Add license key</span>  
+            <span id="ui-br-ext-btn-link" @click="showAddKey = !showAddKey;" :class="{active: showAddKey}">Sign in</span>  
         </div>
         <ul class="ui-br-ext-info-list" v-if="!showAddKey">
             <div class="ui-br-ext-spacer-1"></div>
-            <li v-if="account && account.registrationKey ">
-                <span><strong>License Key:</strong> </span><br><span>  {{account.registrationKey}}</span>
+            <li v-if="account && account.email && !showConfirmationMessage">
+                <span><strong>Email:</strong> </span><br><span>  {{account.email}}</span>
             </li >
+            <li v-if="showConfirmationMessage">
+                <span><strong>Verify your email</strong></span>
+            </li>
             <div class="ui-br-ext-spacer-1"></div>
         </ul >
         <div v-if="showAddKey">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="regKey">License Key</label>
-                <input type="text" name="regKey" v-model="reg.key"/>
-                <span class="ui-br-ext-message">{{reg.error}}</span>
+                <input type="text" name="regKey" v-model="regKey"/>
+                <span class="ui-br-ext-message">{{keyError}}</span>
             </div>
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off" :disabled="reg.spinner" :class="{ disabled: reg.spinner }">
-                <span class="ui-br-ext-spinner" :class="{ active: reg.spinner }"></span>
+            <div class="ui-br-ext-form-container ui-br-ext-textarea">
+                <label for="email">Email</label>
+                <input type="email" name="email" v-model="email"/>
+                <span class="ui-br-ext-message">{{emailError}}</span>
+            </div>
+            <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off" :disabled="spinner" :class="{ disabled: spinner }">
+                <span class="ui-br-ext-spinner" :class="{ active: spinner }"></span>
                 <span @click="onRegKeySave">Save</span > 
             </button>
         </div>
@@ -29,8 +37,9 @@
 
 <script>
 
+    import { v4 as uuidv4 } from 'uuid';
     import { globalStore } from './../../../main';
-    import regKeyAuth from './../../../services/regkey.service';
+    import authService from '../../../services/auth.service';
     import storage from './../../../common/storage';
     import eventBus from './../../../eventBus';
 
@@ -38,7 +47,7 @@
         name: 'Account',
         
         created() { 
-            this.auth = regKeyAuth.auth,
+            this.auth = authService.auth,
             this.localStorage = storage
         },
 
@@ -51,51 +60,61 @@
                 account: {},
                 isRegKeySaved: false,
                 showAddKey: false,
-                reg: {
-                    key: '',
-                    error: '',
-                    spinner: false,
-                }
+                regKey: '',
+                keyError: '',
+                email: '',
+                emailError: '',
+                spinner: false,
+                showConfirmationMessage: false
             }
         },
 
         methods: {
             async onRegKeySave(){
-                this.reg.error = "";
-                if (this.reg.key.trim() !== ''){ 
-                    if (this.account && this.account.registrationKey) {
-                        let regKeyConfirmation = confirm('Do you want to change the registration key?');
-                        if (!regKeyConfirmation) {
-                            this.reg.key = '';
-                            return false
-                        }
-                    }
-                    this.reg.spinner = true;
-                    // Get request
-                    this.account = await this.auth(this.reg.key)
-                        .catch(error => {
-                            this.reg.error = error;
-                            this.reg.spinner = false;
-                        });
-                    if(this.account) {
-                        globalStore.store.account = this.account;
-                        eventBus.$emit('regkey-updated');
-                        try {
-                            await this.localStorage.set('regKey', this.reg.key);
-                        } catch(error) {
-                            if(error.result.message) {
-                                eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
-                            } else {
-                                eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
-                            }
-                            console.log(error);
-                        }
-                        this.reg.spinner = false;
-                        this.showAddKey = false;
-                    }
+                this.keyError = "";
+                this.emailError = "";
+                let count = 0;
+                if (this.regKey.trim() == ''){ 
+                    this.keyError = "License key is required";
+                    count++;
+                }
+                if (this.email.trim() == ''){ 
+                    this.emailError = "Email is required";
+                    count++;
                 } else {
-                    this.reg.error = "Enter registration key";
-                    this.reg.spinner = false
+                    if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email))) {
+                        this.emailError = 'Please enter a valid email address';
+                        count++;
+                    }
+                }
+                if( count > 0) return false;
+                this.submit()
+            },
+
+            async submit(){
+                const appId = uuidv4();
+                this.spinner = true;
+                const logData = {
+                    regKey: this.regKey,
+                    email: this.email,
+                    appId: appId
+                }
+                try {
+                    await this.auth(logData)
+                    this.spinner = false;
+                    globalStore.store.account = this.account;
+                    eventBus.$emit('regkey-updated');
+                    this.showAddKey = false;
+                    this.showConfirmationMessage = true;
+                    try {
+                        await this.localStorage.set('regData', logData);
+                    } catch(error) {
+                        console.log(error);
+                    }
+                } catch (error) {
+                    console.log(error);
+                    eventBus.$emit('toggle-toast', { text: error, danger: true })
+                    this.spinner = false;
                 }
             },
         }

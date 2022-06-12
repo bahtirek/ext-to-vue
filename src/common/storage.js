@@ -4,20 +4,20 @@ const get = (key) => {
             if (chrome.runtime.lastError) {
                 return reject(chrome.runtime.lastError);
             }
-            resolve (result[key]);
+            resolve (JSON.parse(result[key]));
         });
     })
 }
 
-const set = (key, value) => {  
+const set = (key, value) => {
+    value = JSON.stringify(value)
     return new Promise((resolve, reject) => {
         try {
             chrome.storage.local.set({[key]: value}, function() {
                 resolve(true);
             });
         } catch (error) {
-            console.log(error)
-            reject(false)
+            reject(error)
         }
     })
 }

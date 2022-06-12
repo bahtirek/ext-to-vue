@@ -14,7 +14,7 @@
             <FileUpload :account="account" ref="fileUploadForm" />
 
         </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
+        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.token">
             <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="saveToDb">
             <label for="ui-br-ext-save-to-jira">Save to DB</label>
         </div>
