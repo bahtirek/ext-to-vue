@@ -1,3 +1,5 @@
+
+
 <template>
     
     <div class="ui-br-ext-settings-body">
@@ -6,28 +8,41 @@
             <span id="ui-br-ext-btn-link" @click="showAddUser = !showAddUser;" :class="{active: showAddUser}">Add user</span>  
         </div>
 
-        <UserDetails :user="user" v-if="!showAddUser" />
+        <div v-if="!showAddUser">
+            <UserSearch @editUser="editUser" />
+        </div>
 
         <div  v-if="showAddUser">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                <label for="firstname">First name</label>
-                <input type="text" name="firstname" v-model="userForm.firstname"/>
-                <span class="ui-br-ext-message"></span>
-            </div>
-            <div class="ui-br-ext-form-container ui-br-ext-textarea">
-                <label for="lastname">Last name</label>
-                <input type="text" name="lastname" v-model="userForm.lastname"/>
-                <span class="ui-br-ext-message"></span>
-            </div>
-            <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="email">Email</label>
-                <input type="text" name="email" v-model="userForm.email"/>
-                <span class="ui-br-ext-message"></span>
+                <input type="text" name="email" v-model="email"/>
+                <span class="ui-br-ext-message">{{emailError}}</span>
             </div>
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
-                <span class="ui-br-ext-spinner" :class="{ active: spinner }"></span>
-                <span @click="onUserSave">Save</span > 
-            </button>
+            
+            <div class="ui-br-ext-btn-group" v-if="user && user.emailId">
+                <button class="ui-br-ext-btn" @click="deleteUser" data-listener="off">
+                    <span class="ui-br-ext-spinner"></span>
+                    <span>Delete</span> 
+                </button>
+                <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
+                    <span class="ui-br-ext-spinner" :class="{ active: spinner }"></span>
+                    <span @click="onUserSave">Update</span > 
+                </button>
+                <button class="ui-br-ext-btn-danger" @click="resetUser()" data-listener="off">
+                    <span class="ui-br-ext-spinner"></span>
+                    <span>Cancel</span> 
+                </button>
+            </div>
+            <div class="ui-br-ext-btn-group"  v-if="user && !user.emailId">
+                <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
+                    <span class="ui-br-ext-spinner" :class="{ active: spinner }"></span>
+                    <span @click="onUserSave">Save</span > 
+                </button>
+                <button class="ui-br-ext-btn-danger" @click="resetUser()" data-listener="off">
+                    <span class="ui-br-ext-spinner"></span>
+                    <span>Cancel</span> 
+                </button>
+            </div>
         </div >
     </div>
     
@@ -36,53 +51,98 @@
 
 <script>
 
-    import { globalStore } from './../../../main';
-    import storage from './../../../common/storage';
+    import userService from '../../../services/user.service';
     import eventBus from './../../../eventBus';
-    import UserDetails from '../../shared/UserDetails';
+    import UserSearch from '../../shared/UserSearch';
 
 
     export default {
         name: 'User',
 
         components: {
-            UserDetails
+            UserSearch
         },
 
-        created() { 
-            this.localStorage = storage
-        },
-
-        mounted() {
-            this.user = globalStore.store.user;
+        created() {
+            this.post = userService.postUser;
+            this.patch = userService.patchUser;
+            this.delete = userService.deleteUser;
         },
 
         data() {
             return {
-                userForm: {
-                    firstname: '',
-                    lastname: '',
-                    email: ''
-                },
+                email: '',
                 spinner: false,
-                user: {},
-                showAddUser: false
+                showAddUser: false,
+                emailError: '',
+                user: {}
             }
         },
 
         methods: {
-            async onUserSave(){
-                const userString = JSON.stringify(this.userForm)
-                await this.localStorage.set('user', userString)
-                globalStore.store.user = this.userForm;
-                this.user = this.userForm;
-                eventBus.$emit('user-loaded');
-                this.userForm = {
-                    firstname: '',
-                    lastname: '',
-                    email: ''
+
+            emailValidation(){
+                this.emailError = '';
+                if (this.email.trim() == ''){ 
+                    this.emailError = "Email is required";
+                    return false;
                 }
+                if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email))) {
+                    this.emailError = 'Please enter a valid email address';
+                    return false;
+                }
+                return true;
+            },
+
+            editUser(user){
+                this.user = user;
+                this.showAddUser = true;
+                this.email = user.email;
+            },
+
+            async onUserSave(){
+                if (!this.emailValidation()) return false;
+                this.showAddUser = true;
+                try {
+                    if (this.user && this.user.emailId) {
+                        await this.patch({account: this.account, email: this.email, emailId: this.user.emailId});
+                    } else {
+                        await this.post({account: this.account, email: this.email});
+                    }
+                    this.resetUser();
+                } catch(error) {
+                    console.log(error);
+                    if(error.error) {
+                        this.emailError = error.error
+                    } else if(error.result.message){
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
+                    this.showAddUser = false;
+                }
+            },
+
+
+            async deleteUser(){
+                try {
+                    await this.delete(this.account, this.user.emailId);
+                    this.resetUser();
+                } catch(error) {
+                    console.log(error);
+                    if(error.result.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
+                }
+            },
+
+            resetUser(){
+                this.user = {};
+                this.email = '';
                 this.showAddUser = false;
+                this.emailError = '';
             },
 
         }
