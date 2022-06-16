@@ -83,7 +83,8 @@
                 confirmationCodeError: '',
                 appId: '',
                 validateConfirmationCode: '',
-                tempData: undefined
+                tempData: undefined,
+                userData: {}
             }
         },
 
@@ -112,17 +113,17 @@
             async submit(){
                 this.appId = uuidv4();
                 this.spinner = true;
-                const logData = {
-                    regKey: this.regKey,
-                    email: this.email,
-                    appId: this.appId,
+                this.userData = {
+                    RegistrationKey: this.regKey,
+                    UserEmail: this.email,
+                    UserAppId: this.appId,
                     date: Date.now()
                 }
                 try {
-                    await this.auth(logData)
+                    await this.auth(this.userData)
                     this.showConfirmationMessage = true;
                     try {
-                        await this.localStorage.set('tempUserData', logData);
+                        await this.localStorage.set('tempUserData', this.userData);
                     } catch(error) {
                         console.log(error);
                     }
@@ -139,7 +140,8 @@
                 if(!this.validateCode()) return false;
                 this.spinner = true;
                 try {
-                    await this.verify(this.validateConfirmationCode, this.appId)                
+                    await this.verify(this.validateConfirmationCode, this.userData)
+                    this.updateStorage()             
                 } catch(error) {
                     if(error.result.message) {
                         eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
@@ -163,13 +165,31 @@
                 }
             },
 
+            async updateStorage(){
+                const { date, ...userData } = this.userData;
+                console.log(userData);
+                try {
+                    await this.localStorage.set('userData', userData);
+                } catch(error) {
+                    console.log(error);
+                }
+                try {
+                    await this.localStorage.remove('tempUserData');
+                } catch(error) {
+                    console.log(error);
+                }
+            },
+
             async checkTempData(){
                 /* If confirmation code sent and not confirmed */
                 if(this.account && this.account.email) return false;
                 try {
-                    this.tempData = await this.localStorage.get('tempUserData');
-                    const hours = (Date.now() - this.tempData.date) / (60 * 60 * 1000);
-                    if(hours < 24) {this.showConfirmationMessage = true}
+                    const userData = await this.localStorage.get('tempUserData');
+                    const hours = (Date.now() - userData.date) / (60 * 1000);
+                    if(hours < 60) {
+                        this.showConfirmationMessage = true;
+                        this.userData = userData;
+                    }
                 } catch(error) {
                     console.log(error);
                 }

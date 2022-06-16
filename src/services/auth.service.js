@@ -1,23 +1,29 @@
 const URL = 'https://extension-auth.evendor.app/api';
 
-const auth = (regData) => {
-    return new Promise((resolve, reject) => {       
-        fetch(`${URL}/get_config?RegistrationKey=${regData.regKey}`)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else if (response.status === 401) {
-                    reject('Unauthorized')
-                } else {
-                    reject('Sorry, something went wrong')
-                }
-            })
-            .then( data => {
-                resolve(data)
-            })
-            .catch(error => {
-                reject('Sorry, something went wrong');
-            })       
+const auth = (data) => {
+    return new Promise((resolve, reject) => {    
+        fetch(`${URL}/get_config`, {
+            method: 'POST', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 401) {
+                reject('Unauthorized')
+            } else {
+                reject('Sorry, something went wrong')
+            }
+        })
+        .then( data => {
+            resolve(data)
+        })
+        .catch(error => {
+            reject('Sorry, something went wrong');
+        })       
     })
 }
 
