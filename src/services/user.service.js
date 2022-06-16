@@ -1,13 +1,15 @@
 
 import axios from 'axios';
 
-const postUser = (account, email) => {
+const postUser = (account, email, isAdmin) => {
+    isAdmin = isAdmin ? 1 : 0;
     return new Promise((resolve, reject) => {
         axios.post(`${account.repositoryServer}/module`, {
             registrationKey: account.registrationKey, 
             token: account.token,
             uuid: account.uuid,
-            email: email
+            email: email,
+            isAdmin: isAdmin
         }).then(function (response) {
             resolve(response.account)
         }).catch(function (error) {
@@ -16,14 +18,16 @@ const postUser = (account, email) => {
     });
 }
 
-const patchUser = (account, email, emailId) => {
+const patchUser = (account, email, emailId, isAdmin) => {
+    isAdmin = isAdmin ? 1 : 0;
     return new Promise((resolve, reject) => {
         axios.patch(`${account.repositoryServer}/module`, {
             registrationKey: account.registrationKey, 
             token: account.token,
             uuid: account.uuid,
             email: email,
-            emailId: emailId
+            emailId: emailId,
+            isAdmin: isAdmin
         }).then(function (response) {
             resolve(response.account)
         }).catch(function (error) {

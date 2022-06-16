@@ -18,6 +18,10 @@
                 <input type="text" name="email" v-model="email"/>
                 <span class="ui-br-ext-message">{{emailError}}</span>
             </div>
+            <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+                <input type="checkbox" name="isAdmin" id="ui-br-ext-save-to-jira" v-model="isAdmin">
+                <label for="ui-br-ext-save-to-jira">Is Admin</label>
+            </div>
             
             <div class="ui-br-ext-btn-group" v-if="user && user.emailId">
                 <button class="ui-br-ext-btn" @click="deleteUser" data-listener="off">
@@ -75,7 +79,8 @@
                 spinner: false,
                 showAddUser: false,
                 emailError: '',
-                user: {}
+                user: {},
+                isAdmin: false
             }
         },
 
