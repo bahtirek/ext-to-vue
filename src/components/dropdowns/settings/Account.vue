@@ -2,8 +2,13 @@
     
     <div class="ui-br-ext-settings-body">
         <div class="ui-br-ext-btn-link ui-br-ext-btn-create-project">
-            <span id="ui-br-ext-btn-link" @click="toggleView" :class="{active: showAddKey}">Sign in</span>  
+            <span id="ui-br-ext-btn-link" @click="toggleView" :class="{active: showAddKey}" v-if="!(this.account && this.account.token)">Sign in</span>  
         </div>
+        <ul class="ui-br-ext-info-list" v-if="this.account && this.account.token">
+            <li>
+                <span><strong>Logged user:</strong> </span><span>  {{account.userEmail}}</span>
+            </li >
+        </ul >
         <ul class="ui-br-ext-info-list" v-if="!showAddKey">
             <div class="ui-br-ext-spacer-1"></div>
             <li v-if="account && account.email && !showConfirmationMessage">
@@ -65,6 +70,7 @@
 
         mounted() {
             this.account = globalStore.store.account;
+            console.log(this.account);
             this.checkTempData();
         },
 
@@ -114,9 +120,9 @@
                 this.appId = uuidv4();
                 this.spinner = true;
                 this.userData = {
-                    RegistrationKey: this.regKey,
-                    UserEmail: this.email,
-                    UserAppId: this.appId,
+                    registrationKey: this.regKey,
+                    userEmail: this.email,
+                    userAppId: this.appId,
                     date: Date.now()
                 }
                 try {

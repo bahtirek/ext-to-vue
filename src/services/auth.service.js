@@ -1,6 +1,12 @@
 const URL = 'https://extension-auth.evendor.app/api';
 
 const auth = (data) => {
+    data = {
+        RegistrationKey: data.registrationKey,
+        UserEmail: data.userEmail,
+        UserAppId: data.userAppId,
+    }
+    console.log(data);
     return new Promise((resolve, reject) => {    
         fetch(`${URL}/get_config`, {
             method: 'POST', // or 'PUT'

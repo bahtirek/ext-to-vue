@@ -27,21 +27,10 @@ export default {
   created() { 
     this.localStorage = storage;
     this.auth = authService.auth;
-    this.getUserData();
-    //this.fakeGetkey();
+    //this.getUserData();
+    this.adminUserAuth();
+    //this.regularUserAuth();
   },
-
-  watch: {
-
-  },
-
-  /* 
-    userData = {
-      regKey: String,
-      email: String,
-      appId: String
-    }
-  */
 
   methods: {
     async getUserData(){
@@ -54,11 +43,19 @@ export default {
       }
     },
 
-    fakeGetkey(){
+    adminUserAuth(){
       const userData = {
-        RegistrationKey: "sup_61b589b5f03c42.30439098",
-        UserEmail: "uzsultanov@gmail.com",
-        UserAppId: "a3a6120c-e3aa-4185-a664-53a1567b99e4"
+        registrationKey: "61b589b5f03c42.30439098",
+        userEmail: "uzsultanov@gmail.com",
+        userAppId: "a3a6120c-e3aa-4185-a664-53a1567b99e4"
+      };
+      this.login(userData);
+    },
+    regularUserAuth(){
+      const userData = {
+        registrationKey: "61b589b5f03c42.30439098",
+        userEmail: "bahti005@gmail.com",
+        userAppId: "a3a6120c-e3aa-4185-a664-53a1567b99e4"
       };
       this.login(userData);
     },
@@ -68,7 +65,7 @@ export default {
       try {
         const result = await this.auth(userData);
         console.log(result);
-        globalStore.store.account = {...result, ...userData}
+        globalStore.store.account = {...userData, ...result}
         await this.localStorage.set('userData', userData);
         eventBus.$emit('account-loaded')
       } catch(error) {
