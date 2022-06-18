@@ -23,7 +23,9 @@ const postReport = (account, report) => {
             environmentId: report.environment.environmentId,
             url: window.location.href,
             saveToJira: saveToJira,
-            jiraSettings: account.jiraSettings
+            jiraSettings: account.jiraSettings,
+            userProfileId: account.userProfileId,
+            userEmail: account.userEmail
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
@@ -66,7 +68,9 @@ const patchReport = (account, report) => {
             attachments: report.attachments,
             title: report.title,
             environmentId: report.environment.environmentId,
-            url: window.location.href
+            url: window.location.href,
+            userProfileId: account.userProfileId,
+            userEmail: account.userEmail
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
