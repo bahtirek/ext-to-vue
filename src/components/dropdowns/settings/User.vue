@@ -20,7 +20,7 @@
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox">
                 <input type="checkbox" name="isAdmin" id="ui-br-ext-save-to-jira" v-model="isAdmin">
-                <label for="ui-br-ext-save-to-jira">Is Admin</label>
+                <label for="ui-br-ext-save-to-jira">Admin</label>
             </div>
             
             <div class="ui-br-ext-btn-group" v-if="user && user.emailId">
@@ -58,6 +58,7 @@
     import userService from '../../../services/user.service';
     import eventBus from './../../../eventBus';
     import UserSearch from '../../shared/UserSearch';
+    import storage from '../../../common/storage';
 
 
     export default {
@@ -71,6 +72,11 @@
             this.post = userService.postUser;
             this.patch = userService.patchUser;
             this.delete = userService.deleteUser;
+            this.localStorage = storage;
+        },
+        
+        mounted() {
+            this.getAdminData()
         },
 
         data() {
@@ -80,7 +86,7 @@
                 showAddUser: false,
                 emailError: '',
                 user: {},
-                isAdmin: false
+                isAdmin: false,
             }
         },
 
@@ -112,7 +118,15 @@
                     if (this.user && this.user.emailId) {
                         await this.patch({account: this.account, email: this.email, emailId: this.user.emailId});
                     } else {
-                        await this.post({account: this.account, email: this.email});
+                        this.isAdmin = this.isAdmin ? 1 : 0;
+                        const data = {
+                            RegistrationKey: this.account.registrationKey, 
+                            UserEmail: this.account.userEmail, 
+                            UserAppId: this.account.userAppId, 
+                            NewUserEmail: this.email, 
+                            isAdmin: this.isAdmin
+                        }
+                        await this.post(data);
                     }
                     this.resetUser();
                 } catch(error) {
@@ -148,6 +162,15 @@
                 this.email = '';
                 this.showAddUser = false;
                 this.emailError = '';
+            },
+
+            async getAdminData(){
+                console.log('getuser');
+                try {
+                    this.account = await this.localStorage.get('userData')
+                } catch (error) {
+                    console.log(error);
+                }
             },
 
         }

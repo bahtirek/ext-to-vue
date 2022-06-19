@@ -70,7 +70,6 @@
 
         mounted() {
             this.account = globalStore.store.account;
-            console.log(this.account);
             this.checkTempData();
         },
 
@@ -143,12 +142,17 @@
             },
 
             async confirm(){
-                if(!this.validateCode()) return false;
+                //if(!this.validateCode()) return false;
                 this.spinner = true;
                 try {
-                    await this.verify(this.validateConfirmationCode, this.userData)
+                    this.account = await this.verify(this.confirmationCode, this.userData)
+                    globalStore.store.account = this.account;
+                    this.showConfirmationMessage = false;
+                    this.tempData = undefined;
                     this.updateStorage()             
+                    eventBus.$emit('account-loaded')
                 } catch(error) {
+                    console.log(error);
                     if(error.result.message) {
                         eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
                     } else {

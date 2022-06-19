@@ -34,26 +34,40 @@ const auth = (data) => {
 }
 
 
-const verifyCode = (appId, code) => {
+const verifyCode = (code, userData) => {
+    console.log(userData);
     const data = {
-        appId: appId,
-        code: code
+        RegistrationKey: userData.registrationKey,
+        UserEmail: userData.userEmail,
+        UserAppId: userData.userAppId,
+        ConfirmationCode: code
     }
+
     return new Promise((resolve, reject) => {       
-        fetch(`${URL}/verifyCode`, {
+        fetch(`${URL}/confirm_user`, {
             method: 'POST', // or 'PUT'
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
           })
-          .then(response => response.json())
+          .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 401) {
+                reject('Unauthorized')
+            } else if (response.status === 500){
+                console.log(response);
+                reject('Sorry, something went wrong')
+            }
+          })
           .then(data => {
             console.log(data);
             resolve(data);
           })
           .catch((error) => {
-            reject(error)
+            console.log(error);
+            reject(error.result.data)
           });   
     })
 }
