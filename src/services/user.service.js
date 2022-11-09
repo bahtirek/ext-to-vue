@@ -34,18 +34,19 @@ const patchUser = (account, email, emailId, isAdmin) => {
 
 const getUser = (account, query) => {
     return new Promise((resolve, reject) => {       
-        axios.get(`${URL}/module`, {
+        axios.get(`${URL}/user-profiles`, {
             params: {
-                registrationKey: account.registrationKey, 
-                token: account.token,
-                uuid: account.uuid,
-                query: query
+                RegistrationKey: "1636b16263fc27",
+                UserEmail: "uzsultanov@gmail.com",
+                UserAppId: "0e08d1f4-a6d3-49f4-a379-1371bc3cf4fc",
+                query: "uzsultanov@gmail.com"
             }
         }).then(function (response) {
-            resolve(response.account.result)
+            console.log(response);
+            resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);
-            reject(error.response.data);
+            reject(error.response);
         });     
     })
 }

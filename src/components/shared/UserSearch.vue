@@ -10,12 +10,12 @@
             </span >
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
-            <div class="ui-br-ext-search-results" v-if="user && user.emailId">
+            <div class="ui-br-ext-search-results" v-if="users && users.length > 0">
                 <ul>
-                    <li class="ui-br-ext-hovered">
-                        <span class="ui-br-ext-module-label ui-br-ext-no-hover">{{user.email}}</span>
+                    <li class="ui-br-ext-hovered" v-for="(user, index) in users" :key="index">
+                        <span class="ui-br-ext-module-label ui-br-ext-no-hover">{{user.UserEmail}}</span>
                         <div class="ui-br-ext-module-icons">
-                            <span @click="onUserEdit()">
+                            <span @click="onUserEdit(user)">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                             </span>
                         </div>
@@ -59,6 +59,7 @@
                 emailError: '',
                 emailSearch: '',
                 email: {},
+                users: []
             }
         },
 
@@ -70,10 +71,14 @@
                     this.emailError = "Email is required";
                     return false;
                 }
-                if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.emailSearch))) {
-                    this.emailError = 'Please enter a valid email address';
+                if (this.emailSearch.length < 2) {
+                    this.emailError = 'Min 2 chars';
                     return false;
                 }
+                /* if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.emailSearch))) {
+                    this.emailError = 'Please enter a valid email address';
+                    return false;
+                } */
                 return true;
             },
 
@@ -81,7 +86,8 @@
                 if (!this.emailValidation()) return false;
                 console.log(this.emailSearch);
                 try {
-                    this.user = await this.get(this.account, this.emailSearch)
+                    this.users = await this.get(this.account, this.emailSearch)
+                    console.log(this.users);
                 } catch (error) {
                     console.log(error);
                     if(error.result.message) {
@@ -92,8 +98,9 @@
                 }
             },
 
-            onUserEdit(){
-                this.$emit('editUser', this.user)
+            onUserEdit(user){
+                user.email = user.UserEmail;
+                this.$emit('editUser', user)
             },
 
             resetUser(){

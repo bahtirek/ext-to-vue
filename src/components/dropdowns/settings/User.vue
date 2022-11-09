@@ -164,6 +164,7 @@
                 this.email = '';
                 this.showAddUser = false;
                 this.emailError = '';
+                this.IsAdmin = '';
             },
 
             async getAdminData(){
