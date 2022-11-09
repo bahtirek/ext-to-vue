@@ -20,13 +20,8 @@
                     
                     <div class="ui-br-ext-settings-container">
                         <div class="ui-br-ext-setting-title" @click="ifAccount = !ifAccount; ifGlobal = false; ifProject = false; ifModule = false; ifUser = false; ifEnvironment = false">Account</div>
-                        <Account v-if="ifAccount" />
+                        <Account v-if="ifAccount"  @close-account="ifAccount = false" />
                     </div>
-
-                    <!-- <div class="ui-br-ext-settings-container" v-if="account && account.token">
-                        <div class="ui-br-ext-setting-title" @click="ifGlobal = !ifGlobal; ifProject = false; ifModule = false; ifAccount = false; ifUser = false">Global</div>
-                        <Global v-if="ifGlobal" />
-                    </div> -->
 
                     <div class="ui-br-ext-settings-container"  v-if="account && account.isAdmin == 1">
                         <div class="ui-br-ext-setting-title" @click="ifUser = !ifUser; ifGlobal = false; ifProject = false; ifModule = false; ifAccount = false; ifEnvironment = false">User</div>
