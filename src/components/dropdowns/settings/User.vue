@@ -19,11 +19,11 @@
                 <span class="ui-br-ext-message">{{emailError}}</span>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-                <input type="checkbox" name="isAdmin" id="ui-br-ext-save-to-jira" v-model="isAdmin">
+                <input type="checkbox" name="IsAdmin" id="ui-br-ext-save-to-jira" v-model="IsAdmin">
                 <label for="ui-br-ext-save-to-jira">Admin</label>
             </div>
             
-            <div class="ui-br-ext-btn-group" v-if="user && user.emailId">
+            <div class="ui-br-ext-btn-group" v-if="user && user.UserProfileId">
                 <button class="ui-br-ext-btn" @click="deleteUser" data-listener="off">
                     <span class="ui-br-ext-spinner"></span>
                     <span>Delete</span> 
@@ -37,7 +37,7 @@
                     <span>Cancel</span> 
                 </button>
             </div>
-            <div class="ui-br-ext-btn-group"  v-if="user && !user.emailId">
+            <div class="ui-br-ext-btn-group"  v-if="user && !user.UserProfileId">
                 <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
                     <span class="ui-br-ext-spinner" :class="{ active: spinner }"></span>
                     <span @click="onUserSave">Save</span > 
@@ -86,7 +86,7 @@
                 showAddUser: false,
                 emailError: '',
                 user: {},
-                isAdmin: false,
+                IsAdmin: false,
             }
         },
 
@@ -106,25 +106,27 @@
             },
 
             editUser(user){
+                console.log(user);
                 this.user = user;
                 this.showAddUser = true;
                 this.email = user.email;
+                this.IsAdmin = user.IsAdmin;
             },
 
             async onUserSave(){
                 if (!this.emailValidation()) return false;
                 this.showAddUser = true;
                 try {
-                    if (this.user && this.user.emailId) {
-                        await this.patch({account: this.account, email: this.email, emailId: this.user.emailId});
+                    if (this.user && this.user.UserProfileId) {
+                        await this.patch({account: this.account, email: this.email, UserProfileId: this.user.UserProfileId});
                     } else {
-                        this.isAdmin = this.isAdmin ? 1 : 0;
+                        this.IsAdmin = this.IsAdmin ? 1 : 0;
                         const data = {
                             RegistrationKey: this.account.registrationKey, 
                             UserEmail: this.account.userEmail, 
                             UserAppId: this.account.userAppId, 
                             NewUserEmail: this.email, 
-                            isAdmin: this.isAdmin
+                            IsAdmin: this.IsAdmin
                         }
                         await this.post(data);
                     }
@@ -145,7 +147,7 @@
 
             async deleteUser(){
                 try {
-                    await this.delete(this.account, this.user.emailId);
+                    await this.delete(this.account, this.user.UserProfileId);
                     this.resetUser();
                 } catch(error) {
                     console.log(error);

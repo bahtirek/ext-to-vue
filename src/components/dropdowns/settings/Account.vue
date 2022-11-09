@@ -129,6 +129,7 @@
                     this.showConfirmationMessage = true;
                     try {
                         await this.localStorage.set('tempUserData', this.userData);
+                        await this.localStorage.remove('userData');
                     } catch(error) {
                         console.log(error);
                     }
@@ -148,18 +149,20 @@
                     this.account = await this.verify(this.confirmationCode, this.userData)
                     globalStore.store.account = this.account;
                     this.showConfirmationMessage = false;
+                    this.$emit('close-account');
                     this.tempData = undefined;
                     this.updateStorage()             
                     eventBus.$emit('account-loaded')
                 } catch(error) {
                     console.log(error);
-                    if(error.result.message) {
+                    if(error?.result.message) {
                         eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
+                } finally {
+                    this.spinner = false;
                 }
-                this.spinner = false;
             },
 
             validateCode(){
@@ -199,6 +202,7 @@
                     if(hours < 60) {
                         this.showConfirmationMessage = true;
                         this.userData = userData;
+                        await this.localStorage.remove('tempUserData');
                     }
                 } catch(error) {
                     console.log(error);
