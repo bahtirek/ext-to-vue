@@ -1,4 +1,4 @@
-const get = (key) => {
+/* const get = (key) => {
     return new Promise((resolve, reject) => {
         const result = window.localStorage.getItem(key)
         if(result) {
@@ -23,8 +23,8 @@ const remove = (key) => {
         window.localStorage.removeItem(key)
        resolve(true);
     })
-}
-/* const get = (key) => {
+} */
+const get = (key) => {
     return new Promise((resolve, reject) => {
         chrome.storage.local.get(function(result) {
             if (chrome.runtime.lastError) {
@@ -46,7 +46,18 @@ const set = (key, value) => {
             reject(error)
         }
     })
-} */
+}
+const remove = (key) => {
+    return new Promise((resolve, reject) => {
+        try {
+            chrome.storage.local.remove(key, function() {
+                resolve(true);
+            });
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 
 export default {
     get, set, remove

@@ -27,14 +27,13 @@ export default {
   created() { 
     this.localStorage = storage;
     this.auth = authService.auth;
-    //this.getUserData();
-    this.adminUserAuth();
+    this.getUserData();
+    //this.adminUserAuth();
     //this.regularUserAuth();
   },
 
   methods: {
     async getUserData(){
-      console.log('getuser');
       try {
         const userData = await this.localStorage.get('userData')
         this.login(userData)
@@ -62,6 +61,7 @@ export default {
 
     async login(userData){
       console.log('login');
+      if(!userData) return false;
       try {
         const result = await this.auth(userData);
         console.log(result);
