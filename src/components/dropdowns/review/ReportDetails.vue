@@ -174,7 +174,8 @@
                     console.log(e)
                 }
                 if (el){
-                    el.style.cssText = el.style.cssText.replace('outline: red dashed 3px !important;', 'outline: #4fff00 dashed 3px !important;');
+                    el.classList.remove('ui-br-ext-selected-element-outline-red');
+                    el.classList.add('ui-br-ext-selected-element-outline-green');
                     globalStore.store.activeBugElement = el;
                 }
             },

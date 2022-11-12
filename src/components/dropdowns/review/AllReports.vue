@@ -244,7 +244,7 @@
                 if(element){
                     this.createElement(element, bugId)
                     element.classList.add('ui-br-ext-outlined-element');
-                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";                                 
+                    element.classList.add('ui-br-ext-selected-element-outline-red');                               
                 }
                 return element
             },
@@ -272,8 +272,8 @@
                     if(prevBugId == bugId) return false;
                 }
                 if(prevEl){
-                    prevEl.style.cssText = el.style.cssText.replace('outline: #4fff00 dashed 3px !important;', '');                   
-                    prevEl.style.cssText = prevEl.style.cssText + "outline: red dashed 3px !important;";                   
+                    prevEl.classList.add('ui-br-ext-selected-element-outline-red');
+                    prevEl.classList.remove('ui-br-ext-selected-element-outline-green');                  
                 }
                 if(prevBugCover){
                    prevBugCover.classList.remove('ui-br-ext-bug-cover-active');                   
