@@ -9,7 +9,7 @@
         </div>
 
         <div v-if="!showAddUser">
-            <UserSearch @editUser="editUser" />
+            <UserSearch @editUser="editUser" :account="account"/>
         </div>
 
         <div  v-if="showAddUser">
@@ -87,6 +87,7 @@
                 emailError: '',
                 user: {},
                 IsAdmin: false,
+                account: {}
             }
         },
 

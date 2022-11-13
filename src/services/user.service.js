@@ -36,13 +36,12 @@ const getUser = (account, query) => {
     return new Promise((resolve, reject) => {       
         axios.get(`${URL}/user-profiles`, {
             params: {
-                RegistrationKey: "1636b16263fc27",
-                UserEmail: "uzsultanov@gmail.com",
-                UserAppId: "0e08d1f4-a6d3-49f4-a379-1371bc3cf4fc",
-                query: "uzsultanov@gmail.com"
+                RegistrationKey: account.registrationKey,
+                UserEmail: account.userEmail,
+                UserAppId: account.userAppId,
+                query: query
             }
         }).then(function (response) {
-            console.log(response);
             resolve(response.data.result)
         }).catch(function (error) {
             console.log(error.reponse);

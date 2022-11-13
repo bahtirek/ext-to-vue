@@ -22,6 +22,13 @@
                     </li>
                 </ul>
             </div>
+            <div class="ui-br-ext-search-results" v-if="noUsersFound">
+                <ul>
+                    <li class="ui-br-ext-hovered">
+                        <span class="ui-br-ext-module-label ui-br-ext-no-hover">No users found</span>
+                    </li>
+                </ul>
+            </div>
         </div>
         <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off">
             <span class="ui-br-ext-spinner" :class="{ active: spinner }"></span>
@@ -50,6 +57,10 @@
         mounted() {
             
         },
+        
+        props: [
+            'account',
+        ],
 
         data() {
             return {
@@ -59,7 +70,8 @@
                 emailError: '',
                 emailSearch: '',
                 email: {},
-                users: []
+                users: [],
+                noUsersFound: false
             }
         },
 
@@ -70,8 +82,7 @@
                 if (this.emailSearch.trim() == ''){ 
                     this.emailError = "Email is required";
                     return false;
-                }
-                if (this.emailSearch.length < 2) {
+                } else if (this.emailSearch.length < 3) {
                     this.emailError = 'Min 2 chars';
                     return false;
                 }
@@ -83,11 +94,12 @@
             },
 
             async onUserSearch(){
+                this.noUsersFound = false;
                 if (!this.emailValidation()) return false;
-                console.log(this.emailSearch);
                 try {
                     this.users = await this.get(this.account, this.emailSearch)
                     console.log(this.users);
+                    if(this.users == 0 ) this.noUsersFound = true;
                 } catch (error) {
                     console.log(error);
                     if(error.result.message) {
