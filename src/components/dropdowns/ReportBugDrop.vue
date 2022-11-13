@@ -95,6 +95,7 @@
 
             eventBus.$on('projectChanged', (val) => {
                 this.project = val;
+                this.report.saveToJira = this.project.jiraId ? true : false;
             })
                         
             eventBus.$on('user-loaded', () => {
@@ -102,6 +103,7 @@
             })
             this.saveToDb = this.account && this.account.token ? true : false;
             this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
+            this.report.saveToJira = this.project.jiraId ? true : false;
         },
 
         data() {
@@ -115,7 +117,7 @@
                     actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: '',
-                    saveToJira: true,
+                    saveToJira: false,
                     savePdf: false,
                     sendEmail: false,
                     saveScreenshot: false,
