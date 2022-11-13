@@ -227,6 +227,10 @@
             },
 
             close(){
+                document.querySelectorAll('.ui-br-ext-selected-element-outline-green').forEach(element => {
+                    element.classList.remove('ui-br-ext-selected-element-outline-green');
+                    element.classList.add('ui-br-ext-selected-element-outline-red');
+                });
                 this.$emit('close-details')
             },
 
