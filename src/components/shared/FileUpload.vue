@@ -57,9 +57,10 @@
         },
 
         methods: {
-            async addFile(){
+            async addFile(event){
                 const ext = /(\.jpg|\.jpeg|\.bmp|\.gif|\.svg|\.png|\.webm|\.avi|\.mpeg|\.mkv|\.doc|\.docx|\.xls|\.xlsx|\.pdf)$/i;
                 const file = this.$refs.file.files[0];
+                if(!file) return false;
                 const fileName = file.name;
                 
                 if(file.size > 50000000) {
@@ -73,6 +74,7 @@
                 } 
                 this.files.push({fileName: fileName, uuid: ''});
                 this.uploadFile(file, this.files.length-1);
+                event.target.value = "";
             },
 
             async uploadFile(file, index){
@@ -83,7 +85,7 @@
                     const result = await this.postFiles(this.account, formData);
                     if(result){
                         this.files[index]['uuid'] = result.result;
-                        this.newUploads.push(result.result)
+                        this.newUploads.push(result.result);
                     }                    
                 } catch(error) {
                     this.files.splice(index, 1); 
