@@ -28,7 +28,7 @@
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
             <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="report.sendEmail">
-            <label for="ui-br-ext-send-email">Send email</label>
+            <label for="ui-br-ext-send-email">Generate email</label>
         </div>
         <div class="ui-br-ext-btn-group">
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="downloadScreenshot" data-listener="off" >
@@ -164,7 +164,7 @@
                 }
 
                 if(this.report.sendEmail){
-                    await this.sendEmail(this.report)
+                    await this.sendEmail({...this.report});
                 }
 
                 this.report.url = window.location;
@@ -259,7 +259,7 @@
                     this.submitInPorgress = false;                     
                 } catch(error) {
                     console.log(error);
-                    if(error.result.message) {
+                    if(error.result?.message) {
                         eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
