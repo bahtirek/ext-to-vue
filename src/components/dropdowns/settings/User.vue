@@ -107,36 +107,38 @@
             },
 
             editUser(user){
-                console.log(user);
                 this.user = user;
                 this.showAddUser = true;
                 this.email = user.email;
                 this.IsAdmin = user.IsAdmin;
+                this.UserProfileId = user.UserProfileId
             },
 
             async onUserSave(){
                 if (!this.emailValidation()) return false;
                 this.showAddUser = true;
                 try {
+                    this.IsAdmin = this.IsAdmin ? 1 : 0;
+                    let data = {
+                        RegistrationKey: this.account.registrationKey, 
+                        UserEmail: this.account.userEmail, 
+                        UserAppId: this.account.userAppId,  
+                        IsAdmin: this.IsAdmin,
+                        isAdmin: this.IsAdmin,
+                        UserProfileEmail: this.email,
+                        NewUserEmail: this.email
+                    }
                     if (this.user && this.user.UserProfileId) {
-                        await this.patch({account: this.account, email: this.email, UserProfileId: this.user.UserProfileId});
+                        data.UserProfileId = this.UserProfileId
+                        await this.patch(data);
                     } else {
-                        this.IsAdmin = this.IsAdmin ? 1 : 0;
-                        const data = {
-                            RegistrationKey: this.account.registrationKey, 
-                            UserEmail: this.account.userEmail, 
-                            UserAppId: this.account.userAppId, 
-                            NewUserEmail: this.email, 
-                            IsAdmin: this.IsAdmin
-                        }
                         await this.post(data);
                     }
                     this.resetUser();
                 } catch(error) {
-                    console.log(error);
                     if(error.error) {
                         this.emailError = error.error
-                    } else if(error.result.message){
+                    } else if(error.result?.message){
                         eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
@@ -151,7 +153,6 @@
                     await this.delete(this.account, this.user.UserProfileId);
                     this.resetUser();
                 } catch(error) {
-                    console.log(error);
                     if(error.result.message) {
                         eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
                     } else {
@@ -169,7 +170,6 @@
             },
 
             async getAdminData(){
-                console.log('getuser');
                 try {
                     this.account = await this.localStorage.get('userData')
                 } catch (error) {

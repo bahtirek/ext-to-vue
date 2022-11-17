@@ -7,23 +7,14 @@ const postUser = (data) => {
         axios.post(`${URL}/user_profile`, data).then(function (response) {
             resolve(response.account)
         }).catch(function (error) {
-            console.log(error);
             reject(error.response.data);
         });
     });
 }
 
-const patchUser = (account, email, emailId, isAdmin) => {
-    isAdmin = isAdmin ? 1 : 0;
+const patchUser = (data) => {
     return new Promise((resolve, reject) => {
-        axios.patch(`${URL}/module`, {
-            registrationKey: account.registrationKey, 
-            token: account.token,
-            uuid: account.uuid,
-            email: email,
-            emailId: emailId,
-            isAdmin: isAdmin
-        }).then(function (response) {
+        axios.patch(`${URL}/user-profile`, data).then(function (response) {
             resolve(response.account)
         }).catch(function (error) {
             reject(error.response.data);
@@ -44,7 +35,6 @@ const getUser = (account, query) => {
         }).then(function (response) {
             resolve(response.data.result)
         }).catch(function (error) {
-            console.log(error.reponse);
             reject(error.response);
         });     
     })
@@ -52,7 +42,7 @@ const getUser = (account, query) => {
 
 const deleteUser = (account, emailId) => {
     return new Promise((resolve, reject) => {       
-        axios.delete(`${URL}/module`, {
+        axios.delete(`${URL}/user-profile`, {
             params: {
                 registrationKey: account.registrationKey, 
                 token: account.token,
@@ -62,7 +52,6 @@ const deleteUser = (account, emailId) => {
         }).then(function (response) {
             resolve(response.account)
         }).catch(function (error) {
-            console.log(error.reponse);
             reject(error.response.data);
         });     
     })
