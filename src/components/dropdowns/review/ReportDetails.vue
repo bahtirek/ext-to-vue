@@ -189,8 +189,8 @@
                     this.getDetails(this.report.bugId)                 
                 } catch(error) {
                     console.log(error);
-                    if(error.result.message) {
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
@@ -218,8 +218,8 @@
                                      
                 } catch(error) {
                     console.log(error);
-                    if(error.result.message) {
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }

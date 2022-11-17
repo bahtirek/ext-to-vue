@@ -139,7 +139,7 @@
                     if(error.error) {
                         this.emailError = error.error
                     } else if(error.result?.message){
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
@@ -153,8 +153,8 @@
                     await this.delete(this.account, this.user.UserProfileId);
                     this.resetUser();
                 } catch(error) {
-                    if(error.result.message) {
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }

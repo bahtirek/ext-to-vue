@@ -101,8 +101,8 @@
                         console.log(error);
                         if(error.error) {
                             this.errorMessage.name = error.error
-                        } else if(error.result.message){
-                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else if(error.result?.message){
+                            eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                         } else {
                             eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                         }
@@ -128,8 +128,8 @@
                         this.$emit('deleteModule')
                     } catch(error) {
                         console.log(error);
-                        if(error.result.message) {
-                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        if(error.result?.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                         } else {
                             eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                         }

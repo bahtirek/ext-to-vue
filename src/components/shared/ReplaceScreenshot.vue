@@ -79,8 +79,8 @@
                     const result = await this.postFiles(this.account, formData);
                     this.screenshot.id = result.result;                   
                 } catch(error) {
-                    if(error.result.message) {
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
@@ -94,8 +94,8 @@
                     const result = await this.deleteFile(this.account, id);
                     this.screenshot = {}                   
                 } catch(error) {
-                    if(error.result.message) {
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
