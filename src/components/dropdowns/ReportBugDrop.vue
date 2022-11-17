@@ -145,7 +145,6 @@
                 }
 
                 Object.assign(this.report, this.$refs.reportForm.getReportForm());
-                console.log(this.$refs.reportForm.getReportForm());
                 this.saveReport();
             },
 
@@ -248,7 +247,6 @@
                 this.submitInPorgress = true;               
                 try {
                     const report = await this.postReport(this.account, this.report);
-                    console.log(report);
                     globalStore.store.bugId = report.result.bugId;
                     globalStore.store.xpath = this.report.xpath;
                     //Exclusion error message

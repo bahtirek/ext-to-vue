@@ -180,7 +180,6 @@
 
             async updateStorage(){
                 const { date, ...userData } = this.userData;
-                console.log(userData);
                 try {
                     await this.localStorage.set('userData', userData);
                 } catch(error) {

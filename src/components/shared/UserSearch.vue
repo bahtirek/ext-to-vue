@@ -97,8 +97,7 @@
                 this.noUsersFound = false;
                 if (!this.emailValidation()) return false;
                 try {
-                    this.users = await this.get(this.account, this.emailSearch)
-                    console.log(this.users);
+                    this.users = await this.get(this.account, this.emailSearch);
                     if(this.users == 0 ) this.noUsersFound = true;
                 } catch (error) {
                     console.log(error);

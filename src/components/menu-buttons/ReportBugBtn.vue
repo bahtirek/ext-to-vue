@@ -27,17 +27,11 @@
 
             toggleBtn(e) {
                 this.$emit('toggle-button', e.currentTarget);
-                this.moveElementToViewport()
-                this.$nextTick(() => {
-                    if(this.toggleCompleted) {
-                        console.log(this.toggleCompleted);
-                    }
-                })
+                this.moveElementToViewport();
             },
 
             moveElementToViewport(){
                 const isInViewport = this.isElementInViewport(globalStore.store.selectedElement);
-                console.log(isInViewport);
                 if(!isInViewport){
                     globalStore.store.selectedElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'center' });
                     //intersectionObserver.observe(globalStore.store.selectedElement);

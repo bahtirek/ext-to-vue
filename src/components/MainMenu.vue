@@ -165,7 +165,6 @@
             },
 
             toggleBugDetail(bugId) {
-                console.log(bugId);
                 this.$emit('toggle-drop', {id: 'review', state: true});
                 eventBus.$emit('show-details', bugId)
             },

@@ -44,7 +44,6 @@
         },
 
         mounted: function () {
-            console.log(this.report);
             this.setFormValue()
         },
 

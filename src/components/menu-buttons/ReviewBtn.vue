@@ -22,12 +22,6 @@
             toggleBtn(e) {
                 //this.next = this.activateOperator(e.currentTarget);
                 this.$emit('toggle-button', e.currentTarget);
-                this.$nextTick(() => {
-                    console.log(this.toggleCompleted)
-                    if(this.toggleCompleted) {
-                        console.log(this.toggleCompleted)
-                    }
-                })
             },
         }
     }

@@ -151,7 +151,6 @@
                 try {
                     const report = await this.get(this.account, bugId);
                     this.report = report;
-                    console.log(this.report);
                     this.sharedReports.forEach((report) => {
                         const sameXpath = this.sharedReports.filter((item) => {
                                 return (item.xpath == this.report.xpath) && (item.bugId != this.report.bugId)

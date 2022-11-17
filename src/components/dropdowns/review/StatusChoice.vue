@@ -47,11 +47,9 @@
             this.update = statusService.patchStatus;
             this.getList = statusService.getStatusList;
             this.lkBugStatusId = "" + this.report.lkBugStatusId;
-            console.log(this.lkBugStatusId);
         },
 
-        mounted() { 
-            console.log(this.report);
+        mounted() {
             this.getStatusList();
             this.lkBugStatusId = this.report.lkBugStatusId
         },
@@ -90,7 +88,6 @@
             async  getStatusList(){
                 try {
                     this.statusList = await this.getList(this.account);
-                    console.log(this.statusList);
                 } catch(error) {
                     console.log(error);
                 }

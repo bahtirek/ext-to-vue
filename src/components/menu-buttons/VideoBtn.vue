@@ -28,12 +28,6 @@
             toggleBtn(e) {
                 this.$emit('toggle-button', e.currentTarget);
                 this.$emit('start-record');
-                this.$nextTick(() => {
-                    console.log(this.toggleCompleted)
-                    if(this.toggleCompleted) {
-                        console.log(this.toggleCompleted)
-                    }
-                })
             },
         }
     }

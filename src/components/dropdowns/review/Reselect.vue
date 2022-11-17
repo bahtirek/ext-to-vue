@@ -54,7 +54,6 @@
 
         mounted() { 
             this.startSelect()
-            console.log(this.report);
         },
 
         data() {

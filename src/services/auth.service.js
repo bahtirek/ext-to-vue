@@ -6,7 +6,6 @@ const auth = (data) => {
         UserEmail: data.userEmail,
         UserAppId: data.userAppId,
     }
-    console.log(data);
     return new Promise((resolve, reject) => {    
         fetch(`${URL}/get_config`, {
             method: 'POST', // or 'PUT'
@@ -35,7 +34,6 @@ const auth = (data) => {
 
 
 const verifyCode = (code, userData) => {
-    console.log(userData);
     const data = {
         RegistrationKey: userData.registrationKey,
         UserEmail: userData.userEmail,
@@ -57,12 +55,10 @@ const verifyCode = (code, userData) => {
             } else if (response.status === 401) {
                 reject('Unauthorized')
             } else if (response.status === 500){
-                console.log(response);
                 reject('Sorry, something went wrong')
             }
           })
           .then(data => {
-            console.log(data);
             resolve(data);
           })
           .catch((error) => {

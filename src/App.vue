@@ -60,11 +60,9 @@ export default {
     },
 
     async login(userData){
-      console.log('login');
       if(!userData) return false;
       try {
         const result = await this.auth(userData);
-        console.log(result);
         globalStore.store.account = {...userData, ...result}
         await this.localStorage.set('userData', userData);
         eventBus.$emit('account-loaded')

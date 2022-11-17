@@ -162,7 +162,6 @@
         methods: {
 
             async getReports(){
-                console.log(this.include);
                 if(!this.validateForm()) return false;
                 try {
                     const reports = await this.get(this.account, this.environment.environmentId, this.module.moduleId, this.from, this.to, this.includeCompleted, this.includeCanceled);
