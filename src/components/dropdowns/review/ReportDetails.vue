@@ -3,7 +3,7 @@
         <div class="ui-br-ext-close-details" @click="close">Close</div>  
         <div  class="ui-br-ext-review-card" v-if="report">
             <div class="ui-br-ext-review-box" v-if="report.sameElementBugs">
-                <div class="ui-br-ext-review-title">Other bugs for current element:</div>
+                <div class="ui-br-ext-review-title">Other bugs for this element:</div>
                 <div class="ui-br-ext-review-text">
                     <a v-for="(bug, index) in report.sameElementBugs" :key="index" target="_blank" @click="getDetails(bug.bugId)">
                         {{bug.bugIndex}}
@@ -27,6 +27,14 @@
 
             <div class="ui-br-ext-spacer-1"></div>
 
+            <div class="ui-br-ext-review-box"  v-if="report.createdAt">
+                <div class="ui-br-ext-review-title">Created:</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{new Date(report.createdAt).toLocaleString()}}</div>
+            </div>
+            <div class="ui-br-ext-review-box"  v-if="report.updatedAt">
+                <div class="ui-br-ext-review-title">Last updated:</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{new Date(report.updatedAt).toLocaleString()}}</div>
+            </div>
             <div class="ui-br-ext-review-box" v-if="report.lkBugStatus">
                 <div class="ui-br-ext-review-title">Status:</div>
                 <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{report.lkBugStatus}}</div>

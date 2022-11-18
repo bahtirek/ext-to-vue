@@ -68,7 +68,7 @@
                 {{reports.length}} Bug report found
             </div>
             <div v-for="(report, index) in reports" :key="index">
-                <div class="ui-br-ext-review-card" v-if="!report.element" >
+                <div class="ui-br-ext-review-card">
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-review-title">Bug id:</span>
                         <span class="ui-br-ext-review-text">{{report.bugIndex}}</span>
@@ -76,6 +76,10 @@
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-review-title">Bug title:</span>
                         <span class="ui-br-ext-review-text">{{report.title}}</span>
+                    </div>
+                    <div class="ui-br-ext-review-box" v-if="report.createdAt">
+                        <span class="ui-br-ext-review-title">Created at:</span>
+                        <span class="ui-br-ext-review-text">{{new Date(report.createdAt).toLocaleString()}}</span>
                     </div>
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-btn-lnk"  @click="showDetails(report.bugId)">Details</span>
