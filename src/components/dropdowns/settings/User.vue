@@ -15,7 +15,7 @@
         <div  v-if="showAddUser">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="email">Email</label>
-                <input type="text" name="email" v-model="email"/>
+                <input type="text"  autocomplete="off"  name="email" v-model="email"/>
                 <span class="ui-br-ext-message">{{emailError}}</span>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox">

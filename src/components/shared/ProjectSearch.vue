@@ -1,9 +1,9 @@
 <template>
 
-    <form class="ui-br-ext-report-form">
+    <form autocomplete="off" class="ui-br-ext-report-form">
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-modules">Project</label>
-            <input type="text" v-model="searchQuery" @input="onSearch" autocomplete="off">
+            <input type="text"  autocomplete="off"  v-model="searchQuery" @input="onSearch">
             <span class="ui-br-ext-message" v-if="validation && searchQuery!=='' && searchResults && searchResults.length == 0 && !project.id">No projects found</span>
             <span class="ui-br-ext-message" v-if="validation && count>0 && searchQuery==''" >Field is required</span>
             <span class="ui-br-ext-search-icon">

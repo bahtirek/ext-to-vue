@@ -3,10 +3,10 @@
     <div>
         <div class="ui-br-ext-form-title">{{action}}</div >
 
-        <form novalidate name="ui-br-ext-new-module" onsubmit="return false">
+        <form autocomplete="off" novalidate name="ui-br-ext-new-module" onsubmit="return false">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-module-label">Environment name</label>
-                <input type="text" name="ui-br-ext-new-module-label" autocomplete="off" v-model="newEnvironment.name" maxlength="50" minlength="2"/>
+                <input type="text"  autocomplete="off"  name="ui-br-ext-new-module-label" v-model="newEnvironment.name" maxlength="50" minlength="2"/>
                 <span class="ui-br-ext-message">{{errorMessage.name}}</span>
             </div>
         </form>

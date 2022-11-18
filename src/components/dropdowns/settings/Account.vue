@@ -22,7 +22,7 @@
         <div v-if="showConfirmationMessage">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="regKey">Confirmation code</label>
-                <input type="text" name="regKey" v-model="confirmationCode"/>
+                <input type="text"  autocomplete="off"  name="regKey" v-model="confirmationCode"/>
                 <span class="ui-br-ext-message">{{confirmationCodeError}}</span>
             </div>
             <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off" :disabled="spinner" :class="{ disabled: spinner }">
@@ -33,7 +33,7 @@
         <div v-if="showAddKey">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="regKey">License Key</label>
-                <input type="text" name="regKey" v-model="regKey"/>
+                <input type="text"  autocomplete="off"  name="regKey" v-model="regKey"/>
                 <span class="ui-br-ext-message">{{keyError}}</span>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">

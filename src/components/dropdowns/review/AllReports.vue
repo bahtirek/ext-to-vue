@@ -67,7 +67,7 @@
             <div class="ui-br-ext-warning-text"  style="margin-bottom: 10px;">
                 {{reports.length}} Bug report found
             </div>
-            <div v-for="(report, index) in reportsToDisplay" :key="index">
+            <div v-for="(report, index) in reports" :key="index">
                 <div class="ui-br-ext-review-card" v-if="!report.element" >
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-review-title">Bug id:</span>

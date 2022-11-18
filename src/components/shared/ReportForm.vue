@@ -1,6 +1,6 @@
 <template>
 
-    <form class="ui-br-ext-report-form">
+    <form autocomplete="off" class="ui-br-ext-report-form">
         <ProjectSearch :account="account" :validation="validation"  :oldProject="project" ref="projectForm"/>
 
         <ModuleSearch :account="account" :project="project" :validation="validation" :oldModule="module" ref="moduleForm"/>

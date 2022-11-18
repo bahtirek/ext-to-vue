@@ -1,6 +1,6 @@
 <template>
     <div class="ui-br-ext-settings-body">
-        <form novalidate name="ui-br-ext-new-project" onsubmit="return false">
+        <form autocomplete="off" novalidate name="ui-br-ext-new-project" onsubmit="return false">
             <div class="ui-br-ext-form-container ui-br-ext-checkbox">
                 <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="globalSettings.saveToDb" @input="onDbSave">
                 <label for="ui-br-ext-save-to-jira">Save to Database</label>
