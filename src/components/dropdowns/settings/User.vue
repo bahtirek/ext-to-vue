@@ -124,7 +124,6 @@
                         UserEmail: this.account.userEmail, 
                         UserAppId: this.account.userAppId,  
                         IsAdmin: this.IsAdmin,
-                        isAdmin: this.IsAdmin,
                         UserProfileEmail: this.email,
                         NewUserEmail: this.email
                     }
@@ -150,7 +149,7 @@
 
             async deleteUser(){
                 try {
-                    await this.delete(this.account, this.user.UserProfileId);
+                    await this.delete(this.account, this.UserProfileId);
                     this.resetUser();
                 } catch(error) {
                     if(error.result?.message) {

@@ -25,7 +25,7 @@ const patchUser = (data) => {
 
 const getUser = (account, query) => {
     return new Promise((resolve, reject) => {       
-        axios.get(`${URL}/user-profiles`, {
+        axios.get(`${URL}/user-profile`, {
             params: {
                 RegistrationKey: account.registrationKey,
                 UserEmail: account.userEmail,
@@ -40,14 +40,14 @@ const getUser = (account, query) => {
     })
 }
 
-const deleteUser = (account, emailId) => {
+const deleteUser = (account, UserProfileId) => {
     return new Promise((resolve, reject) => {       
         axios.delete(`${URL}/user-profile`, {
             params: {
-                registrationKey: account.registrationKey, 
-                token: account.token,
-                uuid: account.uuid,
-                emailId: emailId
+                RegistrationKey: account.registrationKey, 
+                UserEmail: account.userEmail, 
+                UserAppId: account.userAppId,  
+                UserProfileId: UserProfileId
             }
         }).then(function (response) {
             resolve(response.account)
