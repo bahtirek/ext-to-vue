@@ -31,6 +31,7 @@
             },
 
             moveElementToViewport(){
+                if(!globalStore.store.selectedElement) return false;
                 const isInViewport = this.isElementInViewport(globalStore.store.selectedElement);
                 if(!isInViewport){
                     globalStore.store.selectedElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'center' });

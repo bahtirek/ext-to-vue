@@ -8,7 +8,8 @@
     import storage from './common/storage';
     import authService from './services/auth.service';
     import { globalStore } from './main';
-    import eventBus from './eventBus'
+    import eventBus from './eventBus';
+    //import select from './common/select';
         
 export default {
   name: "App",
@@ -28,6 +29,7 @@ export default {
     this.localStorage = storage;
     this.auth = authService.auth;
     this.getUserData();
+    //this.getElementXpath = select.getElementXpath;
     //this.adminUserAuth();
     //this.regularUserAuth();
   },
@@ -37,6 +39,7 @@ export default {
       try {
         const userData = await this.localStorage.get('userData')
         this.login(userData)
+        //this.checkSavedBug()
       } catch (error) {
         console.log(error);
       }
@@ -70,6 +73,33 @@ export default {
         console.log(error);
         eventBus.$emit('toggle-toast', { text: error, danger: true })
       }
+    },
+
+    checkSavedBug(){
+      const storageItem = window.localStorage.getItem('ezBugSavedReport');
+      if(storageItem != null) {
+        const savedBug = JSON.parse(storageItem);
+        if(savedBug.xpath) {
+          this.setSavedBug(savedBug)
+        }
+      }
+    },
+
+    setSavedBug(savedBug){
+      const reportBugBtn = document.getElementById('ui-br-ext-report-bug-button');
+      reportBugBtn.classList.remove('ui-br-ext-report-bug-inactive');
+      let element;
+      try {
+          element = document.evaluate(savedBug.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+          //element.classList.add('ui-br-ext-outlined-element');
+          //element.classList.add('ui-br-ext-selected-element-outline-red'); 
+          globalStore.store.selectedElement = element
+          console.log(globalStore.store.selectedElement);
+      } catch(e) {
+          console.log(e)
+      }
+      reportBugBtn.click();
+      eventBus.$emit('show-saved-data', savedBug)
     }
   }
 };

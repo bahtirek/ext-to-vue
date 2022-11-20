@@ -9,7 +9,7 @@
 
             <div class="ui-br-ext-spacer-3"></div>
             
-            <ReportForm ref="reportForm" :validation="saveToDb" />
+            <ReportForm ref="reportForm" :validation="saveToDb" @save-bug-to-storage="saveBugToStorage"/>
 
             <FileUpload :account="account" ref="fileUploadForm" />
 
@@ -101,6 +101,10 @@
             eventBus.$on('user-loaded', () => {
                 this.user = globalStore.store.user;
             })
+            /* eventBus.$on('show-saved-data', (xpath) => {
+                this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
+            }) */
+
             this.saveToDb = this.account && this.account.token ? true : false;
             this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
             this.report.saveToJira = this.project.jiraId ? true : false;
@@ -233,6 +237,7 @@
                 globalStore.store.currentElementInlineStyle = '';
                 globalStore.store.selectedElementRect = '';
                 this.$refs.reportForm.resetReportData();
+                window.localStorage.removeItem('ezBugSavedReport')
                 this.cancel();
             },
 
@@ -281,6 +286,14 @@
                     }
                     this.submitInPorgress = false;
                 }
+            },
+
+            saveBugToStorage(form){
+                const bugToStorage = {
+                    form: form,
+                    xpath: this.report.xpath
+                }
+                window.localStorage.setItem('ezBugSavedReport', JSON.stringify(bugToStorage))
             }
         }
     }
