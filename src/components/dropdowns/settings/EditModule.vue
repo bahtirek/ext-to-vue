@@ -3,10 +3,10 @@
     <div>
         <div class="ui-br-ext-form-title">{{action}}</div >
 
-        <form novalidate name="ui-br-ext-new-module" onsubmit="return false">
+        <form autocomplete="off" novalidate name="ui-br-ext-new-module" onsubmit="return false">
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-module-label">Module name</label>
-                <input type="text" name="ui-br-ext-new-module-label" v-model="newModule.name" maxlength="50" minlength="2" autocomplete="off"/>
+                <input type="text"  autocomplete="off"  name="ui-br-ext-new-module-label" v-model="newModule.name" maxlength="50" minlength="2"/>
                 <span class="ui-br-ext-message">{{errorMessage.name}}</span>
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
@@ -101,8 +101,8 @@
                         console.log(error);
                         if(error.error) {
                             this.errorMessage.name = error.error
-                        } else if(error.result.message){
-                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        } else if(error.result?.message){
+                            eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                         } else {
                             eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                         }
@@ -128,8 +128,8 @@
                         this.$emit('deleteModule')
                     } catch(error) {
                         console.log(error);
-                        if(error.result.message) {
-                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        if(error.result?.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                         } else {
                             eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                         }

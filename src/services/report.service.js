@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const postReport = (account, report) => {
     let saveToJira = report.saveToJira? 1 : 0;
-    console.log(saveToJira); 
     if(!report.screenshot){
         report.screenshot = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAooAAAFnCAYAAAAhRmhNAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAFoOSURBVHhe7d0HvBTV2fjxZ+nNWEHaRbpGfd/wioWiRo0iIia+VhQR7MYS/ScaKyAXe0k0ltiigqIg4JtEuCAxYKNagu+rsdC5IFdUQKUIAvs/z8yZmTO7s+VeOvy+fPbD3dmdmTNnZneeec6ZPQIAAAAAu4xFTZuesrhZsy+/aNZsweImTbrZyQAAoBKq2f+BnUpK5C7zaGT+bJGqVm2gPxUAAFQGgSJ2SiZI3GD/lHQ6vd7+CQAAKoFAETslExxenxaZb/`
     }
@@ -23,7 +22,9 @@ const postReport = (account, report) => {
             environmentId: report.environment.environmentId,
             url: window.location.href,
             saveToJira: saveToJira,
-            jiraSettings: account.jiraSettings
+            jiraSettings: account.jiraSettings,
+            userProfileId: account.userProfileId,
+            userEmail: account.userEmail
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
@@ -66,7 +67,9 @@ const patchReport = (account, report) => {
             attachments: report.attachments,
             title: report.title,
             environmentId: report.environment.environmentId,
-            url: window.location.href
+            url: window.location.href,
+            userProfileId: account.userProfileId,
+            userEmail: account.userEmail
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {

@@ -18,6 +18,12 @@ body {
         pointer-events: none!important;
         overflow: hidden!important;
     }
+    .ui-br-ext-selected-element-outline-red {
+        outline: red dashed 3px !important;
+    }
+    .ui-br-ext-selected-element-outline-green {
+        outline: #4fff00 dashed 3px !important
+    }
 }
 
 .ui-br-ext-bug-cover {
@@ -290,6 +296,7 @@ body {
                     margin-bottom: 16px;
 
                     input[type=text],
+                    input[type=email],
                     input[type=date],
                     select,
                     textarea {
@@ -306,6 +313,7 @@ body {
                         outline: none !important;
                         display: block!important;
                         box-shadow: none!important;
+                        line-height: normal !important;
 
                         &:focus,
                         &:active {
@@ -345,18 +353,18 @@ body {
                             align-items: center;
                             height: 34px;
                             justify-content: space-between;
-                            &:hover {
+                            &:hover, &.ui-br-ext-hovered {
                                 background-color: #f7f7f7;
+                                margin-bottom: 2px;
                                 .ui-br-ext-module-icons span {
                                     display: flex;
                                 }
                             }
                         
-                            .ui-br-ext-module-label:hover {
+                            .ui-br-ext-module-label:not(.ui-br-ext-no-hover):hover {
                                 cursor: pointer;
                                 text-shadow: .25px 0px .1px,
                                             -.25px 0px .1px;
-                                
                             }
 
                             .ui-br-ext-module-icons {
@@ -399,10 +407,12 @@ body {
 
                 &:hover {
                     cursor: pointer;
+                    box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px !important;
                 }
 
                 &:active {
-                    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+                    //box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+                    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px !important;
                 }
             }
 
@@ -697,6 +707,9 @@ body {
 
         #ui-br-ext-report-bug, #ui-br-ext-review, #ui-br-ext-settings {
             width: 500px;
+            @media(max-width: 767px) {
+                width: 92%;
+            }
         }
 
         .ui-br-ext-comments {
@@ -1104,6 +1117,15 @@ body {
         background-color: #00000033;
     }
 
+}
+
+/* List default styling */
+.ui-br-ext-extension {
+    .ui-br-ext-default-list {
+        list-style-type: initial !important;
+        padding: 0px 0px 0px 10px !important;
+        margin: 0px 0px 30px 16px !important;
+    }
 }
 
 /* Default reset */

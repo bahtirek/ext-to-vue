@@ -165,7 +165,6 @@
             },
 
             toggleBugDetail(bugId) {
-                console.log(bugId);
                 this.$emit('toggle-drop', {id: 'review', state: true});
                 eventBus.$emit('show-details', bugId)
             },
@@ -179,9 +178,8 @@
                 el.classList.add('ui-br-ext-report-bug-inactive');
                 els.forEach(element => {
                     element.classList.remove('ui-br-ext-outlined-element');
-                    element.style.cssText = element.style.cssText.replace('outline: red dashed 3px !important;', '');
-                    element.style.cssText = element.style.cssText.replace('outline: #4fff00 dashed 3px !important;', '');
-                    element.style.cssText = element.style.cssText.replace('outline: rgb(79, 255, 0) dashed 3px !important;', '');
+                    element.classList.remove('ui-br-ext-selected-element-outline-red');
+                    element.classList.remove('ui-br-ext-selected-element-outline-green');
                     element.removeAttribute('data-ext-index');
                 });
             

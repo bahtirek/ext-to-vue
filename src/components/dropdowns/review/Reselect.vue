@@ -3,10 +3,10 @@
         <div class="ui-br-ext-close-details" @click="close">Close</div>  
         <div class="ui-br-ext-spacer-3"></div>
         <div  class="ui-br-ext-review-card">
-            <ul>
-                <li>Reselct element</li>
-                <li>Updates new xPath</li>
-                <li>Replaces screenshot</li>
+            <p>Select an element from page to:</p>
+            <ul class="ui-br-ext-default-list">
+                <li>Update the existing screenshot of the bug.</li>
+                <li>Update the xpath of the element.</li>
             </ul>
             <div class="ui-br-ext-btn-group">
                 <button class="ui-br-ext-btn" @click="saveSelection" data-listener="off">
@@ -54,7 +54,6 @@
 
         mounted() { 
             this.startSelect()
-            console.log(this.report);
         },
 
         data() {
@@ -82,8 +81,8 @@
                         this.close();                 
                     } catch(error) {
                         console.log(error);
-                        if(error.result.message) {
-                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        if(error.result?.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                         } else {
                             eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                         }

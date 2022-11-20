@@ -1,9 +1,9 @@
 <template>
 
-    <form class="ui-br-ext-report-form">
+    <form autocomplete="off" class="ui-br-ext-report-form">
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-modules">Module</label>
-            <input type="text" v-model="searchQuery" @input="onSearch" autocomplete="off">
+            <input type="text"  autocomplete="off"  v-model="searchQuery" @input="onSearch">
             <span class="ui-br-ext-message" v-if="validation && searchQuery!=='' && searchResults && searchResults.length == 0 && !module.moduleId">No modules found</span>
             <span class="ui-br-ext-message" v-if="validation && count>0 && searchQuery==''" >Field is required</span>
             <span class="ui-br-ext-search-icon">
@@ -106,8 +106,8 @@ import eventBus from '../../eventBus';
                         if(this.project.id) this.searchResults = await this.get(this.account, this.searchQuery, this.project.id)
                     } catch(error) {
                         console.log(error);
-                        if(error.result.message) {
-                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        if(error.result?.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                         } else {
                             eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                         }

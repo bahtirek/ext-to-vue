@@ -9,12 +9,12 @@
 
             <div class="ui-br-ext-spacer-3"></div>
             
-            <ReportForm ref="reportForm" :validation="saveToDb" />
+            <ReportForm ref="reportForm" :validation="saveToDb" @save-bug-to-storage="saveBugToStorage"/>
 
             <FileUpload :account="account" ref="fileUploadForm" />
 
         </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.registrationKey">
+        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.token">
             <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="saveToDb">
             <label for="ui-br-ext-save-to-jira">Save to DB</label>
         </div>
@@ -28,7 +28,7 @@
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
             <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="report.sendEmail">
-            <label for="ui-br-ext-send-email">Send email</label>
+            <label for="ui-br-ext-send-email">Generate email</label>
         </div>
         <div class="ui-br-ext-btn-group">
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="downloadScreenshot" data-listener="off" >
@@ -95,13 +95,19 @@
 
             eventBus.$on('projectChanged', (val) => {
                 this.project = val;
+                this.report.saveToJira = this.project.jiraId ? true : false;
             })
                         
             eventBus.$on('user-loaded', () => {
                 this.user = globalStore.store.user;
             })
+            /* eventBus.$on('show-saved-data', (xpath) => {
+                this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
+            }) */
+
             this.saveToDb = this.account && this.account.token ? true : false;
             this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
+            this.report.saveToJira = this.project.jiraId ? true : false;
         },
 
         data() {
@@ -115,7 +121,7 @@
                     actualResult: '',
                     expectedResult: '',
                     stepsToReproduce: '',
-                    saveToJira: true,
+                    saveToJira: false,
                     savePdf: false,
                     sendEmail: false,
                     saveScreenshot: false,
@@ -143,7 +149,6 @@
                 }
 
                 Object.assign(this.report, this.$refs.reportForm.getReportForm());
-                console.log(this.$refs.reportForm.getReportForm());
                 this.saveReport();
             },
 
@@ -162,7 +167,7 @@
                 }
 
                 if(this.report.sendEmail){
-                    await this.sendEmail(this.report)
+                    await this.sendEmail({...this.report});
                 }
 
                 this.report.url = window.location;
@@ -232,6 +237,7 @@
                 globalStore.store.currentElementInlineStyle = '';
                 globalStore.store.selectedElementRect = '';
                 this.$refs.reportForm.resetReportData();
+                window.localStorage.removeItem('ezBugSavedReport')
                 this.cancel();
             },
 
@@ -246,7 +252,6 @@
                 this.submitInPorgress = true;               
                 try {
                     const report = await this.postReport(this.account, this.report);
-                    console.log(report);
                     globalStore.store.bugId = report.result.bugId;
                     globalStore.store.xpath = this.report.xpath;
                     //Exclusion error message
@@ -257,8 +262,8 @@
                     this.submitInPorgress = false;                     
                 } catch(error) {
                     console.log(error);
-                    if(error.result.message) {
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
@@ -274,13 +279,21 @@
                     window.open(result, '_blank');               
                 } catch(error) {
                     console.log(error);
-                    if(error.result.message) {
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
                     this.submitInPorgress = false;
                 }
+            },
+
+            saveBugToStorage(form){
+                const bugToStorage = {
+                    form: form,
+                    xpath: this.report.xpath
+                }
+                window.localStorage.setItem('ezBugSavedReport', JSON.stringify(bugToStorage))
             }
         }
     }

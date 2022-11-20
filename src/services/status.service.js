@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const patchStatus = (account, lkBugStatusId, bugId) => {
-    console.log(account, lkBugStatusId, bugId);
     return new Promise((resolve, reject) => {
         axios.patch(`${account.repositoryServer}/bug-status`, {
             registrationKey: account.registrationKey, 

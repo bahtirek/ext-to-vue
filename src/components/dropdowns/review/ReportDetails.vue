@@ -3,7 +3,7 @@
         <div class="ui-br-ext-close-details" @click="close">Close</div>  
         <div  class="ui-br-ext-review-card" v-if="report">
             <div class="ui-br-ext-review-box" v-if="report.sameElementBugs">
-                <div class="ui-br-ext-review-title">Other bugs for current element:</div>
+                <div class="ui-br-ext-review-title">Other bugs for this element:</div>
                 <div class="ui-br-ext-review-text">
                     <a v-for="(bug, index) in report.sameElementBugs" :key="index" target="_blank" @click="getDetails(bug.bugId)">
                         {{bug.bugIndex}}
@@ -27,10 +27,27 @@
 
             <div class="ui-br-ext-spacer-1"></div>
 
+            <div class="ui-br-ext-review-box"  v-if="report.createdAt">
+                <div class="ui-br-ext-review-title">Created:</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{new Date(report.createdAt).toLocaleString()}}</div>
+            </div>
+            <div class="ui-br-ext-review-box"  v-if="report.updatedAt">
+                <div class="ui-br-ext-review-title">Last updated:</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{new Date(report.updatedAt).toLocaleString()}}</div>
+            </div>
+            <div class="ui-br-ext-review-box"  v-if="userEmail">
+                <div class="ui-br-ext-review-title">Created by:</div>
+                <div class="ui-br-ext-review-text">{{userEmail}}</div>
+            </div>
+            
+            <div class="ui-br-ext-spacer-1"></div>
+
             <div class="ui-br-ext-review-box" v-if="report.lkBugStatus">
                 <div class="ui-br-ext-review-title">Status:</div>
                 <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{report.lkBugStatus}}</div>
             </div>
+
+            <div class="ui-br-ext-spacer-1"></div>
 
             <div class="ui-br-ext-review-box" v-if="report.bugIndex">
                 <div class="ui-br-ext-review-title">Bug ID:</div>
@@ -88,6 +105,7 @@
     import exportPdf from '../../../services/pdf.service';
     import outline from '../../../services/outline.service';
     import reportService from '../../../services/report.service';
+    import userService from '../../../services/user.service';
     import email from '../../../common/email';
     import eventBus from '../../../eventBus';
     import { globalStore } from '../../../main';
@@ -106,6 +124,7 @@
 
         created() { 
             this.get = reportService.getReportDetails;
+            this.getUser = userService.getUserId;
             this.postJira = reportService.postJira;
             this.getScreenshotBlob = reportService.getScreenshotBlob;
             this.getPdf = exportPdf.getPdf;
@@ -133,7 +152,8 @@
                 report: {
                     screenshots: []
                 },
-                screenshot: ''
+                screenshot: '',
+                userEmail: ''
             }
         },
 
@@ -151,7 +171,7 @@
                 try {
                     const report = await this.get(this.account, bugId);
                     this.report = report;
-                    console.log(this.report);
+                    this.getUserDetails();
                     this.sharedReports.forEach((report) => {
                         const sameXpath = this.sharedReports.filter((item) => {
                                 return (item.xpath == this.report.xpath) && (item.bugId != this.report.bugId)
@@ -166,6 +186,20 @@
                 }
             },
 
+            async getUserDetails(){
+                try {
+                    console.log(this.report);
+                    this.userEmail = await this.getUser(this.account, this.report.createdById)
+                } catch (error) {
+                    console.log(error);
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
+                }
+            },
+
             highLightActiveElement(xpath){
                 let el; 
                 try {
@@ -174,7 +208,8 @@
                     console.log(e)
                 }
                 if (el){
-                    el.style.cssText = el.style.cssText.replace('outline: red dashed 3px !important;', 'outline: #4fff00 dashed 3px !important;');
+                    el.classList.remove('ui-br-ext-selected-element-outline-red');
+                    el.classList.add('ui-br-ext-selected-element-outline-green');
                     globalStore.store.activeBugElement = el;
                 }
             },
@@ -188,8 +223,8 @@
                     this.getDetails(this.report.bugId)                 
                 } catch(error) {
                     console.log(error);
-                    if(error.result.message) {
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
@@ -217,8 +252,8 @@
                                      
                 } catch(error) {
                     console.log(error);
-                    if(error.result.message) {
-                        eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
@@ -226,6 +261,10 @@
             },
 
             close(){
+                document.querySelectorAll('.ui-br-ext-selected-element-outline-green').forEach(element => {
+                    element.classList.remove('ui-br-ext-selected-element-outline-green');
+                    element.classList.add('ui-br-ext-selected-element-outline-red');
+                });
                 this.$emit('close-details')
             },
 

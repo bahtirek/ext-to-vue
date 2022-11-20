@@ -6,9 +6,10 @@
 
     import Extension from './components/Extension';
     import storage from './common/storage';
-    import regKeyAuthentication from './services/regkey.service';
+    import authService from './services/auth.service';
     import { globalStore } from './main';
-    import eventBus from './eventBus'
+    import eventBus from './eventBus';
+    //import select from './common/select';
         
 export default {
   name: "App",
@@ -19,88 +20,86 @@ export default {
 
   data() {
     return {
-      regKey: '',
+      userData: '',
       account: {}
     }
   },
 
   created() { 
     this.localStorage = storage;
-    this.auth = regKeyAuthentication.auth;
-    //this.fakeGetkey();
-    this.getRegKey();
-    this.getUserFromLocal();
-    this.getProjectFromLocal();
-    this.getModuleFromLocal();
-  },
-
-  watch: {
-
+    this.auth = authService.auth;
+    this.getUserData();
+    //this.getElementXpath = select.getElementXpath;
+    //this.adminUserAuth();
+    //this.regularUserAuth();
   },
 
   methods: {
-    async getRegKey(){
-      const regKey = await this.localStorage.get('regKey');
-      if(regKey) {
-        globalStore.store.account = await this.auth(regKey);
-        eventBus.$emit('account-loaded')
+    async getUserData(){
+      try {
+        const userData = await this.localStorage.get('userData')
+        this.login(userData)
+        //this.checkSavedBug()
+      } catch (error) {
+        console.log(error);
       }
     },
 
-    async getUserFromLocal() {
-        const user = await this.localStorage.get('user');
-        if (user) {
-          globalStore.store.user = JSON.parse(user);
-        }
+    adminUserAuth(){
+      const userData = {
+        registrationKey: "61b589b5f03c42.30439098",
+        userEmail: "uzsultanov@gmail.com",
+        userAppId: "a3a6120c-e3aa-4185-a664-53a1567b99e4"
+      };
+      this.login(userData);
+    },
+    regularUserAuth(){
+      const userData = {
+        registrationKey: "61b589b5f03c42.30439098",
+        userEmail: "bahti005@gmail.com",
+        userAppId: "a3a6120c-e3aa-4185-a664-53a1567b99e4"
+      };
+      this.login(userData);
     },
 
-    async getModuleFromLocal() {
-        const module = await this.localStorage.get('module');
-        if (module) {
-          globalStore.store.currentModule = JSON.parse(module);
-        }
-    },
-
-    async getProjectFromLocal() {
-        const project = await this.localStorage.get('project');
-        if (project) {
-          globalStore.store.project = JSON.parse(project);
-        }
-    },
-
-    async fakeGetkey(){
-      const regKey = 'sup_61b589b5f03c42.30439098';
-      globalStore.store.account = await this.auth(regKey);
-      console.log(globalStore.store.account)
-      setTimeout(()=>{
-        
-    
-        globalStore.store.user = {
-          firstname: 'John',
-          lastname: 'Doe',
-          email: 'john_doe@gmail.com'
-        };
-        
-        globalStore.store.project = {
-          allowDelete: 0,
-          clientId: 2,
-          created_at: "2022-03-24T00:24:37.000000Z",
-          id: 2,
-          jiraId: null,
-          lkProjectStatusId: 1,
-          projectKey: "bugtest",
-          saveToJira: 0,
-          updated_at: "2022-03-24T00:24:37.000000Z",
-        };
-
-        globalStore.store.currentModule = {
-          moduleId: 2,
-          name: "bugtest edited",
-          allowDelete: 0,
-          description: "bugtest edited"
-        };
+    async login(userData){
+      if(!userData) return false;
+      try {
+        const result = await this.auth(userData);
+        globalStore.store.account = {...userData, ...result}
+        await this.localStorage.set('userData', userData);
         eventBus.$emit('account-loaded')
-      }, 2000)
+      } catch(error) {
+        console.log(error);
+        eventBus.$emit('toggle-toast', { text: error, danger: true })
+      }
+    },
+
+    checkSavedBug(){
+      const storageItem = window.localStorage.getItem('ezBugSavedReport');
+      if(storageItem != null) {
+        const savedBug = JSON.parse(storageItem);
+        if(savedBug.xpath) {
+          this.setSavedBug(savedBug)
+        }
+      }
+    },
+
+    setSavedBug(savedBug){
+      const reportBugBtn = document.getElementById('ui-br-ext-report-bug-button');
+      reportBugBtn.classList.remove('ui-br-ext-report-bug-inactive');
+      let element;
+      try {
+          element = document.evaluate(savedBug.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+          //element.classList.add('ui-br-ext-outlined-element');
+          //element.classList.add('ui-br-ext-selected-element-outline-red'); 
+          globalStore.store.selectedElement = element
+          console.log(globalStore.store.selectedElement);
+      } catch(e) {
+          console.log(e)
+      }
+      reportBugBtn.click();
+      eventBus.$emit('show-saved-data', savedBug)
     }
   }
 };

@@ -170,7 +170,7 @@
                 }
                 if(element){
                     element.classList.add('ui-br-ext-outlined-element');
-                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";                                 
+                    element.classList.add('ui-br-ext-selected-element-outline-red');                               
                 }
             }
         }

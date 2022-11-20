@@ -9,7 +9,7 @@
 
                 <div class="ui-br-ext-form-container ui-br-ext-textarea" v-if="!showAddEnvironment">
                     <label for="ui-br-ext-modules">Choose environment</label>
-                    <input type="text" v-model="searchQuery" @input="onSearch" autocomplete="off" />
+                    <input type="text"  autocomplete="off"  v-model="searchQuery" @input="onSearch" />
                     <span class="ui-br-ext-message" v-if="searchQuery!=='' && searchResults && searchResults.length == 0">No environment found</span>
                     <span class="ui-br-ext-search-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ad55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -91,8 +91,8 @@
                         this.searchResults = await this.get(this.account, this.searchQuery)
                     } catch(error) {
                         console.log(error);
-                        if(error.result.message) {
-                            eventBus.$emit('toggle-toast', { text: error.result.message, danger: true })
+                        if(error.result?.message) {
+                            eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                         } else {
                             eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                         }

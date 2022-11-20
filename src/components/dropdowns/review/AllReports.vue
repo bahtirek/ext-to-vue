@@ -67,8 +67,8 @@
             <div class="ui-br-ext-warning-text"  style="margin-bottom: 10px;">
                 {{reports.length}} Bug report found
             </div>
-            <div v-for="(report, index) in reportsToDisplay" :key="index">
-                <div class="ui-br-ext-review-card" v-if="!report.element" >
+            <div v-for="(report, index) in reports" :key="index">
+                <div class="ui-br-ext-review-card">
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-review-title">Bug id:</span>
                         <span class="ui-br-ext-review-text">{{report.bugIndex}}</span>
@@ -76,6 +76,10 @@
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-review-title">Bug title:</span>
                         <span class="ui-br-ext-review-text">{{report.title}}</span>
+                    </div>
+                    <div class="ui-br-ext-review-box" v-if="report.createdAt">
+                        <span class="ui-br-ext-review-title">Created at:</span>
+                        <span class="ui-br-ext-review-text">{{new Date(report.createdAt).toLocaleString()}}</span>
                     </div>
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-btn-lnk"  @click="showDetails(report.bugId)">Details</span>
@@ -162,7 +166,6 @@
         methods: {
 
             async getReports(){
-                console.log(this.include);
                 if(!this.validateForm()) return false;
                 try {
                     const reports = await this.get(this.account, this.environment.environmentId, this.module.moduleId, this.from, this.to, this.includeCompleted, this.includeCanceled);
@@ -244,7 +247,7 @@
                 if(element){
                     this.createElement(element, bugId)
                     element.classList.add('ui-br-ext-outlined-element');
-                    element.style.cssText = element.style.cssText + "outline: red dashed 3px !important;";                                 
+                    element.classList.add('ui-br-ext-selected-element-outline-red');                               
                 }
                 return element
             },
@@ -272,8 +275,8 @@
                     if(prevBugId == bugId) return false;
                 }
                 if(prevEl){
-                    prevEl.style.cssText = el.style.cssText.replace('outline: #4fff00 dashed 3px !important;', '');                   
-                    prevEl.style.cssText = prevEl.style.cssText + "outline: red dashed 3px !important;";                   
+                    prevEl.classList.add('ui-br-ext-selected-element-outline-red');
+                    prevEl.classList.remove('ui-br-ext-selected-element-outline-green');                  
                 }
                 if(prevBugCover){
                    prevBugCover.classList.remove('ui-br-ext-bug-cover-active');                   

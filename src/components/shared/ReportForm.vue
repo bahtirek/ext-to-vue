@@ -1,6 +1,6 @@
 <template>
 
-    <form class="ui-br-ext-report-form">
+    <form autocomplete="off" class="ui-br-ext-report-form">
         <ProjectSearch :account="account" :validation="validation"  :oldProject="project" ref="projectForm"/>
 
         <ModuleSearch :account="account" :project="project" :validation="validation" :oldModule="module" ref="moduleForm"/>
@@ -9,27 +9,27 @@
 
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-title">Summary:</label>
-            <textarea name="ui-br-ext-title" v-model="form.title" rows="1" data-gramm="false" maxlength="100"></textarea>
+            <textarea name="ui-br-ext-title" v-model="form.title" rows="1" data-gramm="false" maxlength="100" @blur="saveToStorage"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.title==''">Field is required</span>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-description">Description</label>
-            <textarea name="ui-br-ext-description" v-model="form.description" rows="2" data-gramm="false" maxlength="1000"></textarea>
+            <textarea name="ui-br-ext-description" v-model="form.description" rows="2" data-gramm="false" maxlength="1000" @blur="saveToStorage"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.description==''">Field is required</span>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-act-results">Actual results</label>
-            <textarea name="ui-br-ext-act-results" v-model="form.actualResult" rows="3" data-gramm="false" maxlength="1000"></textarea>
+            <textarea name="ui-br-ext-act-results" v-model="form.actualResult" rows="3" data-gramm="false" maxlength="1000" @blur="saveToStorage"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.actualResult==''">Field is required</span>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-exp-results">Expected results</label>
-            <textarea name="ui-br-ext-exp-results" v-model="form.expectedResult" rows="3" data-gramm="false" maxlength="1000"></textarea>
+            <textarea name="ui-br-ext-exp-results" v-model="form.expectedResult" rows="3" data-gramm="false" maxlength="1000" @blur="saveToStorage"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.expectedResult==''">Field is required</span>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-rep-steps">Steps to reproduce</label>
-            <textarea name="ui-br-ext-rep-steps" v-model="form.stepsToReproduce" rows="3" data-gramm="false" maxlength="1000"></textarea>
+            <textarea name="ui-br-ext-rep-steps" v-model="form.stepsToReproduce" rows="3" data-gramm="false" maxlength="1000" @blur="saveToStorage"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.stepsToReproduce==''">Field is required</span>
         </div>
     </form >
@@ -42,6 +42,7 @@
     import ModuleSearch from '../shared/ModuleSearch';
     import ProjectSearch from '../shared/ProjectSearch';
     import { globalStore } from './../../main';
+    import eventBus from './../../eventBus';
 
     export default {
         name: 'ReportForm',
@@ -62,11 +63,15 @@
             this.environment = globalStore.store.reportBug.environment;
             this.module = globalStore.store.reportBug.module;
             this.project = globalStore.store.reportBug.project;
+            this.checkSavedBug();
         },
 
         mounted() {
-            this.setFormValue();
-            //this.searchQuery = this.report?.environment?.name ?? '';
+            this.setFormValue(this.report);
+            /* eventBus.$on('show-saved-data', (savedBug) => {
+                this.form = savedBug.form
+                console.log(this.form);
+            }) */
         },
 
         data() {
@@ -87,22 +92,23 @@
                 account: {},
                 project: {},
                 environment: {},
-                module: {}
+                module: {},
+                ezBugSavedReport: {}
             }
         },
 
         methods: {
 
-            setFormValue(){
-                if(this.report) {
-                    this.form.description = this.report.description || "",
-                    this.form.title = this.report.title || "",
-                    this.form.actualResult = this.report.actualResult || "",
-                    this.form.expectedResult = this.report.expectedResult || "",
-                    this.form.stepsToReproduce = this.report.stepsToReproduce || "",
-                    this.environment = this.report.environment || {},
-                    this.module = this.report.module || {},
-                    this.project = this.report.project || {}
+            setFormValue(report){
+                if(report) {
+                    this.form.description = report.description || "",
+                    this.form.title = report.title || "",
+                    this.form.actualResult = report.actualResult || "",
+                    this.form.expectedResult = report.expectedResult || "",
+                    this.form.stepsToReproduce = report.stepsToReproduce || "",
+                    this.environment = report.environment || {},
+                    this.module = report.module || {},
+                    this.project = report.project || {}
                 }
             },
 
@@ -150,6 +156,19 @@
                     this.form.project['projectKey'] = this.$refs.projectForm.searchQuery;
                 }
                 return this.form;
+            },
+
+            saveToStorage(){
+                const form = this.getReportForm()
+                this.$emit('save-bug-to-storage', form)
+            },
+
+            checkSavedBug(){
+                const storageItem = window.localStorage.getItem('ezBugSavedReport');
+                if(storageItem != null  && !this.report) {
+                    const savedBug = JSON.parse(storageItem);
+                    this.setFormValue(savedBug.form)
+                }
             },
 
         }
