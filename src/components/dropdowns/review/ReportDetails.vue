@@ -35,10 +35,19 @@
                 <div class="ui-br-ext-review-title">Last updated:</div>
                 <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{new Date(report.updatedAt).toLocaleString()}}</div>
             </div>
+            <div class="ui-br-ext-review-box"  v-if="userEmail">
+                <div class="ui-br-ext-review-title">Created by:</div>
+                <div class="ui-br-ext-review-text">{{userEmail}}</div>
+            </div>
+            
+            <div class="ui-br-ext-spacer-1"></div>
+
             <div class="ui-br-ext-review-box" v-if="report.lkBugStatus">
                 <div class="ui-br-ext-review-title">Status:</div>
                 <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{report.lkBugStatus}}</div>
             </div>
+
+            <div class="ui-br-ext-spacer-1"></div>
 
             <div class="ui-br-ext-review-box" v-if="report.bugIndex">
                 <div class="ui-br-ext-review-title">Bug ID:</div>
@@ -96,6 +105,7 @@
     import exportPdf from '../../../services/pdf.service';
     import outline from '../../../services/outline.service';
     import reportService from '../../../services/report.service';
+    import userService from '../../../services/user.service';
     import email from '../../../common/email';
     import eventBus from '../../../eventBus';
     import { globalStore } from '../../../main';
@@ -114,6 +124,7 @@
 
         created() { 
             this.get = reportService.getReportDetails;
+            this.getUser = userService.getUserId;
             this.postJira = reportService.postJira;
             this.getScreenshotBlob = reportService.getScreenshotBlob;
             this.getPdf = exportPdf.getPdf;
@@ -141,7 +152,8 @@
                 report: {
                     screenshots: []
                 },
-                screenshot: ''
+                screenshot: '',
+                userEmail: ''
             }
         },
 
@@ -159,6 +171,7 @@
                 try {
                     const report = await this.get(this.account, bugId);
                     this.report = report;
+                    this.getUserDetails();
                     this.sharedReports.forEach((report) => {
                         const sameXpath = this.sharedReports.filter((item) => {
                                 return (item.xpath == this.report.xpath) && (item.bugId != this.report.bugId)
@@ -170,6 +183,20 @@
                     this.highLightActiveElement(report.xpath)
                 } catch(error) {
                     console.log(error);
+                }
+            },
+
+            async getUserDetails(){
+                try {
+                    console.log(this.report);
+                    this.userEmail = await this.getUser(this.account, this.report.createdById)
+                } catch (error) {
+                    console.log(error);
+                    if(error.result?.message) {
+                        eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
+                    } else {
+                        eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
+                    }
                 }
             },
 
