@@ -9,7 +9,7 @@
 
             <div class="ui-br-ext-spacer-3"></div>
             
-            <ReportForm ref="reportForm" :validation="saveToDb" @save-bug-to-storage="saveBugToStorage"/>
+            <ReportForm ref="reportForm" :validation="saveToDb" @save-bug-to-storage="saveBugToStorage" @set-project-from-unsaved-report="setProjectFromUnsavedReport"/>
 
             <FileUpload :account="account" ref="fileUploadForm" />
 
@@ -294,6 +294,11 @@
                     xpath: this.report.xpath
                 }
                 window.localStorage.setItem('ezBugSavedReport', JSON.stringify(bugToStorage))
+            },
+
+            setProjectFromUnsavedReport(val){
+                this.project = val;
+                this.report.saveToJira = this.project.jiraId ? true : false;
             }
         }
     }
