@@ -9,7 +9,6 @@
     import authService from './services/auth.service';
     import { globalStore } from './main';
     import eventBus from './eventBus';
-    //import select from './common/select';
         
 export default {
   name: "App",
@@ -29,7 +28,6 @@ export default {
     this.localStorage = storage;
     this.auth = authService.auth;
     this.getUserData();
-    //this.getElementXpath = select.getElementXpath;
     //this.adminUserAuth();
     //this.regularUserAuth();
   },
@@ -39,7 +37,7 @@ export default {
       try {
         const userData = await this.localStorage.get('userData')
         this.login(userData)
-        //this.checkSavedBug()
+        this.checkSavedBug()
       } catch (error) {
         console.log(error);
       }
@@ -91,15 +89,11 @@ export default {
       let element;
       try {
           element = document.evaluate(savedBug.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-          //element.classList.add('ui-br-ext-outlined-element');
-          //element.classList.add('ui-br-ext-selected-element-outline-red'); 
           globalStore.store.selectedElement = element
-          console.log(globalStore.store.selectedElement);
       } catch(e) {
           console.log(e)
       }
       reportBugBtn.click();
-      eventBus.$emit('show-saved-data', savedBug)
     }
   }
 };

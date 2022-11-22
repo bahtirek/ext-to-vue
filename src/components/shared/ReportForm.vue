@@ -68,10 +68,6 @@
 
         mounted() {
             this.setFormValue(this.report);
-            /* eventBus.$on('show-saved-data', (savedBug) => {
-                this.form = savedBug.form
-                console.log(this.form);
-            }) */
         },
 
         data() {
