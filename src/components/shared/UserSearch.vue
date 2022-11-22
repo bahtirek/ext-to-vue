@@ -12,7 +12,7 @@
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <div class="ui-br-ext-search-results" v-if="users && users.length > 0">
                 <ul>
-                    <li class="ui-br-ext-hovered" v-for="(user, index) in users" :key="index">
+                    <li class="ui-br-ext-hovered ui-br-ext-mb-2" v-for="(user, index) in users" :key="index">
                         <span class="ui-br-ext-module-label ui-br-ext-no-hover">{{user.UserEmail}}</span>
                         <div class="ui-br-ext-module-icons">
                             <span @click="onUserEdit(user)">
