@@ -68,7 +68,6 @@ const getUserId = (account, UserProfileId) => {
                 UserProfileId: UserProfileId
             }
         }).then(function (response) {
-            console.log(response);
             resolve(response.data.result.UserEmail)
         }).catch(function (error) {
             reject(error.response.data);

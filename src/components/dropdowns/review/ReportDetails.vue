@@ -188,7 +188,6 @@
 
             async getUserDetails(){
                 try {
-                    console.log(this.report);
                     this.userEmail = await this.getUser(this.account, this.report.createdById)
                 } catch (error) {
                     console.log(error);

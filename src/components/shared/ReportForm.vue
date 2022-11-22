@@ -167,7 +167,8 @@
                 const storageItem = window.localStorage.getItem('ezBugSavedReport');
                 if(storageItem != null  && !this.report) {
                     const savedBug = JSON.parse(storageItem);
-                    this.setFormValue(savedBug.form)
+                    this.setFormValue(savedBug.form);
+                    this.$emit('set-project-from-unsaved-report', savedBug.form.project)
                 }
             },
 
