@@ -300,10 +300,12 @@
             },
 
             setProjectFromUnsavedReport(val){
-                globalStore.store.selectedElement.classList.add('ui-br-ext-outlined-element');
-                globalStore.store.selectedElement.classList.add('ui-br-ext-selected-element-outline-red');
-                this.project = val;
-                this.report.saveToJira = this.project.jiraId ? true : false;
+                if(globalStore.store.selectedElement){
+                    globalStore.store.selectedElement.classList.add('ui-br-ext-outlined-element');
+                    globalStore.store.selectedElement.classList.add('ui-br-ext-selected-element-outline-red');
+                    this.project = val;
+                    this.report.saveToJira = this.project.jiraId ? true : false;
+                }
             }
         }
     }

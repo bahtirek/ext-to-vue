@@ -89,11 +89,13 @@ export default {
       let element;
       try {
           element = document.evaluate(savedBug.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-          globalStore.store.selectedElement = element
+          if(element) {
+            globalStore.store.selectedElement = element
+            reportBugBtn.click();
+          }
       } catch(e) {
           console.log(e)
       }
-      reportBugBtn.click();
     }
   }
 };
