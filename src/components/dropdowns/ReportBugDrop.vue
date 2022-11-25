@@ -158,7 +158,7 @@
             async saveReport(){
                 
 
-                if(!globalStore.store.dynamicDomFlow) {
+                if(!globalStore.store.screenshot) {
                     await this.getScreenshot();
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
