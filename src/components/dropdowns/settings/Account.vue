@@ -147,7 +147,8 @@
                 this.spinner = true;
                 try {
                     this.account = await this.verify(this.confirmationCode, this.userData)
-                    globalStore.store.account = this.account;
+                    const userData = await this.localStorage.get('tempUserData');
+                    globalStore.store.account = {...userData, ...this.account};                
                     this.showConfirmationMessage = false;
                     this.$emit('close-account');
                     this.tempData = undefined;
