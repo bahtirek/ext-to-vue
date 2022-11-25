@@ -38,7 +38,7 @@
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="email">Email</label>
-                <input type="email" name="email" v-model="email"/>
+                <input type="email"  autocomplete="off" name="email" v-model="email"/>
                 <span class="ui-br-ext-message">{{emailError}}</span>
             </div>
             <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off" :disabled="spinner" :class="{ disabled: spinner }">
@@ -204,7 +204,7 @@
                         await this.localStorage.remove('tempUserData');
                     }
                 } catch(error) {
-                    console.log(error);
+                    //console.log(error);
                 }
             },
 
