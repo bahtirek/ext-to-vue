@@ -156,7 +156,9 @@
                     eventBus.$emit('account-loaded')
                 } catch(error) {
                     console.log(error);
-                    if(error?.result.message) {
+                    if(error.error && error.error == "Unauthorized") {
+                        eventBus.$emit('toggle-toast', { text: "Unauthorized", danger: true })
+                    } else if(error?.result?.message) {
                         eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })

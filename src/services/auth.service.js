@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const URL = 'https://extension-auth.evendor.app/api';
 
 const auth = (data) => {
@@ -32,8 +34,22 @@ const auth = (data) => {
     })
 }
 
-
 const verifyCode = (code, userData) => {
+    return new Promise((resolve, reject) => {
+        axios.post(`${URL}/confirm_user`, {
+            RegistrationKey: userData.registrationKey,
+            UserEmail: userData.userEmail,
+            UserAppId: userData.userAppId,
+            ConfirmationCode: code
+        }).then(function (response) {
+            resolve(response.data)
+        }).catch(function (error) {
+            reject(error.response.data);
+        });
+    });
+}
+
+const verifyCode2 = (code, userData) => {
     const data = {
         RegistrationKey: userData.registrationKey,
         UserEmail: userData.userEmail,
