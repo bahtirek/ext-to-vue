@@ -16,6 +16,7 @@ const ui_br_ext_parentLimit = 5;
 let currentElementInlineStyle = '';
 
 const onSelect = function(){
+    globalStore.store.screenshot = '';
     const allPointerEvent = '';
     const noHighlight = `*{
         -webkit-tap-highlight-color: transparent;

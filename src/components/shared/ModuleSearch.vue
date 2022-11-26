@@ -1,6 +1,6 @@
 <template>
 
-    <form autocomplete="off" class="ui-br-ext-report-form">
+    <form autocomplete="off" class="ui-br-ext-report-form" v-on:submit.prevent>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-modules">Module</label>
             <input type="text"  autocomplete="off"  v-model="searchQuery" @input="onSearch">

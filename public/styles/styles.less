@@ -10,8 +10,10 @@ body {
     }
 
     &.ui-br-ext-hide-hovered {
-        .ui-br-ext-hovered {
-            outline: none!important;
+        .ui-br-ext-hovered{
+            &:not(.ui-br-ext-selected-element-outline-red) {
+                outline: none!important;
+            }
         }
     }
     &.ui-br-ext-freeze {

@@ -101,15 +101,18 @@
             eventBus.$on('user-loaded', () => {
                 this.user = globalStore.store.user;
             })
-            /* eventBus.$on('show-saved-data', (xpath) => {
-                this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
-            }) */
 
             this.saveToDb = this.account && this.account.token ? true : false;
             this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
             this.report.saveToJira = this.project.jiraId ? true : false;
         },
 
+        watch: {
+            account(newValue, oldValue) {
+                this.saveToDb = this.account.token ? true : false;
+            }
+        },
+        
         data() {
             return {
                 next: false,
@@ -155,7 +158,7 @@
             async saveReport(){
                 
 
-                if(!globalStore.store.dynamicDomFlow) {
+                if(!globalStore.store.screenshot) {
                     await this.getScreenshot();
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
@@ -297,8 +300,12 @@
             },
 
             setProjectFromUnsavedReport(val){
-                this.project = val;
-                this.report.saveToJira = this.project.jiraId ? true : false;
+                if(globalStore.store.selectedElement){
+                    globalStore.store.selectedElement.classList.add('ui-br-ext-outlined-element');
+                    globalStore.store.selectedElement.classList.add('ui-br-ext-selected-element-outline-red');
+                    this.project = val;
+                    this.report.saveToJira = this.project.jiraId ? true : false;
+                }
             }
         }
     }

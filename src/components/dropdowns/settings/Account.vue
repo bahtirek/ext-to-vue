@@ -38,7 +38,7 @@
             </div>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="email">Email</label>
-                <input type="email" name="email" v-model="email"/>
+                <input type="email"  autocomplete="off" name="email" v-model="email"/>
                 <span class="ui-br-ext-message">{{emailError}}</span>
             </div>
             <button class="ui-br-ext-btn" id="ui-br-ext-save-new-module" data-listener="off" :disabled="spinner" :class="{ disabled: spinner }">
@@ -147,7 +147,8 @@
                 this.spinner = true;
                 try {
                     this.account = await this.verify(this.confirmationCode, this.userData)
-                    globalStore.store.account = this.account;
+                    const userData = await this.localStorage.get('tempUserData');
+                    globalStore.store.account = {...userData, ...this.account};                
                     this.showConfirmationMessage = false;
                     this.$emit('close-account');
                     this.tempData = undefined;
@@ -155,7 +156,9 @@
                     eventBus.$emit('account-loaded')
                 } catch(error) {
                     console.log(error);
-                    if(error?.result.message) {
+                    if(error.error && error.error == "Unauthorized") {
+                        eventBus.$emit('toggle-toast', { text: "Unauthorized", danger: true })
+                    } else if(error?.result?.message) {
                         eventBus.$emit('toggle-toast', { text: error.result?.message, danger: true })
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
@@ -204,7 +207,7 @@
                         await this.localStorage.remove('tempUserData');
                     }
                 } catch(error) {
-                    console.log(error);
+                    //console.log(error);
                 }
             },
 
