@@ -180,7 +180,7 @@
                             });
                         if (sameXpath && sameXpath.length > 0) this.report['sameElementBugs'] = sameXpath;
                     })
-                    this.highLightActiveElement(report.xpath)
+                    //this.highLightActiveElement(report.xpath)
                 } catch(error) {
                     console.log(error);
                 }

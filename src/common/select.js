@@ -56,7 +56,13 @@ const onDeselect = function(){
         element.classList.remove('ui-br-ext-outlined-element');
         element.classList.remove('ui-br-ext-selected-element-outline-red');
         element.classList.remove('ui-br-ext-selected-element-outline-green');
+        element.classList.remove('ui-br-ext-outlined-element-childs-no-events');
         element.removeAttribute('data-ext-index');
+        element.classList.forEach((className) => {
+            if(className.includes('ui-br-ext-searched-element-id-')) {
+                element.classList.remove(className)
+            }
+        });
     });
 
     // Reset the global variable that holds the previously selected element properties.
