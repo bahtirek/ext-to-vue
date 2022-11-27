@@ -1,6 +1,7 @@
 import hoverOutline from './hover-outline';
 import clickBlocker from './click-blocker';
 import { globalStore } from '../main.js';
+import clickOnBug from '../services/clickonbug.service'
 
 // Global variable to hold previously clicked element properties.
 let ui_br_ext_previousElement = {
@@ -60,7 +61,8 @@ const onDeselect = function(){
         element.removeAttribute('data-ext-index');
         element.classList.forEach((className) => {
             if(className.includes('ui-br-ext-searched-element-id-')) {
-                element.classList.remove(className)
+                element.classList.remove(className);
+                clickOnBug.unblockBugElements([element]);
             }
         });
     });
