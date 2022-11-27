@@ -29,25 +29,6 @@ const unblockBugElements = function(elements) {
     globalStore.store.activeBugElement = null;
 }
 
-const showDetailsOnClickWithData = function(event) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    event.stopPropagation();
-    const prevEl = globalStore.store.activeBugElement;
-    const element = event.target;
-    let bugId = element.getAttribute('data-ext-bugid');
-    if(prevEl == element) return false;
-
-    if(prevEl){
-        prevEl.classList.add('ui-br-ext-selected-element-outline-red');
-        prevEl.classList.remove('ui-br-ext-selected-element-outline-green');                  
-    }
-
-    if(!(bugId && bugId >= 0)) return false;
-    eventBus.$emit('show-details', bugId);
-    globalStore.store.activeBugElement = element;
-}
-
 const showDetailsOnClickWithClass = function(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -57,7 +38,6 @@ const showDetailsOnClickWithClass = function(event) {
     const element = event.target;
     if(prevEl == element) return false;
     
-    console.log('same');
     element.classList.forEach((className) => {
         if(className.includes('ui-br-ext-searched-element-id-')) {
             bugId = className.replace('ui-br-ext-searched-element-id-', '');

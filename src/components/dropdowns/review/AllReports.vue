@@ -239,10 +239,6 @@
             createElement(element, bugId){
                 element.classList.add('ui-br-ext-outlined-element', 'ui-br-ext-selected-element-outline-red', 'ui-br-ext-outlined-element-childs-no-events', `ui-br-ext-searched-element-id-${bugId}`); 
                 this.addClickBlocker(element);
-                /* element.classList.add('ui-br-ext-outlined-element', 'ui-br-ext-selected-element-outline-red', 'ui-br-ext-outlined-element-childs-no-events'); 
-                element.setAttribute('data-ext-bugid', bugId);
-                this.addClickBlocker(element); */
-                
             },
 
             async globalSearch(){

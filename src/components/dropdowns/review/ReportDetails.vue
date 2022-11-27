@@ -180,7 +180,6 @@
                             });
                         if (sameXpath && sameXpath.length > 0) this.report['sameElementBugs'] = sameXpath;
                     })
-                    //this.highLightActiveElement(report.xpath)
                 } catch(error) {
                     console.log(error);
                 }
@@ -196,20 +195,6 @@
                     } else {
                         eventBus.$emit('toggle-toast', { text: 'Sorry something went wrong.', danger: true })
                     }
-                }
-            },
-
-            highLightActiveElement(xpath){
-                let el; 
-                try {
-                    el = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-                } catch(e) {
-                    console.log(e)
-                }
-                if (el){
-                    el.classList.remove('ui-br-ext-selected-element-outline-red');
-                    el.classList.add('ui-br-ext-selected-element-outline-green');
-                    globalStore.store.activeBugElement = el;
                 }
             },
 
