@@ -13,6 +13,7 @@ const postProject = (data) => {
             projectKey: data.projectKey,
             jiraId: data.jiraId,
             description: data.description,
+            email: data.email
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {
@@ -53,7 +54,8 @@ const patchProject = (data) => {
             description: data.description,
             jiraId: data.jiraId,
             lkProjectStatusId: data.lkProjectStatusId,
-            id: data.id
+            id: data.id,
+            email: data.email
         }).then(function (response) {
             resolve(response.data)
         }).catch(function (error) {

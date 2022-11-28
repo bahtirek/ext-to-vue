@@ -18,6 +18,11 @@
                 <input type="text"  autocomplete="off"  name="ui-br-ext-new-project-label" v-model="newProject.jiraId" maxlength="10" minlength="2" />
                 <span class="ui-br-ext-message">{{errorMessage.jiraId}}</span>
             </div>
+            <div class="ui-br-ext-form-container ui-br-ext-textarea" v-if="newProject.saveToJira">
+                <label for="ui-br-ext-new-project-label">Assign to</label>
+                <input type="email"  autocomplete="off"  name="ui-br-ext-new-project-label" v-model="newProject.email" maxlength="50" minlength="2" />
+                <span class="ui-br-ext-message">{{errorMessage.email}}</span>
+            </div>
             <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.jiraSettings">
                 <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="newProject.saveToJira">
                 <label for="ui-br-ext-save-to-jira">Jira project</label>
@@ -81,9 +86,10 @@
                     description: '', 
                     jiraId: '', 
                     saveToJira: false,
-                    inactivate: false
+                    inactivate: false,
+                    email: ''
                 },
-                errorMessage: {projectKey: '', jiraId: ''},
+                errorMessage: {projectKey: '', jiraId: '', email: ''},
                 action: 'Create new project',
                 projectStatusEnum: {
                     active: 1,
@@ -94,21 +100,18 @@
 
         methods: {
             async saveProject(){
-
                 this.errorMessage.projectKey = '';
                 this.errorMessage.jiraId = '';
+                this.errorMessage.email = '';
                 this.newProject.projectKey = this.newProject.projectKey.trim();
                 this.newProject.description = this.newProject.description.trim();
+                this.newProject.email = this.newProject.email.trim();
                 if(this.newProject.projectKey != ''){
 
                     // Request jira id if Jira
-
-                    if(this.newProject.saveToJira && this.newProject.jiraId) {
-                        this.newProject.jiraId = this.newProject.jiraId.toString().trim()
-                    }
-                    if(this.newProject.saveToJira && this.newProject.jiraId == '') {
-                        this.errorMessage.jiraId = 'Enter jira id ';
-                        return false;
+                    
+                    if(this.newProject.saveToJira) {
+                        if(this.validateInputs() > 0 ) return false;
                     }
 
                     try {
@@ -140,10 +143,32 @@
                 }
             },
 
+            validateInputs(){
+                let count = 0;
+                if(this.newProject.jiraId) {
+                    this.newProject.jiraId = this.newProject.jiraId.toString().trim()
+                }
+                if(this.newProject.jiraId == '') {
+                    this.errorMessage.jiraId = 'Enter jira id ';
+                    count++
+                }
+
+                if (this.newProject.email == ''){ 
+                    this.errorMessage.email = "Email is required";
+                    count++
+                } else if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.newProject.email))) {
+                    this.errorMessage.email = 'Please enter a valid email address';
+                    console.log(this.errorMessage.email);
+                    count++
+                }
+                return count;
+            },
+
             resetProject() {
                 this.newProject.projectKey = '';
                 this.newProject.description = '';
                 this.newProject.jiraId = '';
+                this.newProject.email = '';
                 this.newProject.saveToJira = undefined;
                 this.action = 'Create new project';
                 delete this.newProject.id;
