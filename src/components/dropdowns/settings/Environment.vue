@@ -80,15 +80,16 @@
             onSearch() {
                 if (this.timeout) clearTimeout(this.timeout)
                 this.timeout = setTimeout(() => {
-                    this.searchQuery = this.searchQuery.trim();
-                    if(this.searchQuery.length > 2) this.getEnvironments();
+                    let searchQuery = this.searchQuery;
+                    searchQuery = searchQuery.trim();
+                    if(searchQuery.length >= 2) this.getEnvironments(searchQuery)
                 }, 300);
             },
 
-            async getEnvironments() {
-                if (this.searchQuery.length != '') {
+            async getEnvironments(searchQuery) {
+                if (searchQuery.length != '') {
                     try {
-                        this.searchResults = await this.get(this.account, this.searchQuery)
+                        this.searchResults = await this.get(this.account, searchQuery)
                     } catch(error) {
                         console.log(error);
                         if(error.result?.message) {

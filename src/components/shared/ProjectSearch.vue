@@ -84,9 +84,10 @@ import eventBus from '../../eventBus';
                 if(!(this.account && this.account.token)) return false;
                 if (this.timeout) clearTimeout(this.timeout)
                 this.timeout = setTimeout(() => {
-                    this.searchQuery = this.searchQuery.trim();
-                    if(this.searchQuery.length >= 2) {
-                        this.getprojects()
+                    let searchQuery = this.searchQuery;
+                    searchQuery = searchQuery.trim();
+                    if(searchQuery.length >= 2) {
+                        this.getprojects(searchQuery)
                     } else {
                         this.searchResults = []
                     }
@@ -94,10 +95,10 @@ import eventBus from '../../eventBus';
                 }, 300);
             },
 
-            async getprojects() {
-                if (this.searchQuery.length != '' && this.searchQuery.length <= 10) {
+            async getprojects(searchQuery) {
+                if (searchQuery.length != '' && searchQuery.length <= 10) {
                     try {
-                        this.searchResults = await this.get(this.account, this.searchQuery)
+                        this.searchResults = await this.get(this.account, searchQuery)
                     } catch(error) {
                         console.log(error);
                         if(error.result?.message) {
