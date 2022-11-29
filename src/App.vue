@@ -85,11 +85,11 @@ export default {
 
     setSavedBug(savedBug){
       const reportBugBtn = document.getElementById('ui-br-ext-report-bug-button');
-      reportBugBtn.classList.remove('ui-br-ext-report-bug-inactive');
       let element;
       try {
-          element = document.evaluate(savedBug.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
-          if(element) {
+        element = document.evaluate(savedBug.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue;
+        if(element) {
+            reportBugBtn.classList.remove('ui-br-ext-report-bug-inactive');
             globalStore.store.selectedElement = element
             reportBugBtn.click();
           }

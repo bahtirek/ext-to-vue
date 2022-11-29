@@ -77,9 +77,9 @@
                         <span class="ui-br-ext-review-title">Bug title:</span>
                         <span class="ui-br-ext-review-text">{{report.title}}</span>
                     </div>
-                    <div class="ui-br-ext-review-box" v-if="report.createdAt">
+                    <div class="ui-br-ext-review-box" v-if="report.created_at">
                         <span class="ui-br-ext-review-title">Created at:</span>
-                        <span class="ui-br-ext-review-text">{{new Date(report.createdAt).toLocaleString()}}</span>
+                        <span class="ui-br-ext-review-text">{{new Date(report.created_at).toLocaleString()}}</span>
                     </div>
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-btn-lnk"  @click="showDetails(report.bugId)">Details</span>

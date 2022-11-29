@@ -36,7 +36,6 @@ const showDetailsOnClickWithClass = function(event) {
     let bugId = "";
     const prevEl = globalStore.store.activeBugElement;
     const element = event.target;
-    if(prevEl == element) return false;
     
     element.classList.forEach((className) => {
         if(className.includes('ui-br-ext-searched-element-id-')) {

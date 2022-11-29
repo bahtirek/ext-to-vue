@@ -27,13 +27,13 @@
 
             <div class="ui-br-ext-spacer-1"></div>
 
-            <div class="ui-br-ext-review-box"  v-if="report.createdAt">
+            <div class="ui-br-ext-review-box"  v-if="report.created_at">
                 <div class="ui-br-ext-review-title">Created:</div>
-                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{new Date(report.createdAt).toLocaleString()}}</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{new Date(report.created_at).toLocaleString()}}</div>
             </div>
-            <div class="ui-br-ext-review-box"  v-if="report.updatedAt">
+            <div class="ui-br-ext-review-box"  v-if="report.updated_at">
                 <div class="ui-br-ext-review-title">Last updated:</div>
-                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{new Date(report.updatedAt).toLocaleString()}}</div>
+                <div class="ui-br-ext-review-text ui-br-ext-capitalize">{{new Date(report.updated_at).toLocaleString()}}</div>
             </div>
             <div class="ui-br-ext-review-box"  v-if="userEmail">
                 <div class="ui-br-ext-review-title">Created by:</div>
