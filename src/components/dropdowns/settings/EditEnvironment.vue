@@ -3,7 +3,7 @@
     <div>
         <div class="ui-br-ext-form-title">{{action}}</div >
 
-        <form autocomplete="off" novalidate name="ui-br-ext-new-module" onsubmit="return false">
+        <form autocomplete="off" novalidate name="ui-br-ext-new-module" onsubmit="return false" v-on:submit.prevent>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-module-label">Environment name</label>
                 <input type="text"  autocomplete="off"  name="ui-br-ext-new-module-label" v-model="newEnvironment.name" maxlength="50" minlength="2"/>

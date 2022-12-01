@@ -4,13 +4,13 @@
                 <div class="ui-br-ext-drop-body">
                     
                     <div class="ui-br-ext-settings-container" v-if="account && account.isAdmin == 1">
-                        <div class="ui-br-ext-setting-title" @click="ifModule = !ifModule; ifGlobal = false; ifProject = false; ifAccount = false; ifUser = false; ifEnvironment = false">Module</div>
-                        <Module v-if="ifModule" />
-                    </div>
-
-                    <div class="ui-br-ext-settings-container" v-if="account && account.isAdmin == 1">
                         <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifGlobal = false; ifModule = false; ifAccount = false; ifUser = false; ifEnvironment = false">Project</div>
                         <Project v-if="ifProject" />
+                    </div>
+                    
+                    <div class="ui-br-ext-settings-container" v-if="account && account.isAdmin == 1">
+                        <div class="ui-br-ext-setting-title" @click="ifModule = !ifModule; ifGlobal = false; ifProject = false; ifAccount = false; ifUser = false; ifEnvironment = false">Module</div>
+                        <Module v-if="ifModule" />
                     </div>
 
                     <div class="ui-br-ext-settings-container" v-if="account && account.isAdmin == 1">

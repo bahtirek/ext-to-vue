@@ -24,13 +24,18 @@ const remove = (key) => {
        resolve(true);
     })
 } */
+
 const get = (key) => {
     return new Promise((resolve, reject) => {
         chrome.storage.local.get(function(result) {
             if (chrome.runtime.lastError) {
                 return reject(chrome.runtime.lastError);
             }
-            resolve (JSON.parse(result[key]));
+            if(result[key]) {
+                resolve (JSON.parse(result[key]));
+            } else {
+                reject (false)
+            }
         });
     })
 }

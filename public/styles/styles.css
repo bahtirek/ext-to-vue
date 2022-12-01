@@ -2,7 +2,7 @@ body .ui-br-ext-hovered {
   outline: 1px dashed!important;
   outline-color: red!important;
 }
-body.ui-br-ext-hide-hovered .ui-br-ext-hovered {
+body.ui-br-ext-hide-hovered .ui-br-ext-hovered:not(.ui-br-ext-selected-element-outline-red) {
   outline: none!important;
 }
 body.ui-br-ext-freeze {
@@ -14,6 +14,9 @@ body .ui-br-ext-selected-element-outline-red {
 }
 body .ui-br-ext-selected-element-outline-green {
   outline: #4fff00 dashed 3px !important;
+}
+body .ui-br-ext-outlined-element.ui-br-ext-outlined-element-childs-no-events * {
+  pointer-events: none !important;
 }
 .ui-br-ext-bug-cover {
   z-index: 1000;
@@ -1190,6 +1193,9 @@ body .ui-br-ext-selected-element-outline-green {
   left: 0;
   right: 0;
   background-color: #00000033;
+}
+.ui-br-ext-extension li::marker {
+  content: "" !important;
 }
 /* List default styling */
 .ui-br-ext-extension .ui-br-ext-default-list {

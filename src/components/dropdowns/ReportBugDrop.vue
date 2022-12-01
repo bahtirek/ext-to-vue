@@ -16,15 +16,17 @@
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.token">
             <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="saveToDb">
-            <label for="ui-br-ext-save-to-jira">Save to DB</label>
+            <label for="ui-br-ext-save-to-jira">Save</label>
         </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="project && project.jiraId">
-            <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveToJira">
-            <label for="ui-br-ext-save-to-jira">Create Jira ticket on save</label>
+        <div v-if="saveToDb"> 
+            <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="project && project.jiraId">
+                <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveToJira">
+                <label for="ui-br-ext-save-to-jira">Create Jira ticket</label>
+            </div>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
             <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf" v-model="report.savePdf">
-            <label for="ui-br-ext-save-to-pdf">Save as PDF</label>
+            <label for="ui-br-ext-save-to-pdf">Download as PDF</label>
         </div>
         <div class="ui-br-ext-form-container ui-br-ext-checkbox">
             <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="report.sendEmail">
@@ -36,7 +38,7 @@
             </button>
             <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="getForm" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
                 <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
-                <span>Save report</span> 
+                <span>Submit</span> 
             </button>
             <button class="ui-br-ext-btn-danger" @click="cancel" data-listener="off">
                 <span>Cancel</span> 
@@ -101,15 +103,18 @@
             eventBus.$on('user-loaded', () => {
                 this.user = globalStore.store.user;
             })
-            /* eventBus.$on('show-saved-data', (xpath) => {
-                this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
-            }) */
 
             this.saveToDb = this.account && this.account.token ? true : false;
             this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
             this.report.saveToJira = this.project.jiraId ? true : false;
         },
 
+        watch: {
+            account(newValue, oldValue) {
+                this.saveToDb = this.account.token ? true : false;
+            }
+        },
+        
         data() {
             return {
                 next: false,
@@ -155,7 +160,7 @@
             async saveReport(){
                 
 
-                if(!globalStore.store.dynamicDomFlow) {
+                if(!globalStore.store.screenshot) {
                     await this.getScreenshot();
                 } else {
                     this.report.screenshot = globalStore.store.screenshot;
@@ -297,8 +302,12 @@
             },
 
             setProjectFromUnsavedReport(val){
-                this.project = val;
-                this.report.saveToJira = this.project.jiraId ? true : false;
+                if(globalStore.store.selectedElement){
+                    globalStore.store.selectedElement.classList.add('ui-br-ext-outlined-element');
+                    globalStore.store.selectedElement.classList.add('ui-br-ext-selected-element-outline-red');
+                    this.project = val;
+                    this.report.saveToJira = this.project.jiraId ? true : false;
+                }
             }
         }
     }

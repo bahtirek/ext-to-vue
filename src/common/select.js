@@ -1,6 +1,7 @@
 import hoverOutline from './hover-outline';
 import clickBlocker from './click-blocker';
 import { globalStore } from '../main.js';
+import clickOnBug from '../services/clickonbug.service'
 
 // Global variable to hold previously clicked element properties.
 let ui_br_ext_previousElement = {
@@ -16,6 +17,7 @@ const ui_br_ext_parentLimit = 5;
 let currentElementInlineStyle = '';
 
 const onSelect = function(){
+    globalStore.store.screenshot = '';
     const allPointerEvent = '';
     const noHighlight = `*{
         -webkit-tap-highlight-color: transparent;
@@ -55,7 +57,14 @@ const onDeselect = function(){
         element.classList.remove('ui-br-ext-outlined-element');
         element.classList.remove('ui-br-ext-selected-element-outline-red');
         element.classList.remove('ui-br-ext-selected-element-outline-green');
+        element.classList.remove('ui-br-ext-outlined-element-childs-no-events');
         element.removeAttribute('data-ext-index');
+        element.classList.forEach((className) => {
+            if(className.includes('ui-br-ext-searched-element-id-')) {
+                element.classList.remove(className);
+                clickOnBug.unblockBugElements([element]);
+            }
+        });
     });
 
     // Reset the global variable that holds the previously selected element properties.

@@ -3,7 +3,7 @@
     <div>
         <div class="ui-br-ext-form-title">{{action}}</div >
 
-        <form autocomplete="off" novalidate name="ui-br-ext-new-project" onsubmit="return false">
+        <form autocomplete="off" novalidate name="ui-br-ext-new-project" v-on:submit.prevent>
             <div class="ui-br-ext-form-container ui-br-ext-textarea">
                 <label for="ui-br-ext-new-project-label">Project key</label>
                 <input type="text"  autocomplete="off"  name="ui-br-ext-new-project-label" v-model="newProject.projectKey" maxlength="10" minlength="2" :disabled="newProject.id && newProject.lkProjectStatusId == 2" />

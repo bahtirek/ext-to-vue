@@ -1,6 +1,6 @@
 <template>
 
-    <form autocomplete="off" class="ui-br-ext-report-form">
+    <form autocomplete="off" class="ui-br-ext-report-form" v-on:submit.prevent>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-modules">Environment</label>
             <input type="text"  autocomplete="off"  v-model="searchQuery" @input="onSearch">
@@ -83,9 +83,10 @@
                 if(!(this.account && this.account.token)) return false;
                 if (this.timeout) clearTimeout(this.timeout)
                 this.timeout = setTimeout(() => {
-                    this.searchQuery = this.searchQuery.trim();
+                    let searchQuery = this.searchQuery;
+                    searchQuery = searchQuery.trim();
                     if(this.searchQuery.length >= 2) {
-                        this.getEnvironments()
+                        this.getEnvironments(searchQuery)
                     } else {
                         this.searchResults = []
                     }
@@ -93,10 +94,10 @@
                 }, 300);
             },
 
-            async getEnvironments() {
-                if (this.searchQuery.length != '') {
+            async getEnvironments(searchQuery) {
+                if (searchQuery.length != '') {
                     try {
-                        this.searchResults = await this.get(this.account, this.searchQuery)
+                        this.searchResults = await this.get(this.account, searchQuery)
                     } catch(error) {
                         console.log(error);
                         if(error.result?.message) {

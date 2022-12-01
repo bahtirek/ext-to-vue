@@ -1,6 +1,6 @@
 <template>
 
-    <form autocomplete="off" class="ui-br-ext-report-form">
+    <div autocomplete="off" class="ui-br-ext-report-form" v-on:submit.prevent>
         <ProjectSearch :account="account" :validation="validation"  :oldProject="project" ref="projectForm"/>
 
         <ModuleSearch :account="account" :project="project" :validation="validation" :oldModule="module" ref="moduleForm"/>
@@ -32,7 +32,7 @@
             <textarea name="ui-br-ext-rep-steps" v-model="form.stepsToReproduce" rows="3" data-gramm="false" maxlength="1000" @blur="saveToStorage"></textarea>
             <span class="ui-br-ext-message" v-if="count>0 && form.stepsToReproduce==''">Field is required</span>
         </div>
-    </form >
+    </div >
 
 </template>
 
@@ -68,10 +68,6 @@
 
         mounted() {
             this.setFormValue(this.report);
-            /* eventBus.$on('show-saved-data', (savedBug) => {
-                this.form = savedBug.form
-                console.log(this.form);
-            }) */
         },
 
         data() {

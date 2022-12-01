@@ -1,6 +1,6 @@
 <template>
 
-    <form autocomplete="off" class="ui-br-ext-report-form">
+    <form autocomplete="off" class="ui-br-ext-report-form" v-on:submit.prevent>
         <div class="ui-br-ext-form-container ui-br-ext-textarea">
             <label for="ui-br-ext-modules">Module</label>
             <input type="text"  autocomplete="off"  v-model="searchQuery" @input="onSearch">
@@ -90,9 +90,10 @@ import eventBus from '../../eventBus';
                 if(!(this.account && this.account.token)) return false;
                 if (this.timeout) clearTimeout(this.timeout)
                 this.timeout = setTimeout(() => {
-                    this.searchQuery = this.searchQuery.trim();
-                    if(this.searchQuery.length >= 2) {
-                        this.getmodules()
+                    let searchQuery = this.searchQuery;
+                    searchQuery = searchQuery.trim();
+                    if(searchQuery.length >= 2) {
+                        this.getmodules(searchQuery)
                     } else {
                         this.searchResults = []
                     }
@@ -100,10 +101,10 @@ import eventBus from '../../eventBus';
                 }, 300);
             },
 
-            async getmodules() {
-                if (this.searchQuery.length != '') {
+            async getmodules(searchQuery) {
+                if (searchQuery.length != '') {
                     try {
-                        if(this.project.id) this.searchResults = await this.get(this.account, this.searchQuery, this.project.id)
+                        if(this.project.id) this.searchResults = await this.get(this.account, searchQuery, this.project.id)
                     } catch(error) {
                         console.log(error);
                         if(error.result?.message) {

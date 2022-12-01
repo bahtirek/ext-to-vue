@@ -94,15 +94,16 @@
             onSearch() {
                 if (this.timeout) clearTimeout(this.timeout)
                 this.timeout = setTimeout(() => {
-                    this.searchQuery = this.searchQuery.trim();
-                    if(this.searchQuery.length >= 2) this.getProjects()
+                    let searchQuery = this.searchQuery;
+                    searchQuery = searchQuery.trim();
+                    if(searchQuery.length >= 2) this.getProjects(searchQuery)
                 }, 300);
             },
 
-            async getProjects() {
-                if (this.searchQuery.length != '') {
+            async getProjects(searchQuery) {
+                if (searchQuery.length != '') {
                     try {
-                        this.searchResults = await this.get(this.account, this.searchQuery)
+                        this.searchResults = await this.get(this.account, searchQuery)
                     } catch(error) {
                         console.log(error);
                         if(error.result?.message) {

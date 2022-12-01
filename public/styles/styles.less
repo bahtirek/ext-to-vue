@@ -10,8 +10,10 @@ body {
     }
 
     &.ui-br-ext-hide-hovered {
-        .ui-br-ext-hovered {
-            outline: none!important;
+        .ui-br-ext-hovered{
+            &:not(.ui-br-ext-selected-element-outline-red) {
+                outline: none!important;
+            }
         }
     }
     &.ui-br-ext-freeze {
@@ -23,6 +25,14 @@ body {
     }
     .ui-br-ext-selected-element-outline-green {
         outline: #4fff00 dashed 3px !important
+    }
+
+    .ui-br-ext-outlined-element {
+        &.ui-br-ext-outlined-element-childs-no-events {
+            * {
+                pointer-events: none !important;
+            }
+        }
     }
 }
 
@@ -1117,6 +1127,12 @@ body {
         left: 0;
         right: 0;
         background-color: #00000033;
+    }
+
+    li {
+        &::marker {
+            content: "" !important;
+        }
     }
 
 }

@@ -77,9 +77,9 @@
                         <span class="ui-br-ext-review-title">Bug title:</span>
                         <span class="ui-br-ext-review-text">{{report.title}}</span>
                     </div>
-                    <div class="ui-br-ext-review-box" v-if="report.createdAt">
+                    <div class="ui-br-ext-review-box" v-if="report.created_at">
                         <span class="ui-br-ext-review-title">Created at:</span>
-                        <span class="ui-br-ext-review-text">{{new Date(report.createdAt).toLocaleString()}}</span>
+                        <span class="ui-br-ext-review-text">{{new Date(report.created_at).toLocaleString()}}</span>
                     </div>
                     <div class="ui-br-ext-review-box">
                         <span class="ui-br-ext-btn-lnk"  @click="showDetails(report.bugId)">Details</span>
@@ -93,15 +93,13 @@
 
 <script>
 
-    import UserDetails from '../../shared/UserDetails';
-    import ModuleDetails from '../../shared/ModuleDetails';
     import EnvironmentSearch from '../../shared/EnvironmentSearch';
     import ModuleSearch from '../../shared/ModuleSearch';
     import ProjectSearch from '../../shared/ProjectSearch';
     import BugSearch from '../../shared/BugSearch';
     import reportService from '../../../services/report.service';
     import eventBus from '../../../eventBus';
-    import clickBlocker from '../../../common/click-blocker';    
+    import clickBlocker from '../../../services/clickonbug.service';    
     import { globalStore } from './../../../main';
 
     export default {
@@ -121,8 +119,8 @@
         created() { 
             this.get = reportService.getReports;
             this.getGlobal = reportService.getGlobalReports;
-            this.addClickBlocker = clickBlocker.addClickBlocker;  
-            this.removeClickBlocker = clickBlocker.removeClickBlocker;  
+            this.addClickBlocker = clickBlocker.blockBugElement;
+            this.removeClickBlocker = clickBlocker.unblockBugElements;
             this.environment = globalStore.store.reviewBug.environment;
             this.module = globalStore.store.reviewBug.module; 
             this.project = globalStore.store.reviewBug.project || globalStore.store.project;
@@ -138,7 +136,6 @@
                 globalStore.store.reviewBug.module = {};
                 this.project = project;
             });
-            this.removeBugCoverEls();
             this.showElements();
         },
 
@@ -224,17 +221,6 @@
                 this.reports.forEach((report) => {
                     report.element = this.selectElement(report.xpath, report.bugId);
                 })
-                const els = document.querySelectorAll('.ui-br-ext-outlined-element');
-                this.addClickBlocker(els);
-                this.reportsToDisplay = this.reports.filter(report => !report.element);
-            },
-
-            removeBugCoverEls(){
-                const els = document.querySelectorAll('.ui-br-ext-bug-cover')
-                    
-                els.forEach(el => {
-                    el.remove()
-                });
             },
 
             selectElement(xpath, bugId){
@@ -246,52 +232,13 @@
                 }
                 if(element){
                     this.createElement(element, bugId)
-                    element.classList.add('ui-br-ext-outlined-element');
-                    element.classList.add('ui-br-ext-selected-element-outline-red');                               
                 }
                 return element
             },
 
             createElement(element, bugId){
-                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const rect = this.getBoundingClientRect(element, scrollTop, scrollLeft);
-                const newDiv = document.createElement("div");
-                newDiv.addEventListener('click', (e) => {this.showDetailsOnClick(e.target)});
-                newDiv.setAttribute('data-ext-bugid', bugId);
-                newDiv.setAttribute('class', 'ui-br-ext-bug-cover');
-                Object.entries(rect).forEach(([key, val]) => {
-                    newDiv.style[key] = `${val}px`; 
-                });
-                document.body.appendChild(newDiv);
-            },
-
-            showDetailsOnClick(el) {
-                const prevEl = globalStore.store.activeBugElement;
-                const bugId = el.getAttribute('data-ext-bugid');
-                const prevBugCover = globalStore.store.prevBugCover;
-                if(prevBugCover) {
-                    const prevBugId = prevBugCover.getAttribute('data-ext-bugid');
-                    if(prevBugId == bugId) return false;
-                }
-                if(prevEl){
-                    prevEl.classList.add('ui-br-ext-selected-element-outline-red');
-                    prevEl.classList.remove('ui-br-ext-selected-element-outline-green');                  
-                }
-                if(prevBugCover){
-                   prevBugCover.classList.remove('ui-br-ext-bug-cover-active');                   
-                }
-                el.classList.add('ui-br-ext-bug-cover-active');
-                globalStore.store.prevBugCover = el;
-                if(!(bugId && bugId >= 0)) return false;
-                eventBus.$emit('show-details', bugId)
-            },
-
-            getBoundingClientRect(element, scrollTop, scrollLeft){     
-                let {top, right, bottom, left, width, height, x, y} = element.getBoundingClientRect();
-                top = top + scrollTop;
-                left = left + scrollLeft;   
-                return {top, left} 
+                element.classList.add('ui-br-ext-outlined-element', 'ui-br-ext-selected-element-outline-red', 'ui-br-ext-outlined-element-childs-no-events', `ui-br-ext-searched-element-id-${bugId}`); 
+                this.addClickBlocker(element);
             },
 
             async globalSearch(){
@@ -319,7 +266,6 @@
             setReports(reports){
                 const els = document.querySelectorAll('.ui-br-ext-outlined-element');
                 this.removeClickBlocker(els);
-                this.removeBugCoverEls();
                 this.reports = reports;
                 this.$emit('setReports', reports);
             }
