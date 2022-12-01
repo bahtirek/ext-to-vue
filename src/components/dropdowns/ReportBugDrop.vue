@@ -1,53 +1,58 @@
 <template>
     <div class="ui-br-ext-dropdown-item ui-br-ext-report-bug" id="ui-br-ext-report-bug" ref="divToResize">
-        <div class="ui-br-ext-drop-title">Report bug</div>
-        <div class="ui-br-ext-drop-body">
-
-            <!-- <ProjectDetails :project="project" /> -->
-
-            <UserDetails :user="user" />
-
-            <div class="ui-br-ext-spacer-3"></div>
-            
-            <ReportForm ref="reportForm" :validation="saveToDb" @save-bug-to-storage="saveBugToStorage" @set-project-from-unsaved-report="setProjectFromUnsavedReport"/>
-
-            <FileUpload :account="account" ref="fileUploadForm" />
-
+        <div class="ui-br-ext-drop-title-wrap">
+            <div class="ui-br-ext-drop-title">Report bug</div>
+            <MinimizeDropBody v-model="showHide" class="ui-br-ext-minimizedropbody2" />
         </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.token">
-            <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="saveToDb">
-            <label for="ui-br-ext-save-to-jira">Save</label>
-        </div>
-        <div v-if="saveToDb"> 
-            <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="project && project.jiraId">
-                <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveToJira">
-                <label for="ui-br-ext-save-to-jira">Create Jira ticket</label>
+        <div id="ui-br-ext-report-bug-body" v-show="showHide">
+            <div class="ui-br-ext-drop-body">
+    
+                <!-- <ProjectDetails :project="project" /> -->
+    
+                <UserDetails :user="user" />
+    
+                <div class="ui-br-ext-spacer-3"></div>
+                
+                <ReportForm ref="reportForm" :validation="saveToDb" @save-bug-to-storage="saveBugToStorage" @set-project-from-unsaved-report="setProjectFromUnsavedReport"/>
+    
+                <FileUpload :account="account" ref="fileUploadForm" />
+    
             </div>
+            <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="account && account.token">
+                <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="saveToDb">
+                <label for="ui-br-ext-save-to-jira">Save</label>
+            </div>
+            <div v-if="saveToDb"> 
+                <div class="ui-br-ext-form-container ui-br-ext-checkbox" v-if="project && project.jiraId">
+                    <input type="checkbox" name="jira" id="ui-br-ext-save-to-jira" v-model="report.saveToJira">
+                    <label for="ui-br-ext-save-to-jira">Create Jira ticket</label>
+                </div>
+            </div>
+            <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+                <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf" v-model="report.savePdf">
+                <label for="ui-br-ext-save-to-pdf">Download as PDF</label>
+            </div>
+            <div class="ui-br-ext-form-container ui-br-ext-checkbox">
+                <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="report.sendEmail">
+                <label for="ui-br-ext-send-email">Generate email</label>
+            </div>
+            <div class="ui-br-ext-btn-group">
+                <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="downloadScreenshot" data-listener="off" >
+                    <span>Download screenshot</span> 
+                </button>
+                <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="getForm" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
+                    <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
+                    <span>Submit</span> 
+                </button>
+                <button class="ui-br-ext-btn-danger" @click="cancel" data-listener="off">
+                    <span>Cancel</span> 
+                </button>
+            </div>
+    
+            <Resize :elementId="elementId" />
+    
+            <a href="" ref="downloadImageFull" style="display: none !important;"></a>
         </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-            <input type="checkbox" name="pdf" id="ui-br-ext-save-to-pdf" v-model="report.savePdf">
-            <label for="ui-br-ext-save-to-pdf">Download as PDF</label>
-        </div>
-        <div class="ui-br-ext-form-container ui-br-ext-checkbox">
-            <input type="checkbox" name="pdf" id="ui-br-ext-send-email" v-model="report.sendEmail">
-            <label for="ui-br-ext-send-email">Generate email</label>
-        </div>
-        <div class="ui-br-ext-btn-group">
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="downloadScreenshot" data-listener="off" >
-                <span>Download screenshot</span> 
-            </button>
-            <button class="ui-br-ext-btn" id="ui-br-ext-save-report" @click="getForm" data-listener="off" :disabled="submitInPorgress" :class="{ disabled: submitInPorgress }">
-                <span class="ui-br-ext-spinner" :class="{ active: submitInPorgress }"></span>
-                <span>Submit</span> 
-            </button>
-            <button class="ui-br-ext-btn-danger" @click="cancel" data-listener="off">
-                <span>Cancel</span> 
-            </button>
-        </div>
-
-        <Resize :elementId="elementId" />
-
-        <a href="" ref="downloadImageFull" style="display: none !important;"></a>
     </div>
 </template>
 
@@ -63,6 +68,7 @@
     import Resize from '../shared/Resize';
     import ReportForm from '../shared/ReportForm';
     import FileUpload from '../shared/FileUpload';
+    import MinimizeDropBody from '../shared/MinimizeDropBody';
     import email from '../../common/email';
     import reportService from '../../services/report.service'
             
@@ -73,7 +79,8 @@
             UserDetails,
             Resize,
             ReportForm,
-            FileUpload
+            FileUpload,
+            MinimizeDropBody
         },
         
         created() { 
@@ -139,8 +146,9 @@
                 saveToDb: false,
                 filename: '',
                 name: 'test',
-                elementId: 'ui-br-ext-report-bug',
+                elementId: 'ui-br-ext-report-bug-body',
                 submitInPorgress: false,
+                showHide: true
             }
         },
 

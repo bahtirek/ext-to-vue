@@ -1,26 +1,32 @@
 <template>
     <div class="ui-br-ext-dropdown-item ui-br-ext-review" id="ui-br-ext-review" ref="divToResize">
-        <div class="ui-br-ext-drop-title">Reports</div>
-        <div class="ui-br-ext-drop-body" v-if="account && account.token">
-
-            <AllReports v-if="toggle.allReports" :sharedReports="reports" @show-details="showDetails" @setReports="setReports" ref="allReportsRef"/>
-
-            <ReportDetails v-if="toggle.details" :sharedReports="reports" @reselect="showReselect" @status-update="showStatusUpdate" @edit-report="showEditReport" @close-details="closeDetails" :bugId="bugId" :account="account" />
-
-            <StatusChoice v-if="toggle.status" @close-status="closeStatus" :report="report" :account="account" />
-
-            <Reselect v-if="toggle.reselect" @close-reselect="closeReselect" @reselected="updateReportOnReselect" :report="report" :account="account" @toggle-extension="$emit('toggle-extension')" />
-
-            <EditReport v-if="toggle.edit" :report="report" @cancel-edit-report="cancelEditReport"  :account="account" />
+        <div class="ui-br-ext-drop-title-wrap">
+            <div class="ui-br-ext-drop-title">Reports</div>   
+            <MinimizeDropBody v-model="showHide" class="ui-br-ext-minimizedropbody2" />
+        </div>
+        <div v-show="showHide" id="ui-br-ext-review-body">
+            <div class="ui-br-ext-drop-body" v-if="account && account.token">
+    
+                <AllReports v-if="toggle.allReports" :sharedReports="reports" @show-details="showDetails" @setReports="setReports" ref="allReportsRef"/>
+    
+                <ReportDetails v-if="toggle.details" :sharedReports="reports" @reselect="showReselect" @status-update="showStatusUpdate" @edit-report="showEditReport" @close-details="closeDetails" :bugId="bugId" :account="account" />
+    
+                <StatusChoice v-if="toggle.status" @close-status="closeStatus" :report="report" :account="account" />
+    
+                <Reselect v-if="toggle.reselect" @close-reselect="closeReselect" @reselected="updateReportOnReselect" :report="report" :account="account" @toggle-extension="$emit('toggle-extension')" />
+    
+                <EditReport v-if="toggle.edit" :report="report" @cancel-edit-report="cancelEditReport"  :account="account" />
+    
+            </div>
+            <div class="ui-br-ext-drop-body"  v-if="!(account && account.token)">
+    
+                <p>Report for users with Account</p>
+                <p>Features:</p>
+    
+            </div>
+            <Resize :elementId="elementId" />
 
         </div>
-        <div class="ui-br-ext-drop-body"  v-if="!(account && account.token)">
-
-            <p>Report for users with Account</p>
-            <p>Features:</p>
-
-        </div>
-        <Resize :elementId="elementId" />
 
     </div>
 </template>
@@ -37,6 +43,7 @@
     import Resize from '../shared/Resize';
     import EditReport from './review/EditReport';
     import Reselect from './review/Reselect';
+    import MinimizeDropBody from '../shared/MinimizeDropBody';
     import outline from '../../services/outline.service';
 
     export default {
@@ -48,7 +55,8 @@
             Resize,
             EditReport,
             StatusChoice,
-            Reselect
+            Reselect,
+            MinimizeDropBody
         },
 
         created() { 
@@ -86,9 +94,10 @@
                     status: false,
                     reselect: false
                 },
-                elementId: 'ui-br-ext-review',
+                elementId: 'ui-br-ext-review-body',
                 bugId: undefined,
-                projectId: undefined
+                projectId: undefined,
+                showHide: true
             }
         },
 

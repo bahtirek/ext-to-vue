@@ -1,0 +1,37 @@
+<template>
+    <div>
+        <span class="ui-br-ext-alwaysOn" @click="toggleBtn"  data-title="Minimize" id="ui-br-ext-minimize-button" v-if="minimize">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ad55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"/></svg>
+        </span>
+        
+        <span class="ui-br-ext-alwaysOn" @click="toggleBtn"  data-title="Maximize" id="ui-br-ext-maximize-button" v-if="!minimize">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ad55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+    </div>
+</template>
+
+<script>
+
+    export default {
+        name: 'MinimizeDropBody',
+
+        created() { 
+            //this.onSelect = operators.onSelect;
+        },
+
+        data() {
+            return {
+                minimize: true
+            }
+        },
+
+        methods: {
+
+            toggleBtn(e) {
+                this.minimize = !this.minimize;
+                this.$emit('input', this.minimize);
+            },
+        }
+    }
+</script>
+

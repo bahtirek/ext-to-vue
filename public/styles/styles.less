@@ -24,7 +24,7 @@ body {
         outline: red dashed 3px !important;
     }
     .ui-br-ext-selected-element-outline-green {
-        outline: #4fff00 dashed 3px !important
+        outline: #4fff00 dashed 3px !important;
     }
 
     .ui-br-ext-outlined-element {
@@ -226,12 +226,29 @@ body {
                 max-height: 500px;
             }
 
+            .ui-br-ext-drop-title-wrap {
+                display: flex;
+                align-items: center;
+                position: relative;
+                .ui-br-ext-minimizedropbody {
+                    position: absolute;
+                    right: 2px;
+                    top: 23px;
+                    cursor: pointer;
+                }
+                .ui-br-ext-minimizedropbody2 {
+                    margin-bottom: -5px;
+                    cursor: pointer;
+                }
+            }
+            
             .ui-br-ext-drop-title {
                 color: @primary-color;
                 border-bottom: 1px solid @primary-color;
                 padding: 0 3px 3px;
                 margin: 20px 0;
                 font-size: 18px;
+                flex-grow: 1;
             }
 
             &.ui-br-ext-active {
@@ -717,7 +734,7 @@ body {
             }
         }
 
-        #ui-br-ext-report-bug, #ui-br-ext-review, #ui-br-ext-settings {
+        #ui-br-ext-report-bug-body, #ui-br-ext-review-body, #ui-br-ext-settings {
             width: 500px;
             @media(max-width: 767px) {
                 width: 92%;
@@ -769,7 +786,7 @@ body {
         }
 
         .ui-br-ext-review {
-            width: 350px;
+            //width: 350px;
         }
 
         .ui-br-ext-close-details {

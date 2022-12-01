@@ -1,7 +1,11 @@
 <template>
     <div class="ui-br-ext-dropdown-item ui-br-ext-settings" id="ui-br-ext-settings">
-                <div class="ui-br-ext-drop-title">Settings</div>
-                <div class="ui-br-ext-drop-body">
+        <div class="ui-br-ext-drop-title-wrap">
+            <div class="ui-br-ext-drop-title">Settings</div>
+            <MinimizeDropBody v-model="showHide" class="ui-br-ext-minimizedropbody2" />
+        </div>
+
+                <div class="ui-br-ext-drop-body" v-show="showHide">
                     
                     <div class="ui-br-ext-settings-container" v-if="account && account.isAdmin == 1">
                         <div class="ui-br-ext-setting-title" @click="ifProject = !ifProject; ifGlobal = false; ifModule = false; ifAccount = false; ifUser = false; ifEnvironment = false">Project</div>
@@ -42,6 +46,7 @@
     import User from './settings/User';
     import { globalStore } from './../../main';
     import eventBus from './../../eventBus'
+    import MinimizeDropBody from '../shared/MinimizeDropBody';
 
     export default {
         name: 'SettingsDrop',
@@ -50,7 +55,8 @@
             Account,
             User,
             Project,
-            Environment
+            Environment,
+            MinimizeDropBody
         },
 
         mounted: function () {
@@ -77,6 +83,7 @@
                 ifGlobal: false, 
                 currentModule: {},
                 account: {},
+                showHide: true
             }
         },
 

@@ -190,12 +190,28 @@ body .ui-br-ext-outlined-element.ui-br-ext-outlined-element-childs-no-events * {
     max-height: 500px;
   }
 }
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-drop-title-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-drop-title-wrap .ui-br-ext-minimizedropbody {
+  position: absolute;
+  right: 2px;
+  top: 23px;
+  cursor: pointer;
+}
+.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-drop-title-wrap .ui-br-ext-minimizedropbody2 {
+  margin-bottom: -5px;
+  cursor: pointer;
+}
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item .ui-br-ext-drop-title {
   color: #00ad55;
   border-bottom: 1px solid #00ad55;
   padding: 0 3px 3px;
   margin: 20px 0;
   font-size: 18px;
+  flex-grow: 1;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-dropdown-item.ui-br-ext-active {
   display: block;
@@ -832,14 +848,14 @@ body .ui-br-ext-outlined-element.ui-br-ext-outlined-element-childs-no-events * {
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review.ui-br-ext-active {
   display: flex;
 }
-.ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-report-bug,
-.ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-review,
+.ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-report-bug-body,
+.ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-review-body,
 .ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-settings {
   width: 500px;
 }
 @media (max-width: 767px) {
-  .ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-report-bug,
-  .ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-review,
+  .ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-report-bug-body,
+  .ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-review-body,
   .ui-br-ext-extension .ui-br-ext-dropdown #ui-br-ext-settings {
     width: 92%;
   }
@@ -878,9 +894,6 @@ body .ui-br-ext-outlined-element.ui-br-ext-outlined-element-childs-no-events * {
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-spinner.active {
   display: inline-block;
-}
-.ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-review {
-  width: 350px;
 }
 .ui-br-ext-extension .ui-br-ext-dropdown .ui-br-ext-close-details {
   text-align: right;
