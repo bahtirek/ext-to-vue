@@ -131,73 +131,35 @@ const findElementFromPoint = function(pageX, pageY){
 
     const retainSelectedElement = document.elementFromPoint(pageX, pageY);
 
-    if(element 
-       && ui_br_ext_previousElement.element !== null
-       && ui_br_ext_previousElement.parentCount < ui_br_ext_parentLimit 
-       && element?.closest('#ui-br-ext-extension') === null
-       ){
+    if( element?.tagName.toLocaleLowerCase() != 'body'
+        && element?.tagName.toLocaleLowerCase() != 'html'
+        && element?.closest('#ui-br-ext-extension') !== null
+    ){
+        return false   
+    }
 
-        // Previously selected element's top and left coordicates.
-        const previousElementRect = ui_br_ext_previousElement.element.getBoundingClientRect();
-        const previousElementTop = previousElementRect.top;
-        const previousElementLeft = previousElementRect.left;
+    if(element.classList.contains('ui-br-ext-selected-element-outline-red') && element?.closest('#ui-br-ext-extension') === null){
 
-        // Currently selected element's top and left coordicates.
-        const elementRect = element.getBoundingClientRect();
-        const elementTop = elementRect.top;
-        const elementLeft = elementRect.left;
-
-        if(previousElementTop === elementTop && previousElementLeft === elementLeft){
-
-            /**
-             * if selected element's parent is already outlined, then we outline the next parent (up to 5).
-             */
-            let parentElement = null;
-            let parentOutlined = false;
-
-            for(let i=1; i<ui_br_ext_parentLimit; i++){
-
-                parentElement = parentElement !== null
-                ? parentElement.parentElement
-                : element.parentElement;
-
-                if(parentElement?.classList.contains('ui-br-ext-outlined-element')){
-                    parentOutlined = true;
-                    ui_br_ext_previousElement.parentCount ++;
-                    break;
-                }
-
-            }
-
-            if(!parentOutlined){
-                ui_br_ext_previousElement.parentCount ++;
-            }
-
-            element = parentOutlined
-            ? parentElement.parentElement
-            : element.parentElement;
-
+        if(element.classList.contains('ui-br-ext-outline-offset-plus')) {
+            element.classList.remove('ui-br-ext-outline-offset-plus')
+            element.classList.add('ui-br-ext-outline-offset-minus')
+        } else if(element.classList.contains('ui-br-ext-outline-offset-minus')) {
+            element.classList.remove('ui-br-ext-outline-offset-minus')
+        } else {
+            element.classList.add('ui-br-ext-outline-offset-plus')
         }
 
-    }
+    } else {
 
-    ui_br_ext_previousElement.element = retainSelectedElement;
-    if(
-        element?.tagName.toLocaleLowerCase() != 'body'
-        && element?.tagName.toLocaleLowerCase() != 'html'
-        && element?.closest('#ui-br-ext-extension') === null
-        ){
-            
-            outlineSelectedElement(element);
-            displayReportBugButton(true);
-            globalStore.store.selectedElement = element;
-            //Used to crop dynamic elements
-            globalStore.store.selectedElementRect = element.getBoundingClientRect();
-    }
+        if(ui_br_ext_previousElement.element) {
+            ui_br_ext_previousElement.element.classList.remove('ui-br-ext-selected-element-outline-red', 'ui-br-ext-outline-offset-plus', 'ui-br-ext-outline-offset-minus')
+        }
 
-    if(ui_br_ext_previousElement.parentCount === ui_br_ext_parentLimit){
-        ui_br_ext_previousElement.element = null,
-        ui_br_ext_previousElement.parentCount = 0
+        element.classList.add('ui-br-ext-selected-element-outline-red')
+        ui_br_ext_previousElement.element = retainSelectedElement;
+        displayReportBugButton(true);
+        globalStore.store.selectedElement = element;
+
     }
 }
 

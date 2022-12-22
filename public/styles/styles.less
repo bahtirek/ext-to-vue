@@ -22,9 +22,70 @@ body {
     }
     .ui-br-ext-selected-element-outline-red {
         outline: red dashed 3px !important;
+        outline-offset: 0px !important;
     }
+    
     .ui-br-ext-selected-element-outline-green {
-        outline: #4fff00 dashed 3px !important
+        outline: #4fff00 dashed 3px !important;
+        outline-offset: 0px !important;
+    }
+    .ui-br-ext-selected-element-outline-red, .ui-br-ext-selected-element-outline-green {
+        &.ui-br-ext-outline-offset-plus {
+            outline-offset: 3px !important;
+        }
+
+        &.ui-br-ext-outline-offset-even {
+            outline-offset: 0px !important;
+        }
+
+        &.ui-br-ext-outline-offset-minus {
+            outline-offset: -3px !important;
+        }
+    }
+
+    .ui-br-ext-selected-element-outline {
+        outline-style: dashed !important;
+        
+        &.ui-br-ext-outline-red {
+            outline-color: red !important;
+        }
+        &.ui-br-ext-outline-purple {
+            outline-color: #cc00ff !important;
+            
+        }
+        &.ui-br-ext-outline-orange {
+            outline-color: #ff7600 !important;
+        }
+        
+        &.ui-br-ext-outline-green {
+            outline-color: #00ad55 !important;
+        }
+
+        &.ui-br-ext-outline-width-1 {
+            outline-width: 1px !important;
+        }
+
+        &.ui-br-ext-outline-width-2 {
+            outline-width: 2px !important;
+        }
+
+        &.ui-br-ext-outline-width-3 {
+            outline-width: 3px !important;
+        }
+
+        &.ui-br-ext-outline-offset-plus {
+            outline-offset: 3px !important;
+        }
+
+        &.ui-br-ext-outline-offset-even {
+            outline-offset: 0px !important;
+        }
+
+        &.ui-br-ext-outline-offset-minus {
+            outline-offset: -3px !important;
+        }
+
+
     }
 
     .ui-br-ext-outlined-element {

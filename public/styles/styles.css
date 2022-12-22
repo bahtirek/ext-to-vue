@@ -11,9 +11,56 @@ body.ui-br-ext-freeze {
 }
 body .ui-br-ext-selected-element-outline-red {
   outline: red dashed 3px !important;
+  outline-offset: 0px !important;
 }
 body .ui-br-ext-selected-element-outline-green {
   outline: #4fff00 dashed 3px !important;
+  outline-offset: 0px !important;
+}
+body .ui-br-ext-selected-element-outline-red.ui-br-ext-outline-offset-plus,
+body .ui-br-ext-selected-element-outline-green.ui-br-ext-outline-offset-plus {
+  outline-offset: 3px !important;
+}
+body .ui-br-ext-selected-element-outline-red.ui-br-ext-outline-offset-even,
+body .ui-br-ext-selected-element-outline-green.ui-br-ext-outline-offset-even {
+  outline-offset: 0px !important;
+}
+body .ui-br-ext-selected-element-outline-red.ui-br-ext-outline-offset-minus,
+body .ui-br-ext-selected-element-outline-green.ui-br-ext-outline-offset-minus {
+  outline-offset: -3px !important;
+}
+body .ui-br-ext-selected-element-outline {
+  outline-style: dashed !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-red {
+  outline-color: red !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-purple {
+  outline-color: #cc00ff !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-orange {
+  outline-color: #ff7600 !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-green {
+  outline-color: #00ad55 !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-width-1 {
+  outline-width: 1px !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-width-2 {
+  outline-width: 2px !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-width-3 {
+  outline-width: 3px !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-offset-plus {
+  outline-offset: 3px !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-offset-even {
+  outline-offset: 0px !important;
+}
+body .ui-br-ext-selected-element-outline.ui-br-ext-outline-offset-minus {
+  outline-offset: -3px !important;
 }
 body .ui-br-ext-outlined-element.ui-br-ext-outlined-element-childs-no-events * {
   pointer-events: none !important;

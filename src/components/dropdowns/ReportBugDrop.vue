@@ -106,6 +106,7 @@
 
             this.saveToDb = this.account && this.account.token ? true : false;
             this.report.xpath = this.getElementXpath(globalStore.store.selectedElement);
+            this.collectClasses();
             this.report.saveToJira = this.project.jiraId ? true : false;
         },
 
@@ -134,7 +135,8 @@
                     xpath: '',
                     queryWidth: undefined,
                     url: '',
-                    user: {}
+                    user: {},
+                    classes: []
                 },
                 saveToDb: false,
                 filename: '',
@@ -308,6 +310,14 @@
                     this.project = val;
                     this.report.saveToJira = this.project.jiraId ? true : false;
                 }
+            },
+
+            collectClasses() {
+                globalStore.store.selectedElement.classList.forEach((elClass) => {
+                    if(elClass.includes('ui-br-ext-')) {
+                        this.report.classes.push(elClass)
+                    }
+                })
             }
         }
     }
